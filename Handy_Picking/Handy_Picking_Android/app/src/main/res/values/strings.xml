@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Double Check</string>
+    <string name="customer_code"><u>Customer Code</u></string>
+    <string name="sale_order"><u>Sale Order</u></string>
+    <string name="employee_code"><u>Employee Code</u></string>
+    <string name="pallet_no"><u>Pallet No.</u></string>
+</resources>

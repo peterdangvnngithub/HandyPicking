@@ -1,0 +1,68 @@
+@api = http://localhost:3000/handyPickingDetail
+###
+@apiMS = http://localhost:3000/handyPicking
+###
+POST http://localhost:3000/handyPickingMS
+Content-Type: application/json
+
+[
+    {
+        "CUSTOMER_CODE":    "CO0001",
+        "PICKING_LIST_NO":  "TVC/TSK-22/751",
+        "DELIVERY_ADDRESS": "TAKAKO INDUSTRIES, INC.",
+        "SALE_ORDER":       "SO00001",
+        "ITEM_CODE":        "BH40036760",
+        "LOT_ID":           "LOT-19123122",
+        "QUANTITY":         100,
+        "EMPLOYEE_CODE":    "118471",
+        "PALLET_NO":        "No 1",
+        "CREATE_DATE":      "23/02/2023",
+        "CREATE_BY":        "118471",
+        "EDIT_DATE":         null,
+        "EDIT_BY":          null,
+        "COLUMN1":          null,
+        "COLUMN2":          null,
+        "COLUMN3":          null,
+        "COLUMN4":          null,
+        "COLUMN5":          null
+    }
+]
+###
+GET {{apiMS}}
+
+###src/requests/handyPicking.http
+POST http://localhost:3000/handyPickingDetail
+Content-Type: application/json
+
+[
+    {
+        "PICKING_LIST_NO":  "PICKING003",
+        "ITEM_CODE":        "11063-V",
+        "SERIES":           "00001",
+        "QUANTITY":         100,
+        "CREATE_DATE":      "23/02/2023",
+        "CREATE_BY":        "ADMIN",
+        "EDIT_DATE":        null,
+        "EDIT_BY":          null,
+        "COLUMN1":          null,
+        "COLUMN2":          null,
+        "COLUMN3":          null,
+        "COLUMN4":          null,
+        "COLUMN5":          null
+    },
+    {
+        "PICKING_LIST_NO":  "PICKING003",
+        "ITEM_CODE":        "11063-V",
+        "SERIES":           "00002",
+        "QUANTITY":         200,
+        "CREATE_DATE":      "23/02/2023",
+        "CREATE_BY":        "ADMIN",
+        "EDIT_DATE":        null,
+        "EDIT_BY":          null,
+        "COLUMN1":          null,
+        "COLUMN2":          null,
+        "COLUMN3":          null,
+        "COLUMN4":          null,
+        "COLUMN5":          null
+    }
+]
