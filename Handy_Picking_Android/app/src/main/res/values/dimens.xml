@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="width_zero" type="dimen">0dp</item>
+    <item name="padding_10dp" type="dimen">10dp</item>
+    <item name="width_point_four" type="integer">0.4</item>
+    <item name="width_point_six" type="integer">0.6</item>
+    <item name="text_size_12dp" type="dimen">10sp</item>
+</resources>
