@@ -1,154 +1,55 @@
 package com.example.handypicking.activity.picking.pickingDetail;
 
 import android.util.Log;
-
 import androidx.annotation.NonNull;
 
-import com.example.handypicking.api.ApiClient;
-import com.example.handypicking.api.ApiInterface;
-import com.example.handypicking.model.handy_detail;
-import com.example.handypicking.model.handy_ms;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.example.handypicking.api.ApiClient;
+import com.example.handypicking.api.ApiInterface;
+import com.example.handypicking.model.handy_ms;
+import com.example.handypicking.model.handy_detail;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
+import java.io.IOException;
 
 import okio.Buffer;
 
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 
-public class PickingDetailPresenter{
-    private static final String TAG = "InventoryPresenter";
+public class PickingDetailPresenter {
+    private static final String TAG     = "InventoryPresenter";
+    private boolean isPickingDetailNull = false;
 
-    public void isServerRunning(Callback<Void> callback) {
-        // Perform a simple GET request to check if the server is running
-        ApiInterface apiInterface = ApiClient.getApiClient().create( ApiInterface.class );
-        Call<Void> call = apiInterface.getStatus();
-        call.enqueue(callback);
-    }
-
-    public void saveLocalData(List<handy_ms> list_HandyMS, List<handy_detail> list_HandyDetail)
-    {
-
-    }
-
-    public void getData() {
-        //Request to server
-        Log.d(TAG, "getData");
-        ApiInterface apiInterface = ApiClient.getApiClient().create( ApiInterface.class );
-        Call<List<handy_ms>> call = apiInterface.getHandyMS();
-
-        call.enqueue( new Callback<List<handy_ms>>() {
-            @Override
-            public void onResponse(@NonNull Call<List<handy_ms>> call, @NonNull Response<List<handy_ms>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    Log.d(TAG, String.valueOf(response.body()));
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<List<handy_ms>> call, @NonNull Throwable t) {
-                Log.d(TAG, t.getLocalizedMessage());
-            }
-        } );
-    }
-
-    public List<handy_ms> check_Exists_Data_Handy_MS(String plNo) {
+    public void check_Exists_Data_Handy_Detail(String series, PickingDetailView callback) {
         ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
-        Call<List<handy_ms>> call = apiInterface.check_Exists_Handy_MS(plNo);
+        Call<List<handy_detail>> call = apiInterface.check_Exists_HandyPicking_Detail(series);
 
-        try {
-            Response<List<handy_ms>> response = call.execute();
-
-            List<handy_ms> handyMSList = new ArrayList<>();
-
-            if (response.isSuccessful()) {
-                handyMSList = response.body();
-            }
-
-            return handyMSList;
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to fetch data from server.", e);
-        }
-    }
-
-    public void onSendDataHandyMS(List<handy_ms> list_handyMS) {
-        Gson gson = new GsonBuilder().serializeNulls().create();
-        String json = gson.toJson(list_handyMS);
-
-        Log.d(TAG, "onSendHandyMSData");
-
-        //Request to server
-        RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
-        ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
-        Call<ResponseBody> call = apiInterface.send_Handy_MS(body);
-
-        Log.d(TAG, bodyToString(body));
-
-        call.enqueue( new Callback<ResponseBody>() {
+        call.enqueue(new Callback<List<handy_detail>>() {
             @Override
-            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
-                /*view.hideLoading();*/
-                try {
-                    if (response.isSuccessful() && response.body() != null) {
-                        /*view.insertSuccess();*/
-                        Log.d(TAG,"Success:" + response.body().toString());
+            public void onResponse(Call<List<handy_detail>> call, Response<List<handy_detail>> response) {
+                if(response.isSuccessful() && response.body() != null) {
+                    if (response.body().size() > 0) {
+                        isPickingDetailNull = false;
+                        Log.d(TAG, "Success:" + response.body().size());
+                    } else {
+                        isPickingDetailNull = true;
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
+                callback.isPickingDetailNull(isPickingDetailNull);
             }
 
             @Override
-            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
-                /*view.hideLoading();*/
+            public void onFailure(Call<List<handy_detail>> call, Throwable t) {
+                callback.isPickingDetailNull(isPickingDetailNull);
                 Log.d(TAG,"Error:" + t.getLocalizedMessage());
             }
-        } );
-    }
-
-    public void onSendDataHandyDetail(List<handy_detail> list_handyDetail) {
-        Gson gson = new GsonBuilder().serializeNulls().create();
-        String json = gson.toJson(list_handyDetail);
-
-        Log.d(TAG, "onSendHandyDetailData");
-
-        //Request to server
-        RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
-        ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
-        Call<ResponseBody> call = apiInterface.send_Handy_Detail(body);
-
-        Log.d(TAG, bodyToString(body));
-
-        call.enqueue( new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
-                /*view.hideLoading();*/
-                try {
-                    if (response.isSuccessful() && response.body() != null) {
-                        /*view.insertSuccess();*/
-                        Log.d(TAG,"Success:" + response.body().toString());
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
-                /*view.hideLoading();*/
-                Log.d(TAG,"Error:" + t.getLocalizedMessage());
-            }
-        } );
+        });
     }
 
     public void logLargeString(String str) {

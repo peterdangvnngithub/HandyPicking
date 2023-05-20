@@ -6,5 +6,5 @@ import com.example.handypicking.model.handy_ms;
 import java.util.List;
 
 public interface PickingDetailView {
-    void onSendHandyDetailData(handy_ms handyMS, List<handy_detail> handyDetail);
+    void isPickingDetailNull(boolean isPickingDetailNull);
 }

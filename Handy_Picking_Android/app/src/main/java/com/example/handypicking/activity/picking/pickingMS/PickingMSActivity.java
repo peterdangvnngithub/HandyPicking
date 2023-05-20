@@ -9,25 +9,28 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.Toast;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.handypicking.R;
+import com.example.handypicking.Utils.Utils;
+import com.example.handypicking.model.handy_ms;
 import com.example.handypicking.activity.menu.MenuActivity;
 import com.example.handypicking.database.PickingDatabaseHelper;
-import com.example.handypicking.model.handy_ms;
 import com.example.handypicking.activity.picking.pickingDetail.PickingDetailActivity;
 
 import java.util.Calendar;
 
 public class PickingMSActivity extends AppCompatActivity {
     Button btnNext, btnCancel;
-    EditText edCustomerCode, edPLNumber, edDeliveryAddress, edItem, edQuantity, edSaleOrder, edLotID, edEmpCode;
-    TextView txtCustomerCode, txtSaleOrder, txtEmpCode ;
+    TextView txtCustomerCode, txtEmpCode ;
+    EditText edCustomerCode, edPLNumber, edDeliveryAddress, edEmpCode;
+    PickingMSPresenter pickingMSPresenter;
     private handy_ms handy_ms;
     final String TABLE_HANDY_MS = "handy_ms";
+    Utils utils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,19 +38,17 @@ public class PickingMSActivity extends AppCompatActivity {
         setContentView(R.layout.activity_picking_ms);
 
         // Label
-        txtCustomerCode = findViewById(R.id.txtCustomerCode);
-        txtSaleOrder = findViewById(R.id.txtSaleOrder);
-        txtEmpCode = findViewById(R.id.txtEmpCode);
+        txtCustomerCode     = findViewById(R.id.txtCustomerCode);
+        txtEmpCode          = findViewById(R.id.txtEmpCode);
 
         // Value
-        edCustomerCode = findViewById(R.id.edCustomerCode);
-        edPLNumber = findViewById(R.id.edPLNumber);
-        edDeliveryAddress = findViewById(R.id.edDeliveryAddress);
-        edSaleOrder = findViewById(R.id.edSaleOrder);
-        edItem = findViewById(R.id.edItem);
-        edLotID = findViewById(R.id.edLotID);
-        edQuantity = findViewById(R.id.edQuantity);
-        edEmpCode = findViewById(R.id.edEmpCode);
+        edCustomerCode      = findViewById(R.id.edCustomerCode);
+        edPLNumber          = findViewById(R.id.edPLNumber);
+        edDeliveryAddress   = findViewById(R.id.edDeliveryAddress);
+        edEmpCode           = findViewById(R.id.edEmpCode);
+
+        pickingMSPresenter  = new PickingMSPresenter();
+        utils               = new Utils(this);
 
         txtCustomerCode.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,26 +84,78 @@ public class PickingMSActivity extends AppCompatActivity {
                 if(qrCodeValue1.length() == 96)
                 {
                     String customerCode = qrCodeValue1.substring(0, 6).trim();
-                    String address = qrCodeValue1.substring(6, 66).trim();
-                    String PLNumber = qrCodeValue1.substring(66, 96).trim();
-                    if(!ignoreChange)
-                    {
-                        ignoreChange = true;
+                    String address      = qrCodeValue1.substring(6, 66).trim();
+                    String PLNumber     = qrCodeValue1.substring(66, 96).trim();
 
-                        txtCustomerCode.setTextColor(Color.parseColor("#FF0000"));
+                    pickingMSPresenter.check_Exists_Data_Handy_MS(PLNumber, new PickingMSView() {
+                        @Override
+                        public void isPickingMSNull(boolean isPickingNull) {
+                            if(isPickingNull)
+                            {
+                                if(!ignoreChange)
+                                {
+                                    ignoreChange = true;
 
-                        edCustomerCode.setText(customerCode);
-                        edPLNumber.setText(PLNumber);
-                        edDeliveryAddress.setText(address);
+                                    txtCustomerCode.setTextColor(Color.parseColor("#FF0000"));
 
-                        edSaleOrder.requestFocus();
-                        ignoreChange = false;
-                    }
+                                    edCustomerCode.setText(customerCode);
+                                    edPLNumber.setText(PLNumber);
+                                    edDeliveryAddress.setText(address);
+
+                                    edEmpCode.requestFocus();
+
+                                    ignoreChange = false;
+                                }
+                            } else {
+                                String message = "Packing List: " + PLNumber + " đã tồn tại trong hệ thống";
+                                utils.displayDialogNotification("Cảnh báo",message);
+                                edCustomerCode.setText("");
+                            }
+                        }
+                    });
                 }
             }
         });
 
-        txtSaleOrder.setOnClickListener(new View.OnClickListener() {
+        txtEmpCode.setOnClickListener   (new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!TextUtils.isEmpty(edEmpCode.getText()))
+                {
+                    edEmpCode.setText("");
+                    txtEmpCode.setTextColor(Color.parseColor("#000000"));
+                }
+            }
+        });
+
+        edEmpCode.addTextChangedListener(new TextWatcher() {
+            boolean ignoreChange = false;
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(!ignoreChange)
+                {
+                    ignoreChange = true;
+
+                    txtEmpCode.setTextColor(Color.parseColor("#FF0000"));
+                    edEmpCode.setText(edEmpCode.getText().toString().trim());
+
+                    ignoreChange = false;
+                }
+
+            }
+        });
+
+/*        txtSaleOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(!TextUtils.isEmpty(edSaleOrder.getText()))
@@ -117,9 +170,9 @@ public class PickingMSActivity extends AppCompatActivity {
                     edSaleOrder.requestFocus();
                 }
             }
-        });
+        });*/
 
-        edSaleOrder.addTextChangedListener(new TextWatcher() {
+        /*edSaleOrder.addTextChangedListener(new TextWatcher() {
             boolean ignoreChange = false;
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -157,60 +210,13 @@ public class PickingMSActivity extends AppCompatActivity {
                     }
                 }
             }
-        });
+        });*/
 
-        txtEmpCode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!TextUtils.isEmpty(edEmpCode.getText()))
-                {
-                    edEmpCode.setText("");
-
-                    txtEmpCode.setTextColor(Color.parseColor("#000000"));
-
-                    edEmpCode.requestFocus();
-                }
-            }
-        });
-
-        edEmpCode.addTextChangedListener(new TextWatcher() {
-            boolean ignoreChange = false;
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String qrCodeValue3 = edEmpCode.getText().toString();
-                if(qrCodeValue3.length() == 20)
-                {
-                    if(!ignoreChange)
-                    {
-                        ignoreChange = true;
-
-                        txtEmpCode.setTextColor(Color.parseColor("#FF0000"));
-
-                        edEmpCode.setText(qrCodeValue3.trim());
-
-                        ignoreChange = false;
-                    }
-                }
-            }
-        });
-
-        btnNext = findViewById(R.id.btnNext);
-        btnCancel = findViewById(R.id.btnCancel);
+        btnNext     = findViewById(R.id.btnNext);
+        btnCancel   = findViewById(R.id.btnCancel);
 
         // Disable keypad when click
         edCustomerCode.setShowSoftInputOnFocus(false);
-        edSaleOrder.setShowSoftInputOnFocus(false);
-        edEmpCode.setShowSoftInputOnFocus(false);
 
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -219,24 +225,18 @@ public class PickingMSActivity extends AppCompatActivity {
                 {
                     PickingDatabaseHelper myDB = new PickingDatabaseHelper(PickingMSActivity.this);
                     String PLNumber = edPLNumber.getText().toString().trim();
-                    String item = edItem.getText().toString().trim();
-                    Integer quantity = Integer.valueOf(edQuantity.getText().toString().trim());
 
                     // Get data
                     handy_ms = new handy_ms(
                             edCustomerCode.getText().toString().trim(),
                             PLNumber,
                             edDeliveryAddress.getText().toString().trim(),
-                            edSaleOrder.getText().toString().trim(),
-                            item,
-                            edLotID.getText().toString().trim(),
-                            quantity,
                             edEmpCode.getText().toString().trim(),
-                            null,
                             String.valueOf(Calendar.getInstance().getTime()),   // CREATE_DATE
-                            edEmpCode.getText().toString().trim(),              // CREATE
+                            edEmpCode.getText().toString().trim(),              // CREATE_BY
                             null,                                               // EDIT_DATE
                             null,                                               // EDIT_BY
+                            0,                                                  // STATUS
                             null,                                               // COLUMN1
                             null,                                               // COLUMN2
                             null,                                               // COLUMN3
@@ -247,7 +247,7 @@ public class PickingMSActivity extends AppCompatActivity {
                     // Delete all data before add new
                     myDB.deleteData(TABLE_HANDY_MS);
 
-                    long result = myDB.addHandyMS(handy_ms);
+                    long result = myDB.addHandyMS(TABLE_HANDY_MS ,handy_ms);
 
                     if(result == -1)
                     {
@@ -283,14 +283,7 @@ public class PickingMSActivity extends AppCompatActivity {
             return false;
         }
 
-        if(edSaleOrder.getText().toString().matches(""))
-        {
-            Toast.makeText(PickingMSActivity.this, "Input Sale Order", Toast.LENGTH_SHORT).show();
-            edSaleOrder.requestFocus();
-            return false;
-        }
-
-        if(edEmpCode.getText().toString().matches(""))
+        if(String.valueOf(edEmpCode.getText()).length() == 0)
         {
             Toast.makeText(PickingMSActivity.this, "Input Employee Code", Toast.LENGTH_SHORT).show();
             edEmpCode.requestFocus();

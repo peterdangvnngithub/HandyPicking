@@ -6,16 +6,12 @@ public class handy_ms implements Serializable {
     private String CUSTOMER_CODE;
     private String PICKING_LIST_NO;
     private String DELIVERY_ADDRESS;
-    private String SALE_ORDER;
-    private String ITEM_CODE;
-    private String LOT_ID;
-    private Integer QUANTITY;
     private String EMPLOYEE_CODE;
-    private String COLUMN6;
     private String CREATE_DATE;
     private String CREATE_BY;
     private String EDIT_DATE;
     private String EDIT_BY;
+    private Integer STATUS;
     private String COLUMN1;
     private String COLUMN2;
     private String COLUMN3;
@@ -25,16 +21,12 @@ public class handy_ms implements Serializable {
     public handy_ms(String CUSTOMER_CODE,
                     String PICKING_LIST_NO,
                     String DELIVERY_ADDRESS,
-                    String SALE_ORDER,
-                    String ITEM_CODE,
-                    String LOT_ID,
-                    Integer QUANTITY,
                     String EMPLOYEE_CODE,
-                    String COLUMN6,
                     String CREATE_DATE,
                     String CREATE_BY,
                     String EDIT_DATE,
                     String EDIT_BY,
+                    Integer STATUS,
                     String COLUMN1,
                     String COLUMN2,
                     String COLUMN3,
@@ -43,16 +35,12 @@ public class handy_ms implements Serializable {
         this.CUSTOMER_CODE = CUSTOMER_CODE;
         this.PICKING_LIST_NO = PICKING_LIST_NO;
         this.DELIVERY_ADDRESS = DELIVERY_ADDRESS;
-        this.SALE_ORDER = SALE_ORDER;
-        this.ITEM_CODE = ITEM_CODE;
-        this.LOT_ID = LOT_ID;
-        this.QUANTITY = QUANTITY;
         this.EMPLOYEE_CODE = EMPLOYEE_CODE;
-        this.COLUMN6 = COLUMN6;
         this.CREATE_DATE = CREATE_DATE;
         this.CREATE_BY = CREATE_BY;
         this.EDIT_DATE = EDIT_DATE;
         this.EDIT_BY = EDIT_BY;
+        this.STATUS = STATUS;
         this.COLUMN1 = COLUMN1;
         this.COLUMN2 = COLUMN2;
         this.COLUMN3 = COLUMN3;
@@ -70,22 +58,6 @@ public class handy_ms implements Serializable {
 
     public String getDELIVERY_ADDRESS() {
         return DELIVERY_ADDRESS;
-    }
-
-    public String getSALE_ORDER() {
-        return SALE_ORDER;
-    }
-
-    public String getITEM_CODE() {
-        return ITEM_CODE;
-    }
-
-    public String getLOT_ID() {
-        return LOT_ID;
-    }
-
-    public Integer getQUANTITY() {
-        return QUANTITY;
     }
 
     public String getEMPLOYEE_CODE() {
@@ -108,6 +80,8 @@ public class handy_ms implements Serializable {
         return EDIT_BY;
     }
 
+    public Integer getSTATUS() { return STATUS; }
+
     public String getCOLUMN1() {
         return COLUMN1;
     }
@@ -128,7 +102,59 @@ public class handy_ms implements Serializable {
         return COLUMN5;
     }
 
-    public String getCOLUMN6() {
-        return COLUMN6;
+    public void setCUSTOMER_CODE(String CUSTOMER_CODE) {
+        this.CUSTOMER_CODE = CUSTOMER_CODE;
+    }
+
+    public void setPICKING_LIST_NO(String PICKING_LIST_NO) {
+        this.PICKING_LIST_NO = PICKING_LIST_NO;
+    }
+
+    public void setDELIVERY_ADDRESS(String DELIVERY_ADDRESS) {
+        this.DELIVERY_ADDRESS = DELIVERY_ADDRESS;
+    }
+
+    public void setEMPLOYEE_CODE(String EMPLOYEE_CODE) {
+        this.EMPLOYEE_CODE = EMPLOYEE_CODE;
+    }
+
+    public void setCREATE_DATE(String CREATE_DATE) {
+        this.CREATE_DATE = CREATE_DATE;
+    }
+
+    public void setCREATE_BY(String CREATE_BY) {
+        this.CREATE_BY = CREATE_BY;
+    }
+
+    public void setEDIT_DATE(String EDIT_DATE) {
+        this.EDIT_DATE = EDIT_DATE;
+    }
+
+    public void setEDIT_BY(String EDIT_BY) {
+        this.EDIT_BY = EDIT_BY;
+    }
+
+    public void setSTATUS(Integer STATUS) {
+        this.STATUS = STATUS;
+    }
+
+    public void setCOLUMN1(String COLUMN1) {
+        this.COLUMN1 = COLUMN1;
+    }
+
+    public void setCOLUMN2(String COLUMN2) {
+        this.COLUMN2 = COLUMN2;
+    }
+
+    public void setCOLUMN3(String COLUMN3) {
+        this.COLUMN3 = COLUMN3;
+    }
+
+    public void setCOLUMN4(String COLUMN4) {
+        this.COLUMN4 = COLUMN4;
+    }
+
+    public void setCOLUMN5(String COLUMN5) {
+        this.COLUMN5 = COLUMN5;
     }
 }

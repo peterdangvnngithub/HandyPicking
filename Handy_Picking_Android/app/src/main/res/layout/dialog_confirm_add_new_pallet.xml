@@ -41,12 +41,12 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/btnNew"
+                android:id="@+id/btnNextPicking"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="12sp"
                 android:textColor="@color/white"
-                android:text="New"
+                android:text="Next"
                 android:gravity="center"/>
 
             <Button
