@@ -1,0 +1,375 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="HANDY_PICKING_Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="HANDY_PICKING_DETAIL">
+          <Key>
+            <PropertyRef Name="PICKING_LIST_NO" />
+            <PropertyRef Name="CUSTOMER_ITEM_CODE" />
+            <PropertyRef Name="SERIES" />
+          </Key>
+          <Property Name="PICKING_LIST_NO" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="CUSTOMER_ITEM_CODE" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="SERIES" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="QUANTITY" Type="int" Nullable="false" />
+          <Property Name="CREATE_DATE" Type="datetime" Nullable="false" />
+          <Property Name="CREATE_BY" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="EDIT_DATE" Type="datetime" />
+          <Property Name="EDIT_BY" Type="varchar" MaxLength="50" />
+          <Property Name="PALLET_NO" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="TVC_ITEM_CODE" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="COLUMN3" Type="varchar" MaxLength="30" />
+          <Property Name="COLUMN4" Type="varchar" MaxLength="30" />
+          <Property Name="COLUMN5" Type="varchar" MaxLength="30" />
+        </EntityType>
+        <EntityType Name="HANDY_PICKING_DETAIL_TEST">
+          <Key>
+            <PropertyRef Name="PICKING_LIST_NO" />
+            <PropertyRef Name="SERIES" />
+          </Key>
+          <Property Name="PICKING_LIST_NO" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="INVOICE_NO" Type="nvarchar" MaxLength="50" />
+          <Property Name="SALE_ORDER" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="ITEM_CODE" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="LOT_ID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="QUANTITY" Type="int" Nullable="false" />
+          <Property Name="PALLET_NO" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="SERIES" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="CUS_ITEM_CODE" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="TVC_ITEM_CODE" Type="nvarchar" MaxLength="50" />
+          <Property Name="CUSTOMER_PO" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="QTY_CARTON" Type="int" Nullable="false" />
+          <Property Name="QTY_PER_CARTON" Type="int" Nullable="false" />
+          <Property Name="QTY_TOTAL" Type="int" Nullable="false" />
+          <Property Name="NET_WEIGHT" Type="decimal" Precision="9" Scale="3" Nullable="false" />
+          <Property Name="NET_WEIGHT_TOTAL" Type="decimal" Precision="9" Scale="2" />
+          <Property Name="GROSS_WEIGHT" Type="decimal" Precision="9" Scale="2" Nullable="false" />
+          <Property Name="LOT_NO" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="CREATE_BY" Type="nvarchar" MaxLength="50" />
+          <Property Name="CREATE_AT" Type="datetime" />
+          <Property Name="EDIT_BY" Type="nvarchar" MaxLength="50" />
+          <Property Name="EDIT_AT" Type="datetime" />
+          <Property Name="COLUMN1" Type="varchar" MaxLength="30" />
+          <Property Name="COLUMN2" Type="varchar" MaxLength="30" />
+          <Property Name="COLUMN3" Type="varchar" MaxLength="30" />
+          <Property Name="COLUMN4" Type="varchar" MaxLength="30" />
+          <Property Name="COLUMN5" Type="varchar" MaxLength="30" />
+        </EntityType>
+        <EntityType Name="HANDY_PICKING_MS">
+          <Key>
+            <PropertyRef Name="PICKING_LIST_NO" />
+          </Key>
+          <Property Name="CUSTOMER_CODE" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="PICKING_LIST_NO" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="DELIVERY_ADDRESS" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="EMPLOYEE_CODE" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="CREATE_DATE" Type="datetime" Nullable="false" />
+          <Property Name="CREATE_BY" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="EDIT_DATE" Type="datetime" />
+          <Property Name="EDIT_BY" Type="varchar" MaxLength="50" />
+          <Property Name="STATUS" Type="int" />
+          <Property Name="COLUMN1" Type="varchar" MaxLength="30" />
+          <Property Name="COLUMN2" Type="varchar" MaxLength="30" />
+          <Property Name="COLUMN3" Type="varchar" MaxLength="30" />
+          <Property Name="COLUMN4" Type="varchar" MaxLength="30" />
+          <Property Name="COLUMN5" Type="varchar" MaxLength="30" />
+        </EntityType>
+        <EntityType Name="PRODUCTMF">
+          <Key>
+            <PropertyRef Name="ITEM_CODE" />
+          </Key>
+          <Property Name="ITEM_CODE" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="ITEM_NAME" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="ITEM_NAME_E" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="ITEM_NAME_V" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="ITEM_CLASSIFY" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="UNIT_ITEM" Type="char" MaxLength="6" Nullable="false" />
+          <Property Name="CUSTOMER" Type="varchar" MaxLength="10" />
+          <Property Name="SUPPLIER" Type="varchar" MaxLength="10" />
+          <Property Name="LOT_SIZE" Type="decimal" Precision="18" Scale="6" />
+          <Property Name="PRODUCT_DAY" Type="decimal" Precision="18" Scale="6" />
+          <Property Name="SAFETY_STOCK" Type="decimal" Precision="18" Scale="6" />
+          <Property Name="LOSS" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="WEIGHT" Type="decimal" Precision="18" Scale="6" />
+          <Property Name="WEIGHT_UNIT" Type="varchar" MaxLength="3" />
+          <Property Name="BOX_TYPE" Type="varchar" MaxLength="30" />
+          <Property Name="BOX_QUANTITY" Type="decimal" Precision="18" Scale="6" />
+          <Property Name="BOX_SIZE" Type="varchar" MaxLength="30" />
+          <Property Name="BOX_WEIGHT" Type="decimal" Precision="18" Scale="6" />
+          <Property Name="MEMO" Type="varchar" MaxLength="30" />
+          <Property Name="CREATE_DATE" Type="datetime" />
+          <Property Name="CREATE_BY" Type="varchar" MaxLength="8" />
+          <Property Name="EDIT_DATE" Type="datetime" />
+          <Property Name="EDIT_BY" Type="varchar" MaxLength="8" />
+          <Property Name="PROCESS_CODE" Type="varchar" MaxLength="50" />
+          <Property Name="PALLET_WEIGHT" Type="numeric" Precision="18" Scale="6" />
+          <Property Name="BOXPERPALLET_QTY" Type="numeric" Precision="18" Scale="6" />
+          <Property Name="DEL_FLAG" Type="bit" Nullable="false" />
+          <Property Name="TOLERANCE" Type="numeric" Precision="18" Scale="0" />
+          <Property Name="CUS_ITEM_NAME" Type="nvarchar" MaxLength="256" />
+          <Property Name="ACC_ITEM_CODE" Type="varchar" MaxLength="30" />
+        </EntityType>
+        <EntityContainer Name="HANDY_PICKING_ModelStoreContainer">
+          <EntitySet Name="HANDY_PICKING_DETAIL" EntityType="Self.HANDY_PICKING_DETAIL" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HANDY_PICKING_DETAIL_TEST" EntityType="Self.HANDY_PICKING_DETAIL_TEST" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HANDY_PICKING_MS" EntityType="Self.HANDY_PICKING_MS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PRODUCTMF" EntityType="Self.PRODUCTMF" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="HANDY_PICKING_Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="HANDY_PICKING_Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="HANDY_PICKING_DETAIL" EntityType="HANDY_PICKING_Model.HANDY_PICKING_DETAIL" />
+          <EntitySet Name="HANDY_PICKING_DETAIL_TEST" EntityType="HANDY_PICKING_Model.HANDY_PICKING_DETAIL_TEST" />
+          <EntitySet Name="PRODUCTMFs" EntityType="HANDY_PICKING_Model.PRODUCTMF" />
+          <EntitySet Name="HANDY_PICKING_MS" EntityType="HANDY_PICKING_Model.HANDY_PICKING_MS" />
+        </EntityContainer>
+        <EntityType Name="HANDY_PICKING_DETAIL">
+          <Key>
+            <PropertyRef Name="PICKING_LIST_NO" />
+            <PropertyRef Name="CUSTOMER_ITEM_CODE" />
+            <PropertyRef Name="SERIES" />
+          </Key>
+          <Property Name="PICKING_LIST_NO" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="CUSTOMER_ITEM_CODE" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="SERIES" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="QUANTITY" Type="Int32" Nullable="false" />
+          <Property Name="CREATE_DATE" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CREATE_BY" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="EDIT_DATE" Type="DateTime" Precision="3" />
+          <Property Name="EDIT_BY" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PALLET_NO" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="TVC_ITEM_CODE" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="COLUMN3" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="COLUMN4" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="COLUMN5" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="HANDY_PICKING_DETAIL_TEST">
+          <Key>
+            <PropertyRef Name="PICKING_LIST_NO" />
+            <PropertyRef Name="SERIES" />
+          </Key>
+          <Property Name="PICKING_LIST_NO" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="INVOICE_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SALE_ORDER" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="ITEM_CODE" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="LOT_ID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="QUANTITY" Type="Int32" Nullable="false" />
+          <Property Name="PALLET_NO" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SERIES" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CUS_ITEM_CODE" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TVC_ITEM_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CUSTOMER_PO" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="QTY_CARTON" Type="Int32" Nullable="false" />
+          <Property Name="QTY_PER_CARTON" Type="Int32" Nullable="false" />
+          <Property Name="QTY_TOTAL" Type="Int32" Nullable="false" />
+          <Property Name="NET_WEIGHT" Type="Decimal" Nullable="false" Precision="9" Scale="3" />
+          <Property Name="NET_WEIGHT_TOTAL" Type="Decimal" Precision="9" Scale="2" />
+          <Property Name="GROSS_WEIGHT" Type="Decimal" Nullable="false" Precision="9" Scale="2" />
+          <Property Name="LOT_NO" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="CREATE_BY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CREATE_AT" Type="DateTime" Precision="3" />
+          <Property Name="EDIT_BY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EDIT_AT" Type="DateTime" Precision="3" />
+          <Property Name="COLUMN1" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="COLUMN2" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="COLUMN3" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="COLUMN4" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="COLUMN5" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="PRODUCTMF">
+          <Key>
+            <PropertyRef Name="ITEM_CODE" />
+          </Key>
+          <Property Name="ITEM_CODE" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="ITEM_NAME" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="ITEM_NAME_E" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="ITEM_NAME_V" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="ITEM_CLASSIFY" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="UNIT_ITEM" Type="String" Nullable="false" MaxLength="6" FixedLength="true" Unicode="false" />
+          <Property Name="CUSTOMER" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="SUPPLIER" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="LOT_SIZE" Type="Decimal" Precision="18" Scale="6" />
+          <Property Name="PRODUCT_DAY" Type="Decimal" Precision="18" Scale="6" />
+          <Property Name="SAFETY_STOCK" Type="Decimal" Precision="18" Scale="6" />
+          <Property Name="LOSS" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="WEIGHT" Type="Decimal" Precision="18" Scale="6" />
+          <Property Name="WEIGHT_UNIT" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="BOX_TYPE" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="BOX_QUANTITY" Type="Decimal" Precision="18" Scale="6" />
+          <Property Name="BOX_SIZE" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="BOX_WEIGHT" Type="Decimal" Precision="18" Scale="6" />
+          <Property Name="MEMO" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="CREATE_DATE" Type="DateTime" Precision="3" />
+          <Property Name="CREATE_BY" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="EDIT_DATE" Type="DateTime" Precision="3" />
+          <Property Name="EDIT_BY" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="PROCESS_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PALLET_WEIGHT" Type="Decimal" Precision="18" Scale="6" />
+          <Property Name="BOXPERPALLET_QTY" Type="Decimal" Precision="18" Scale="6" />
+          <Property Name="DEL_FLAG" Type="Boolean" Nullable="false" />
+          <Property Name="TOLERANCE" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="CUS_ITEM_NAME" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="ACC_ITEM_CODE" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="HANDY_PICKING_MS">
+          <Key>
+            <PropertyRef Name="PICKING_LIST_NO" />
+          </Key>
+          <Property Name="CUSTOMER_CODE" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="PICKING_LIST_NO" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="DELIVERY_ADDRESS" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="EMPLOYEE_CODE" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="CREATE_DATE" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CREATE_BY" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="EDIT_DATE" Type="DateTime" Precision="3" />
+          <Property Name="EDIT_BY" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="STATUS" Type="Int32" />
+          <Property Name="COLUMN1" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="COLUMN2" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="COLUMN3" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="COLUMN4" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="COLUMN5" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="HANDY_PICKING_ModelStoreContainer" CdmEntityContainer="HANDY_PICKING_Entities">
+          <EntitySetMapping Name="HANDY_PICKING_DETAIL">
+            <EntityTypeMapping TypeName="HANDY_PICKING_Model.HANDY_PICKING_DETAIL">
+              <MappingFragment StoreEntitySet="HANDY_PICKING_DETAIL">
+                <ScalarProperty Name="COLUMN5" ColumnName="COLUMN5" />
+                <ScalarProperty Name="COLUMN4" ColumnName="COLUMN4" />
+                <ScalarProperty Name="COLUMN3" ColumnName="COLUMN3" />
+                <ScalarProperty Name="TVC_ITEM_CODE" ColumnName="TVC_ITEM_CODE" />
+                <ScalarProperty Name="PALLET_NO" ColumnName="PALLET_NO" />
+                <ScalarProperty Name="EDIT_BY" ColumnName="EDIT_BY" />
+                <ScalarProperty Name="EDIT_DATE" ColumnName="EDIT_DATE" />
+                <ScalarProperty Name="CREATE_BY" ColumnName="CREATE_BY" />
+                <ScalarProperty Name="CREATE_DATE" ColumnName="CREATE_DATE" />
+                <ScalarProperty Name="QUANTITY" ColumnName="QUANTITY" />
+                <ScalarProperty Name="SERIES" ColumnName="SERIES" />
+                <ScalarProperty Name="CUSTOMER_ITEM_CODE" ColumnName="CUSTOMER_ITEM_CODE" />
+                <ScalarProperty Name="PICKING_LIST_NO" ColumnName="PICKING_LIST_NO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HANDY_PICKING_DETAIL_TEST">
+            <EntityTypeMapping TypeName="HANDY_PICKING_Model.HANDY_PICKING_DETAIL_TEST">
+              <MappingFragment StoreEntitySet="HANDY_PICKING_DETAIL_TEST">
+                <ScalarProperty Name="COLUMN5" ColumnName="COLUMN5" />
+                <ScalarProperty Name="COLUMN4" ColumnName="COLUMN4" />
+                <ScalarProperty Name="COLUMN3" ColumnName="COLUMN3" />
+                <ScalarProperty Name="COLUMN2" ColumnName="COLUMN2" />
+                <ScalarProperty Name="COLUMN1" ColumnName="COLUMN1" />
+                <ScalarProperty Name="EDIT_AT" ColumnName="EDIT_AT" />
+                <ScalarProperty Name="EDIT_BY" ColumnName="EDIT_BY" />
+                <ScalarProperty Name="CREATE_AT" ColumnName="CREATE_AT" />
+                <ScalarProperty Name="CREATE_BY" ColumnName="CREATE_BY" />
+                <ScalarProperty Name="LOT_NO" ColumnName="LOT_NO" />
+                <ScalarProperty Name="GROSS_WEIGHT" ColumnName="GROSS_WEIGHT" />
+                <ScalarProperty Name="NET_WEIGHT_TOTAL" ColumnName="NET_WEIGHT_TOTAL" />
+                <ScalarProperty Name="NET_WEIGHT" ColumnName="NET_WEIGHT" />
+                <ScalarProperty Name="QTY_TOTAL" ColumnName="QTY_TOTAL" />
+                <ScalarProperty Name="QTY_PER_CARTON" ColumnName="QTY_PER_CARTON" />
+                <ScalarProperty Name="QTY_CARTON" ColumnName="QTY_CARTON" />
+                <ScalarProperty Name="CUSTOMER_PO" ColumnName="CUSTOMER_PO" />
+                <ScalarProperty Name="TVC_ITEM_CODE" ColumnName="TVC_ITEM_CODE" />
+                <ScalarProperty Name="CUS_ITEM_CODE" ColumnName="CUS_ITEM_CODE" />
+                <ScalarProperty Name="SERIES" ColumnName="SERIES" />
+                <ScalarProperty Name="PALLET_NO" ColumnName="PALLET_NO" />
+                <ScalarProperty Name="QUANTITY" ColumnName="QUANTITY" />
+                <ScalarProperty Name="LOT_ID" ColumnName="LOT_ID" />
+                <ScalarProperty Name="ITEM_CODE" ColumnName="ITEM_CODE" />
+                <ScalarProperty Name="SALE_ORDER" ColumnName="SALE_ORDER" />
+                <ScalarProperty Name="INVOICE_NO" ColumnName="INVOICE_NO" />
+                <ScalarProperty Name="PICKING_LIST_NO" ColumnName="PICKING_LIST_NO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PRODUCTMFs">
+            <EntityTypeMapping TypeName="HANDY_PICKING_Model.PRODUCTMF">
+              <MappingFragment StoreEntitySet="PRODUCTMF">
+                <ScalarProperty Name="ACC_ITEM_CODE" ColumnName="ACC_ITEM_CODE" />
+                <ScalarProperty Name="CUS_ITEM_NAME" ColumnName="CUS_ITEM_NAME" />
+                <ScalarProperty Name="TOLERANCE" ColumnName="TOLERANCE" />
+                <ScalarProperty Name="DEL_FLAG" ColumnName="DEL_FLAG" />
+                <ScalarProperty Name="BOXPERPALLET_QTY" ColumnName="BOXPERPALLET_QTY" />
+                <ScalarProperty Name="PALLET_WEIGHT" ColumnName="PALLET_WEIGHT" />
+                <ScalarProperty Name="PROCESS_CODE" ColumnName="PROCESS_CODE" />
+                <ScalarProperty Name="EDIT_BY" ColumnName="EDIT_BY" />
+                <ScalarProperty Name="EDIT_DATE" ColumnName="EDIT_DATE" />
+                <ScalarProperty Name="CREATE_BY" ColumnName="CREATE_BY" />
+                <ScalarProperty Name="CREATE_DATE" ColumnName="CREATE_DATE" />
+                <ScalarProperty Name="MEMO" ColumnName="MEMO" />
+                <ScalarProperty Name="BOX_WEIGHT" ColumnName="BOX_WEIGHT" />
+                <ScalarProperty Name="BOX_SIZE" ColumnName="BOX_SIZE" />
+                <ScalarProperty Name="BOX_QUANTITY" ColumnName="BOX_QUANTITY" />
+                <ScalarProperty Name="BOX_TYPE" ColumnName="BOX_TYPE" />
+                <ScalarProperty Name="WEIGHT_UNIT" ColumnName="WEIGHT_UNIT" />
+                <ScalarProperty Name="WEIGHT" ColumnName="WEIGHT" />
+                <ScalarProperty Name="LOSS" ColumnName="LOSS" />
+                <ScalarProperty Name="SAFETY_STOCK" ColumnName="SAFETY_STOCK" />
+                <ScalarProperty Name="PRODUCT_DAY" ColumnName="PRODUCT_DAY" />
+                <ScalarProperty Name="LOT_SIZE" ColumnName="LOT_SIZE" />
+                <ScalarProperty Name="SUPPLIER" ColumnName="SUPPLIER" />
+                <ScalarProperty Name="CUSTOMER" ColumnName="CUSTOMER" />
+                <ScalarProperty Name="UNIT_ITEM" ColumnName="UNIT_ITEM" />
+                <ScalarProperty Name="ITEM_CLASSIFY" ColumnName="ITEM_CLASSIFY" />
+                <ScalarProperty Name="ITEM_NAME_V" ColumnName="ITEM_NAME_V" />
+                <ScalarProperty Name="ITEM_NAME_E" ColumnName="ITEM_NAME_E" />
+                <ScalarProperty Name="ITEM_NAME" ColumnName="ITEM_NAME" />
+                <ScalarProperty Name="ITEM_CODE" ColumnName="ITEM_CODE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HANDY_PICKING_MS">
+            <EntityTypeMapping TypeName="HANDY_PICKING_Model.HANDY_PICKING_MS">
+              <MappingFragment StoreEntitySet="HANDY_PICKING_MS">
+                <ScalarProperty Name="COLUMN5" ColumnName="COLUMN5" />
+                <ScalarProperty Name="COLUMN4" ColumnName="COLUMN4" />
+                <ScalarProperty Name="COLUMN3" ColumnName="COLUMN3" />
+                <ScalarProperty Name="COLUMN2" ColumnName="COLUMN2" />
+                <ScalarProperty Name="COLUMN1" ColumnName="COLUMN1" />
+                <ScalarProperty Name="STATUS" ColumnName="STATUS" />
+                <ScalarProperty Name="EDIT_BY" ColumnName="EDIT_BY" />
+                <ScalarProperty Name="EDIT_DATE" ColumnName="EDIT_DATE" />
+                <ScalarProperty Name="CREATE_BY" ColumnName="CREATE_BY" />
+                <ScalarProperty Name="CREATE_DATE" ColumnName="CREATE_DATE" />
+                <ScalarProperty Name="EMPLOYEE_CODE" ColumnName="EMPLOYEE_CODE" />
+                <ScalarProperty Name="DELIVERY_ADDRESS" ColumnName="DELIVERY_ADDRESS" />
+                <ScalarProperty Name="PICKING_LIST_NO" ColumnName="PICKING_LIST_NO" />
+                <ScalarProperty Name="CUSTOMER_CODE" ColumnName="CUSTOMER_CODE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
