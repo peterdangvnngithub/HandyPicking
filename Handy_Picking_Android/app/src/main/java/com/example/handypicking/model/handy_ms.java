@@ -5,7 +5,8 @@ import java.io.Serializable;
 public class handy_ms implements Serializable {
     private String CUSTOMER_CODE;
     private String PICKING_LIST_NO;
-    private String DELIVERY_ADDRESS;
+    private String DELIVERY_ADDRESS_CODE;
+    private String DELIVERY_ADDRESS_NAME;
     private String EMPLOYEE_CODE;
     private String CREATE_DATE;
     private String CREATE_BY;
@@ -20,7 +21,8 @@ public class handy_ms implements Serializable {
 
     public handy_ms(String CUSTOMER_CODE,
                     String PICKING_LIST_NO,
-                    String DELIVERY_ADDRESS,
+                    String DELIVERY_ADDRESS_CODE,
+                    String DELIVERY_ADDRESS_NAME,
                     String EMPLOYEE_CODE,
                     String CREATE_DATE,
                     String CREATE_BY,
@@ -32,32 +34,39 @@ public class handy_ms implements Serializable {
                     String COLUMN3,
                     String COLUMN4,
                     String COLUMN5) {
-        this.CUSTOMER_CODE = CUSTOMER_CODE;
-        this.PICKING_LIST_NO = PICKING_LIST_NO;
-        this.DELIVERY_ADDRESS = DELIVERY_ADDRESS;
-        this.EMPLOYEE_CODE = EMPLOYEE_CODE;
-        this.CREATE_DATE = CREATE_DATE;
-        this.CREATE_BY = CREATE_BY;
-        this.EDIT_DATE = EDIT_DATE;
-        this.EDIT_BY = EDIT_BY;
-        this.STATUS = STATUS;
-        this.COLUMN1 = COLUMN1;
-        this.COLUMN2 = COLUMN2;
-        this.COLUMN3 = COLUMN3;
-        this.COLUMN4 = COLUMN4;
-        this.COLUMN5 = COLUMN5;
+        this.CUSTOMER_CODE          = CUSTOMER_CODE;
+        this.PICKING_LIST_NO        = PICKING_LIST_NO;
+        this.DELIVERY_ADDRESS_CODE  = DELIVERY_ADDRESS_CODE;
+        this.DELIVERY_ADDRESS_NAME  = DELIVERY_ADDRESS_NAME;
+        this.EMPLOYEE_CODE          = EMPLOYEE_CODE;
+        this.CREATE_DATE            = CREATE_DATE;
+        this.CREATE_BY              = CREATE_BY;
+        this.EDIT_DATE              = EDIT_DATE;
+        this.EDIT_BY                = EDIT_BY;
+        this.STATUS                 = STATUS;
+        this.COLUMN1                = COLUMN1;
+        this.COLUMN2                = COLUMN2;
+        this.COLUMN3                = COLUMN3;
+        this.COLUMN4                = COLUMN4;
+        this.COLUMN5                = COLUMN5;
     }
 
     public String getCUSTOMER_CODE() {
         return CUSTOMER_CODE;
     }
 
-    public String getPICKING_LIST_NO() {
+    public String getPICKING_LIST_NO()
+    {
         return PICKING_LIST_NO;
     }
 
-    public String getDELIVERY_ADDRESS() {
-        return DELIVERY_ADDRESS;
+    public String getDELIVERY_ADDRESS_CODE()
+    {
+        return DELIVERY_ADDRESS_CODE;
+    }
+    public String getDELIVERY_ADDRESS_NAME()
+    {
+        return DELIVERY_ADDRESS_NAME;
     }
 
     public String getEMPLOYEE_CODE() {
@@ -110,8 +119,12 @@ public class handy_ms implements Serializable {
         this.PICKING_LIST_NO = PICKING_LIST_NO;
     }
 
-    public void setDELIVERY_ADDRESS(String DELIVERY_ADDRESS) {
-        this.DELIVERY_ADDRESS = DELIVERY_ADDRESS;
+    public void setDELIVERY_ADDRESS_CODE(String DELIVERY_ADDRESS_CODE) {
+        this.DELIVERY_ADDRESS_CODE = DELIVERY_ADDRESS_CODE;
+    }
+
+    public void setDELIVERY_ADDRESS_NAME(String DELIVERY_ADDRESS_NAME) {
+        this.DELIVERY_ADDRESS_NAME = DELIVERY_ADDRESS_NAME;
     }
 
     public void setEMPLOYEE_CODE(String EMPLOYEE_CODE) {

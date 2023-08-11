@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import com.example.handypicking.api.ApiClient;
 import com.example.handypicking.api.ApiInterface;
 import com.example.handypicking.model.handy_ms;
+import com.example.handypicking.preferences.AppPreferences;
 
 import java.util.List;
 
@@ -15,17 +16,19 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class HistoryPickingPresenter {
-    private static final String TAG = "HistoryPickingPresenter";
+    private AppPreferences appPreferences;
     private final HistoryPickingView view;
+    private static final String TAG = "HistoryPickingPresenter";
 
-    public HistoryPickingPresenter(HistoryPickingView historyView) {
-        this.view = historyView;
+    public HistoryPickingPresenter(AppPreferences appPreferences, HistoryPickingView view) {
+        this.appPreferences = appPreferences;
+        this.view = view;
     }
 
-    public void getData() {
+    public void getDataHandyMS() {
         //Request to server
         Log.d(TAG, "getData HandyMS");
-        ApiInterface apiInterface = ApiClient.getApiClient().create( ApiInterface.class );
+        ApiInterface apiInterface = ApiClient.getApiClient(appPreferences).create( ApiInterface.class );
         Call<List<handy_ms>> call = apiInterface.getHandyMS();
 
         call.enqueue( new Callback<List<handy_ms>>() {

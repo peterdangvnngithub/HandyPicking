@@ -1,7 +1,7 @@
 package com.example.handypicking.api;
 
-import com.example.handypicking.model.handy_detail;
 import com.example.handypicking.model.handy_ms;
+import com.example.handypicking.model.handy_detail;
 
 import java.util.List;
 
@@ -26,6 +26,9 @@ public interface ApiInterface {
 
     @GET("handyPickingDetail/{series}")
     Call<List<handy_detail>> check_Exists_HandyPicking_Detail(@Path("series") String series);
+
+    @POST("checkExistsDetail")
+    Call<Integer> check_Exists_List_HandyPicking_Detail(@Body RequestBody requestBody);
 
     @POST("handyPickingMS")
     Call<ResponseBody> send_Handy_MS(@Body RequestBody requestBody);

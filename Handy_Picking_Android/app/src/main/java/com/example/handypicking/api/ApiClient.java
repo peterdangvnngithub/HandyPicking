@@ -1,5 +1,7 @@
 package com.example.handypicking.api;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -8,12 +10,15 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import com.example.handypicking.preferences.AppPreferences;
 
 public class ApiClient {
-    private static final String BASE_URL = "http://192.168.13.231:4545/";
     private static Retrofit retrofit;
+    private static String TAG = "ApiClient";
 
-    public static Retrofit getApiClient() {
+    public static Retrofit getApiClient(AppPreferences appPreferences) {
+        String BASE_URL = appPreferences.getApiSetting();
+        Log.d(TAG, BASE_URL);
         Gson gson = new GsonBuilder()
                 .setLenient()
                 .create();

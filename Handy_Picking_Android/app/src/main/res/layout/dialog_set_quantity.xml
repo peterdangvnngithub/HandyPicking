@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="12dp"
-        android:text="Set quantity"
+        android:text="Nhập số lượng tem lẻ"
         android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="bold" />

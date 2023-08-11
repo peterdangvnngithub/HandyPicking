@@ -1,7 +1,8 @@
-﻿using System;
+﻿using Handy_Picking_Winform;
+using System;
 using System.Windows.Forms;
 
-namespace Time_Keeping
+namespace Handy_Picking_Winform
 {
     static class Program
     {
@@ -13,7 +14,7 @@ namespace Time_Keeping
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form_Main());
+            Application.Run(new Form_Login());
         }
     }
 }

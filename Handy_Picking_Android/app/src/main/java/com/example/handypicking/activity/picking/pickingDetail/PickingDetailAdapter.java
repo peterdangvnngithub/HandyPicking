@@ -33,7 +33,7 @@ public class PickingDetailAdapter extends RecyclerView.Adapter<PickingDetailAdap
     @Override
     public PickingHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
     {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.picking_item, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.row_item_picking_detail, parent, false);
         return new PickingHolder(view, itemClickListener );
     }
 

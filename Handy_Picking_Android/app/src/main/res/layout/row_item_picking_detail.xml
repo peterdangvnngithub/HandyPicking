@@ -7,7 +7,7 @@
 
     <TextView
         android:id="@+id/txtItemCode"
-        android:layout_width="70dp"
+        android:layout_width="90dp"
         android:layout_height="wrap_content"
         android:text="TextView"
         android:maxLines="3"
@@ -18,7 +18,7 @@
 
     <TextView
         android:id="@+id/txtSeries"
-        android:layout_width="100dp"
+        android:layout_width="90dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:text="TextView"
@@ -30,10 +30,11 @@
 
     <TextView
         android:id="@+id/txtQuantity"
-        android:layout_width="80dp"
+        android:layout_width="62dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:text="TextView"
+        android:text="111,000"
+        android:textAlignment="textEnd"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/txtSeries"
@@ -41,12 +42,12 @@
 
     <Button
         android:id="@+id/btnDelete"
-        android:layout_width="40dp"
-        android:layout_height="38dp"
-        android:layout_marginEnd="5dp"
-        android:text="X"
-        android:textColor="@color/white"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginEnd="3dp"
+        android:background="@drawable/ic_delete"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

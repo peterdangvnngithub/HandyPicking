@@ -12,30 +12,35 @@ import android.text.TextUtils;
 import android.graphics.Color;
 import android.content.Intent;
 import android.content.DialogInterface;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.KeyEvent;
+import android.widget.Toast;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.handypicking.R;
 import com.example.handypicking.Utils.Utils;
-import com.example.handypicking.Utils.UtilsView;
-import com.example.handypicking.activity.menu.MenuActivity;
-import com.example.handypicking.database.PickingDatabaseHelper;
 import com.example.handypicking.model.handy_ms;
 import com.example.handypicking.model.handy_detail;
+import com.example.handypicking.activity.menu.MenuActivity;
+import com.example.handypicking.database.PickingDatabaseHelper;
+import com.example.handypicking.preferences.AppPreferences;
 
-import java.util.Calendar;
 import java.util.List;
+import android.util.Log;
+import java.util.Calendar;
 import java.util.ArrayList;
 import java.text.DecimalFormat;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class PickingDetailActivity extends AppCompatActivity{
-    TextView txtLabelItem_A, txtItem, txtQuantity, txtLabelPalletNo, txtSaleOrder, txtLotID, txtPalletNo, txtTotalQRCodeScan,txtQuantityDetailTotal;
+    TextView txtLabelPalletNo, txtPalletNo, txtLabelItem_A, txtItem, txtQuantity, txtSaleOrder, txtLotID;
+    TextView labelEmployeeCode, txtEmployeeCode , txtTotalQRCodeScan,txtQuantityDetailTotal;
     Button  btnPost, btnCancel;
     RecyclerView recyclerView;
     PickingDatabaseHelper myDB;
@@ -45,10 +50,10 @@ public class PickingDetailActivity extends AppCompatActivity{
     final String TABLE_HANDY_MS_LOCAL = "handy_ms_local";
     final String TABLE_HANDY_DETAIL_LOCAL = "handy_detail_local";
     private PickingDetailAdapter pickingDetailAdapter;
-    private PickingDetailPresenter pickingDetailPresenter = new PickingDetailPresenter();
-
+    private PickingDetailPresenter pickingDetailPresenter;
+    private AppPreferences appPreferences;
     private Utils utils;
-    handy_ms handyMS;
+    private handy_ms handyMS;
     private List<handy_detail> list_handyDetail = new ArrayList<>();
     private static final String TAG = "PickingDetailActivity";
     @Override
@@ -63,6 +68,8 @@ public class PickingDetailActivity extends AppCompatActivity{
         txtQuantity             = findViewById(R.id.txtQuantity);
         txtSaleOrder            = findViewById(R.id.txtSaleOrder);
         txtLotID                = findViewById(R.id.txtLotID);
+        labelEmployeeCode       = findViewById(R.id.labelEmployeeCode);
+        txtEmployeeCode         = findViewById(R.id.txtEmployeeCode);
         txtTotalQRCodeScan      = findViewById(R.id.txtTotalQRCodeScan);
         txtQuantityDetailTotal  = findViewById(R.id.txtQuantityDetailTotal);
 
@@ -71,15 +78,41 @@ public class PickingDetailActivity extends AppCompatActivity{
         btnPost                 = findViewById(R.id.btnPost);
         btnCancel               = findViewById(R.id.btnCancel);
 
+        appPreferences          = new AppPreferences(PickingDetailActivity.this);
+        utils                   = new Utils(PickingDetailActivity.this, appPreferences);
+
         myDB                    = new PickingDatabaseHelper(PickingDetailActivity.this);
+        pickingDetailPresenter  = new PickingDetailPresenter(appPreferences, utils);
 
-        utils                   = new Utils(PickingDetailActivity.this);
+        Intent intent = getIntent();
 
-        if(getIntent().getExtras() != null) {
-            handyMS = (handy_ms) getIntent().getSerializableExtra("handyMS");
-            //TODO
-            /*txtItem.setText(handyMS.getITEM_CODE());
-            txtQuantity.setText(String.valueOf(handyMS.getQUANTITY()));*/
+        if(intent != null)
+        {
+            handyMS = (handy_ms) intent.getSerializableExtra("handyMS");
+
+            String plNo = intent.getStringExtra("HistoryPicking-PLNo");
+            if(plNo != null)
+            {
+                // Get data PickingMS
+                Call<List<handy_ms>> call = pickingDetailPresenter.get_Data_Handy_MS_By_PLNo(plNo);
+                call.enqueue(new Callback<List<handy_ms>>() {
+                    @Override
+                    public void onResponse(Call<List<handy_ms>> call, Response<List<handy_ms>> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            List<handy_ms> handyMsList = response.body();
+                            // Xử lý danh sách handy_ms ở đây
+                            handyMS = handyMsList.get(0);
+                        } else {
+                            // Xử lý khi response không thành công hoặc body null
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<handy_ms>> call, Throwable t) {
+                        // Xử lý khi gặp lỗi
+                    }
+                });
+            }
         }
 
         itemClickListener = ((view, position) -> {
@@ -91,8 +124,8 @@ public class PickingDetailActivity extends AppCompatActivity{
                         int quantityTotal           = Integer.parseInt((txtQuantityDetailTotal.getText().toString()).replace(",", ""));
                         int quantityDetail          = list_handyDetail.get(position).getQTY_TOTAL();
                         int quantityTotalQRCodeScan = Integer.parseInt(txtTotalQRCodeScan.getText().toString()) - 1;
+                        DecimalFormat formatter     = new DecimalFormat("###,###,###");
 
-                        DecimalFormat formatter = new DecimalFormat("###,###,###");
                         Log.d(TAG, "1.Total: " + quantityTotal + ".Detail: " + quantityDetail);
                         txtQuantityDetailTotal.setText(formatter.format(quantityTotal - quantityDetail));
                         txtTotalQRCodeScan.setText(formatter.format(quantityTotalQRCodeScan));
@@ -112,13 +145,13 @@ public class PickingDetailActivity extends AppCompatActivity{
             });
 
             AlertDialog alert = builder.create();
-            alert.setTitle("Confirm");
+            alert.setTitle("Xác nhận");
             alert.setMessage("Bạn muốn xóa:\nItem: '"
                     + list_handyDetail.get(position).getCUS_ITEM_CODE()
                     + "'\nSeries: '"
                     + list_handyDetail.get(position).getSERIES()
                     + "'\nQuantity: '"
-                    + list_handyDetail.get(position).getQUANTITY()
+                    + list_handyDetail.get(position).getQTY_TOTAL()
                     + "'");
 
             alert.show();
@@ -149,140 +182,142 @@ public class PickingDetailActivity extends AppCompatActivity{
             }
         });
 
+        labelEmployeeCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!TextUtils.isEmpty(txtEmployeeCode.getText()))
+                {
+                    labelEmployeeCode.setTextColor(Color.parseColor("#000000"));
+                    txtEmployeeCode.setText("");
+                }
+            }
+        });
+
         btnPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                utils.isServerRunning(new UtilsView() {
+                utils.checkApiConnection(appPreferences.getApiSetting(), new Utils.validateApiConnection() {
                     @Override
-                    public void onServerStatusReceived(boolean isServerRunning) {
-                        // Do something with the result
-                        if(isServerRunning) {
-                            //TODO: Test web API is running
-                            Toast.makeText(PickingDetailActivity.this, "Result On", Toast.LENGTH_SHORT).show();
+                    public void isApiConnectionValid(boolean isConnected) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if(isConnected) {
+                                    if(checkError_Post())
+                                    {
+                                        try {
+                                            //Send data picking to Web API
+                                            List<handy_ms> list_handyMS = new ArrayList<>();
+                                            list_handyMS.add(handyMS);
+                                            utils.onSendDataHandyMS(list_handyMS);
+                                            utils.onSendDataHandyDetail(list_handyDetail);
 
-                            if(checkError())
-                            {
-                                try {
-                                    //Send data picking to Web API
-                                    List<handy_ms> list_handyMS = new ArrayList<>();
-                                    list_handyMS.add(handyMS);
-                                    utils.onSendDataHandyMS(list_handyMS);
-                                    utils.onSendDataHandyDetail(list_handyDetail);
+                                            // Ask to end post or Post new pallet. Display dialog confirm
+                                            final Dialog dialog = new Dialog(PickingDetailActivity.this);
+                                            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                            dialog.setContentView(R.layout.dialog_confirm_add_new_pallet);
 
-                                    //TODO: Ask to end post or Post new pallet. Display dialog confirm
+                                            TextView txtMessage;
+                                            Button btnNextPicking, btnCancel;
+
+                                            txtMessage      = dialog.findViewById(R.id.txtMessage);
+                                            btnNextPicking  = dialog.findViewById(R.id.btnNextPicking);
+                                            btnCancel       = dialog.findViewById(R.id.btnCancel);
+
+                                            txtMessage.setText("Lưu PL: '" + handyMS.getPICKING_LIST_NO() + "' thành công!\nBấm 'Next' để tiếp tục picking.\nBấm Cancel để về menu.");
+
+                                            btnNextPicking.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    // Clear local data
+                                                    myDB.deleteData(TABLE_HANDY_MS);
+                                                    myDB.deleteData(TABLE_HANDY_DETAIL);
+                                                    list_handyDetail.clear();
+
+                                                    // Refresh recyclerView
+                                                    pickingDetailAdapter.notifyDataSetChanged();
+
+                                                    txtQuantityDetailTotal.setText("0");
+                                                    txtTotalQRCodeScan.setText("0");
+
+                                                    // Clear item
+                                                    txtLabelItem_A.performClick();
+
+                                                    dialog.dismiss();
+                                                }
+                                            });
+
+                                            btnCancel.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    dialog.dismiss();
+
+                                                    // Clear local data
+                                                    myDB.deleteData(TABLE_HANDY_MS);
+                                                    myDB.deleteData(TABLE_HANDY_DETAIL);
+
+                                                    // Back to packing MS
+                                                    Intent intent = new Intent(PickingDetailActivity.this, MenuActivity.class);
+                                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                                    startActivity(intent);
+                                                }
+                                            });
+
+                                            dialog.show();
+                                        } catch (Exception ex) {
+                                            Log.d(TAG, ex.getMessage());
+                                        }
+                                    }
+                                } else {
+                                    // Display dialog confirm save data local
                                     final Dialog dialog = new Dialog(PickingDetailActivity.this);
                                     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                                    dialog.setContentView(R.layout.dialog_confirm_add_new_pallet);
+                                    dialog.setContentView(R.layout.dialog_confirm_save_data_local);
 
-                                    TextView txtMessage;
-                                    Button btnNextPicking, btnCancel;
+                                    Button btnCancel, btnSaveLocal;
 
-                                    txtMessage      = dialog.findViewById(R.id.txtMessage);
-                                    btnNextPicking  = dialog.findViewById(R.id.btnNextPicking);
                                     btnCancel       = dialog.findViewById(R.id.btnCancel);
-
-                                    txtMessage.setText("Lưu PL: '" + handyMS.getPICKING_LIST_NO() + "' thành công!\nBấm 'Next' để tiếp tục picking.\nBấm Cancel để về menu.");
-
-                                    btnNextPicking.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            // Clear local data
-                                            myDB.deleteData(TABLE_HANDY_MS);
-                                            myDB.deleteData(TABLE_HANDY_DETAIL);
-                                            list_handyDetail.clear();
-
-                                            // Refresh recyclerView
-                                            pickingDetailAdapter.notifyDataSetChanged();
-
-                                            /*txtPalletNo.setText("");*/
-                                            txtQuantityDetailTotal.setText("0");
-                                            txtTotalQRCodeScan.setText("0");
-
-                                            // Clear item
-                                            txtLabelItem_A.performClick();
-
-                                            dialog.dismiss();
-                                        }
-                                    });
+                                    btnSaveLocal    = dialog.findViewById(R.id.btnSaveLocal);
 
                                     btnCancel.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
                                             dialog.dismiss();
-
-                                            // Clear local data
-                                            myDB.deleteData(TABLE_HANDY_MS);
-                                            myDB.deleteData(TABLE_HANDY_DETAIL);
-
-                                            // Back to packing MS
-                                            Intent intent = new Intent(PickingDetailActivity.this, MenuActivity.class);
-                                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                            startActivity(intent);
                                         }
                                     });
 
+                                    btnSaveLocal.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            // Save to the local SQLite table and return to main menu
+                                            // Save the data to the temporary table
+                                            myDB.addHandyMS(TABLE_HANDY_MS_LOCAL, handyMS);
+                                            myDB.addListHandyDetails(TABLE_HANDY_DETAIL_LOCAL, list_handyDetail);
+
+                                            // Delete data in main table
+                                            myDB.deleteData(TABLE_HANDY_MS);
+                                            myDB.deleteData(TABLE_HANDY_DETAIL);
+
+                                            // Clear list data
+                                            list_handyDetail.clear();
+
+                                            // Refresh recyclerView
+                                            pickingDetailAdapter.notifyDataSetChanged();
+
+                                            txtItem.setText("");
+                                            txtQuantity.setText(String.valueOf(0));
+                                            txtSaleOrder.setText("");
+                                            txtLotID.setText("");
+                                            txtTotalQRCodeScan.setText(String.valueOf(0));
+                                            txtQuantityDetailTotal.setText(String.valueOf(0));
+
+                                            dialog.dismiss();
+                                        }
+                                    });
                                     dialog.show();
-                                } catch (Exception ex) {
-                                    Log.d(TAG, ex.getMessage());
                                 }
                             }
-                        } else {
-                            //TODO: Test web API not running
-                            Toast.makeText(PickingDetailActivity.this, "Không thể kết nối đến server", Toast.LENGTH_SHORT).show();
-
-                            //TODO: Display dialog confirm save data local
-                            final Dialog dialog = new Dialog(PickingDetailActivity.this);
-                            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                            dialog.setContentView(R.layout.dialog_confirm_save_data_local);
-
-                            Button btnCancel, btnSaveLocal;
-
-                            btnCancel       = dialog.findViewById(R.id.btnCancel);
-                            btnSaveLocal    = dialog.findViewById(R.id.btnSaveLocal);
-
-                            btnCancel.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    dialog.dismiss();
-
-                                    // Clear local data
-                                    myDB.deleteData(TABLE_HANDY_MS);
-                                    myDB.deleteData(TABLE_HANDY_DETAIL);
-
-                                    // Back to packing MS
-                                    Intent intent = new Intent(PickingDetailActivity.this, MenuActivity.class);
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                    startActivity(intent);
-                                }
-                            });
-
-                            btnSaveLocal.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    // TODO: Save to the local SQLite table and return to main menu
-                                    // Save the data to the temporary table
-                                    myDB.addHandyMS(TABLE_HANDY_MS_LOCAL, handyMS);
-                                    myDB.addListHandyDetails(TABLE_HANDY_DETAIL_LOCAL, list_handyDetail);
-
-                                    // Delete data in main table
-                                    myDB.deleteData(TABLE_HANDY_MS);
-                                    myDB.deleteData(TABLE_HANDY_DETAIL);
-
-                                    // Clear list data
-                                    list_handyDetail.clear();
-
-                                    // Refresh recyclerView
-                                    pickingDetailAdapter.notifyDataSetChanged();
-
-                                    txtPalletNo.setText("");
-                                    txtQuantityDetailTotal.setText("0");
-
-                                    dialog.dismiss();
-                                }
-                            });
-
-                            dialog.show();
-                        }
+                        });
                     }
                 });
             }
@@ -316,14 +351,16 @@ public class PickingDetailActivity extends AppCompatActivity{
             // Check if palletNo is empty
             if(txtPalletNo.getText().equals("")) {
                 String palletNo = event.getCharacters();
-                //TODO: Check format pallet No scan
+                // Check format pallet No scan
                 if(palletNo.length() == 20) {
-                    txtPalletNo.setText(palletNo.trim());
+                    txtPalletNo.setText(palletNo.trim().replaceAll("[\t ]", ""));
                     txtLabelPalletNo.setTextColor(Color.parseColor("#FF0000"));
                 } else {
-                    Toast.makeText(PickingDetailActivity.this, "Scan số pallet không đúng định dạng", Toast.LENGTH_SHORT).show();
+                    String title = "Lỗi";
+                    String messageError = "Scan số pallet không đúng định dạng";
+                    utils.displayDialogNotification(title, messageError);
                 }
-            } else if(txtItem.getText().equals("")) // Check if Itemcode is empty
+            } else if(txtItem.getText().equals("")) // Check if Item code is empty
             {
                 String Item = event.getCharacters();
 
@@ -341,7 +378,21 @@ public class PickingDetailActivity extends AppCompatActivity{
                     txtLotID.setText(lotID);
                     txtQuantity.setText(quantity);
                 } else {
-                    Toast.makeText(PickingDetailActivity.this, "Scan thông tin Item không đúng định dạng", Toast.LENGTH_SHORT).show();
+                    String title = "Lỗi";
+                    String message = "Scan thông tin Item không đúng định dạng";
+                    utils.displayDialogNotification(title, message);
+                }
+            } else if(txtEmployeeCode.getText().equals("")) // Check if Employee code is empty
+            {
+                String employeeCode = event.getCharacters();
+                // Check format Employee Code scan
+                if(employeeCode.length() == 20) {
+                    txtEmployeeCode.setText(employeeCode.trim());
+                    labelEmployeeCode.setTextColor(Color.parseColor("#FF0000"));
+                } else {
+                    String title = "Lỗi";
+                    String messageError = "Scan mã số nhân viên không đúng định dạng";
+                    utils.displayDialogNotification(title, messageError);
                 }
             } else {
                 if(event.getCharacters().length() == 114)
@@ -349,109 +400,104 @@ public class PickingDetailActivity extends AppCompatActivity{
                     handy_detail handyDetail = SplitString(event.getCharacters());
                     handyDetail.setPALLET_NO(txtPalletNo.getText().toString());
 
-                    if(check_Error_Picking_Detail(handyDetail, list_handyDetail))
-                    {
-                        if(handyDetail.getQUANTITY().equals(0))
-                        {
-                            //TODO: Call dialog Input quantity
-                            final Dialog dialog = new Dialog(PickingDetailActivity.this);
-                            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                            dialog.setContentView(R.layout.dialog_set_quantity);
-
-                            EditText edQuantity;
-                            Button btnOk, btnCancel;
-
-                            edQuantity  = dialog.findViewById(R.id.edQuantity);
-                            btnOk       = dialog.findViewById(R.id.btnOk);
-                            btnCancel   = dialog.findViewById(R.id.btnCancel);
-
-                            btnOk.setOnClickListener(new View.OnClickListener() {
+                    // Check exists item in database SQL Server
+                    pickingDetailPresenter.check_Exists_Data_Handy_Detail(handyDetail.getSERIES(), new PickingDetailView() {
+                        @Override
+                        public void isPickingDetailNull(boolean isPickingDetailNull) {
+                            runOnUiThread(new Runnable() {
                                 @Override
-                                public void onClick(View v) {
-                                    int quantityDetail          = Integer.parseInt(edQuantity.getText().toString());
-                                    int quantityTotal           = Integer.parseInt((txtQuantityDetailTotal.getText().toString()).replace(",", ""));
-                                    int quantityTotalQRCodeScan = Integer.parseInt(txtTotalQRCodeScan.getText().toString());
-
-                                    if (quantityDetail > 0) {
-                                        handyDetail.setQTY_TOTAL(quantityDetail);
-                                        quantityTotalQRCodeScan++;
-
-                                        list_handyDetail.add(handyDetail);
-                                        myDB.addHandyDetail(TABLE_HANDY_DETAIL, handyDetail);
-
-                                        DecimalFormat formatter = new DecimalFormat("###,###,###");
-                                        Log.d(TAG, "2.Total: " + quantityTotal + ".Detail: " + quantityDetail);
-                                        txtQuantityDetailTotal.setText(formatter.format(quantityTotal + quantityDetail));
-                                        txtTotalQRCodeScan.setText(formatter.format(quantityTotalQRCodeScan));
-
-                                        // Refresh recyclerView
-                                        pickingDetailAdapter.notifyDataSetChanged();
-
-                                        dialog.dismiss();
+                                public void run() {
+                                    if(!isPickingDetailNull)
+                                    {
+                                        String title = "Lỗi";
+                                        String message = "Item: " + handyDetail.getTVC_ITEM_CODE() + "\nSeries: " + handyDetail.getSERIES() + "\nđã tồn tại trên SQL Server.";
+                                        utils.displayDialogNotification(title, message);
                                     } else {
-                                        Toast.makeText(PickingDetailActivity.this, "Hãy nhập số lượng lớn hơn 0", Toast.LENGTH_SHORT).show();
-                                        edQuantity.setText("");
-                                        edQuantity.requestFocus();
+                                        if(check_Error_Picking_Detail(handyDetail, list_handyDetail))
+                                        {
+                                            if(handyDetail.getQTY_TOTAL().equals(0))
+                                            {
+                                                // Call dialog Input quantity
+                                                final Dialog dialog = new Dialog(PickingDetailActivity.this);
+                                                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                                dialog.setContentView(R.layout.dialog_set_quantity);
+
+                                                EditText edQuantity;
+                                                Button btnOk, btnCancel;
+
+                                                edQuantity  = dialog.findViewById(R.id.edQuantity);
+                                                btnOk       = dialog.findViewById(R.id.btnOk);
+                                                btnCancel   = dialog.findViewById(R.id.btnCancel);
+
+                                                btnOk.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View v) {
+                                                        int quantityDetail          = Integer.parseInt(edQuantity.getText().toString());
+                                                        int quantityTotal           = Integer.parseInt((txtQuantityDetailTotal.getText().toString()).replace(",", ""));
+                                                        int quantityTotalQRCodeScan = Integer.parseInt(txtTotalQRCodeScan.getText().toString());
+
+                                                        if (quantityDetail > 0) {
+                                                            handyDetail.setQTY_TOTAL(quantityDetail);
+                                                            quantityTotalQRCodeScan++;
+
+                                                            list_handyDetail.add(handyDetail);
+                                                            myDB.addHandyDetail(TABLE_HANDY_DETAIL, handyDetail);
+
+                                                            DecimalFormat formatter = new DecimalFormat("###,###,###");
+                                                            /*Log.d(TAG, "2.Total: " + quantityTotal + ".Detail: " + quantityDetail);*/
+                                                            txtQuantityDetailTotal.setText(formatter.format(quantityTotal + quantityDetail));
+                                                            txtTotalQRCodeScan.setText(formatter.format(quantityTotalQRCodeScan));
+
+                                                            // Refresh recyclerView
+                                                            pickingDetailAdapter.notifyDataSetChanged();
+
+                                                            dialog.dismiss();
+                                                        } else {
+                                                            Toast.makeText(PickingDetailActivity.this, "Hãy nhập số lượng lớn hơn 0", Toast.LENGTH_SHORT).show();
+                                                            edQuantity.setText("");
+                                                            edQuantity.requestFocus();
+                                                        }
+                                                    }
+                                                });
+
+                                                btnCancel.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View v)
+                                                    {
+                                                        dialog.dismiss();
+                                                    }
+                                                });
+
+                                                edQuantity.requestFocus();
+
+                                                dialog.show();
+                                            } else {
+                                                try {
+                                                    list_handyDetail.add(handyDetail);
+                                                    myDB.addHandyDetail(TABLE_HANDY_DETAIL, handyDetail);
+
+                                                    int quantityDetail          = handyDetail.getQTY_TOTAL();
+                                                    int quantityTotal           = Integer.parseInt((txtQuantityDetailTotal.getText().toString()).replace(",", ""));
+                                                    int quantityTotalQRCodeScan = Integer.parseInt(txtTotalQRCodeScan.getText().toString()) + 1;
+
+                                                    DecimalFormat formatter = new DecimalFormat("###,###,###");
+                                                    Log.d(TAG, "3.Total: " + quantityTotal + ".Detail: " + quantityDetail);
+                                                    txtQuantityDetailTotal.setText(formatter.format(quantityTotal + quantityDetail));
+                                                    txtTotalQRCodeScan.setText(formatter.format(quantityTotalQRCodeScan));
+
+                                                    // Refresh recyclerView
+                                                    pickingDetailAdapter.notifyDataSetChanged();
+                                                } catch(Exception e)
+                                                {
+                                                    Log.d(TAG, e.getMessage());
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                             });
-
-                            btnCancel.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v)
-                                {
-                                    dialog.dismiss();
-                                }
-                            });
-
-                            edQuantity.requestFocus();
-
-                            dialog.show();
-                        } else {
-                            try {
-                                list_handyDetail.add(handyDetail);
-                                myDB.addHandyDetail(TABLE_HANDY_DETAIL, handyDetail);
-
-                                int quantityDetail          = handyDetail.getQTY_TOTAL();
-                                int quantityTotal           = Integer.parseInt((txtQuantityDetailTotal.getText().toString()).replace(",", ""));
-                                int quantityTotalQRCodeScan = Integer.parseInt(txtTotalQRCodeScan.getText().toString()) + 1;
-
-                                DecimalFormat formatter = new DecimalFormat("###,###,###");
-                                Log.d(TAG, "3.Total: " + quantityTotal + ".Detail: " + quantityDetail);
-                                txtQuantityDetailTotal.setText(formatter.format(quantityTotal + quantityDetail));
-                                txtTotalQRCodeScan.setText(formatter.format(quantityTotalQRCodeScan));
-
-                                // Refresh recyclerView
-                                pickingDetailAdapter.notifyDataSetChanged();
-                            } catch(Exception e)
-                            {
-                                Log.d(TAG, e.getMessage());
-                            }
                         }
-                    }
-
-                    /*
-                    else {
-                        //TODO: Check info item code detail with header
-                        if (!checkExistData(handyDetail, list_handyDetail)) {
-                            handyDetail.setPALLET_NO(txtPalletNo.getText().toString());
-                            list_handyDetail.add(handyDetail);
-
-                            myDB.addHandyDetail(handyDetail);
-
-                            int quantityTotal   = Integer.parseInt((txtQuantityDetailTotal.getText().toString()).replace(",", ""));
-                            int quantityDetail  = handyDetail.getQUANTITY();
-
-                            DecimalFormat formatter = new DecimalFormat("###,###,###");
-                            txtQuantityDetailTotal.setText(formatter.format(quantityTotal + quantityDetail));
-
-                            // Refresh recyclerView
-                            pickingDetailAdapter.notifyDataSetChanged();
-                        } else {
-                            Toast.makeText(PickingDetailActivity.this, "Item đã có trong danh sách", Toast.LENGTH_SHORT).show();
-                            return false;
-                        }
-                    }*/
+                    });
                 } else {
                     String title = "Lỗi";
                     String message = "Scan thông tin Handy Picking Detail không đúng định dạng";
@@ -480,23 +526,10 @@ public class PickingDetailActivity extends AppCompatActivity{
             return false;
         }
 
-        //TODO: Check exists item in database SQL Server
-        pickingDetailPresenter.check_Exists_Data_Handy_Detail(handyDetail.getSERIES(), new PickingDetailView() {
-            @Override
-            public void isPickingDetailNull(boolean isPickingDetailNull) {
-                if(!isPickingDetailNull)
-                {
-                    String message = "Item: " + handyDetail.getTVC_ITEM_CODE() + "\nSeries: " + handyDetail.getSERIES() + " đã tồn tại trong hệ thống";
-                    utils.displayDialogNotification(title,message);
-                    txtItem.setText("");
-                }
-            }
-        });
-
-        //TODO: Check info item code detail with header
-        /*if(!handyDetail.getTVC_ITEM_CODE().equals(txtItem.getText().toString()))
+        // Check info item code detail with header
+        if(!handyDetail.getTVC_ITEM_CODE().equals(txtItem.getText().toString()))
         {
-            message = "Item Code Detail không trùng với Item Code Header."
+            message = "Item Header khác Item Detail"
                     + "\nHeader: "
                     + txtItem.getText().toString()
                     + "\nDetail: "
@@ -504,12 +537,52 @@ public class PickingDetailActivity extends AppCompatActivity{
 
             utils.displayDialogNotification(title,message);
             return false;
-        }*/
+        }
 
-        //TODO: Check exists item in list
+        // Check exists item in list
         if(checkExistData(handyDetail, list_handyDetail))
         {
-            message = "Item" + handyDetail.getTVC_ITEM_CODE() + " đã có trong danh sách";
+            message = "Item: "
+                    + handyDetail.getTVC_ITEM_CODE()
+                    + "\nSeries: "
+                    + handyDetail.getSERIES()
+                    + " đã có trong danh sách";
+            utils.displayDialogNotification(title, message);
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean checkError_Post()
+    {
+        String title = "Lỗi";
+        String message = "";
+
+        if(txtPalletNo.getText().toString().trim().equals(""))
+        {
+            message = "Chưa nhập PalletNo";
+            utils.displayDialogNotification(title, message);
+            return false;
+        }
+
+        if(txtItem.getText().toString().trim().equals(""))
+        {
+            message = "Chưa nhập Item";
+            utils.displayDialogNotification(title, message);
+            return false;
+        }
+
+        if(txtEmployeeCode.getText().toString().trim().equals(""))
+        {
+            message = "Chưa nhập Mã nhân viên";
+            utils.displayDialogNotification(title, message);
+            return false;
+        }
+
+        if(list_handyDetail.size() == 0)
+        {
+            message = "Chưa nhập Picking Detail";
             utils.displayDialogNotification(title, message);
             return false;
         }
@@ -520,58 +593,48 @@ public class PickingDetailActivity extends AppCompatActivity{
     private handy_detail SplitString(String qrCodeValue)
     {
         handy_detail handyDetail = new handy_detail();
-        if(checkError())
-        {
-            String customerItemCode = qrCodeValue.substring(0,18).trim();
-            String lineCode         = qrCodeValue.substring(18, 26).trim();
-            Integer quantity        = Integer.parseInt(qrCodeValue.substring(26, 34).trim().replace(".00",""));
-            String tvcItemCode      = qrCodeValue.substring(34, 52).trim();
-            String series           = qrCodeValue.substring(52, 70).trim();
 
-            Log.d(TAG, "customerItemCode: " + customerItemCode + ".TvcItemCode: " + tvcItemCode + ".Quantity: " + quantity + ".Series: " + series);
+        String customerItemCode = qrCodeValue.substring(0,18).trim();
+        String lineCode         = qrCodeValue.substring(18, 26).trim();
+        Integer quantity        = Integer.parseInt(qrCodeValue.substring(26, 34).trim().replace(".00",""));
+        String tvcItemCode      = qrCodeValue.substring(34, 52).trim();
+        String series           = qrCodeValue.substring(52, 70).trim();
+        String lotNo            = qrCodeValue.substring(103, 114).trim();
 
-            handyDetail = new handy_detail(
-                    handyMS.getPICKING_LIST_NO(),
-                    null,
-                    txtSaleOrder.getText().toString().trim(),           // Item header
-                    txtItem.getText().toString().trim(),                // Item header
-                    txtLotID.getText().toString().trim(),               // Item header
-                    Integer.parseInt(txtQuantity.getText().toString()), // Item header
-                    txtPalletNo.getText().toString().trim(),
-                    series,
-                    customerItemCode,
-                    tvcItemCode,
-                    null,
-                    0,
-                    0,
-                    quantity,
-                    Float.parseFloat("0") ,
-                    Float.parseFloat("0") ,
-                    Float.parseFloat("0") ,
-                    null,
-                    Calendar.getInstance().getTime().toString(),
-                    handyMS.getEMPLOYEE_CODE(),
-                    null,
-                    null,
-                    0,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null
-            );
-        }
+        Log.d(TAG, "customerItemCode: " + customerItemCode + ".TvcItemCode: " + tvcItemCode + ".Quantity: " + quantity + ".Series: " + series +  ".LotNo: " + lotNo);
+
+        handyDetail = new handy_detail(
+                handyMS.getPICKING_LIST_NO(),
+                null,
+                txtSaleOrder.getText().toString().trim(),           // Item header
+                txtItem.getText().toString().trim(),                // Item header
+                txtLotID.getText().toString().trim(),               // Item header
+                Integer.parseInt(txtQuantity.getText().toString()), // Item header
+                txtPalletNo.getText().toString().trim(),
+                series,
+                customerItemCode,
+                tvcItemCode,
+                null,
+                0,
+                0,
+                quantity,
+                Float.parseFloat("0"),
+                Float.parseFloat("0"),
+                Float.parseFloat("0"),
+                lotNo,
+                Calendar.getInstance().getTime().toString(),
+                txtEmployeeCode.getText().toString().trim(),         // Item header
+                null,
+                null,
+                0,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
 
         return handyDetail;
-    }
-
-    private boolean checkError() {
-        if(txtPalletNo.getText().toString().matches(""))
-        {
-            Toast.makeText(PickingDetailActivity.this, "Input Pallet No", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        return true;
     }
 
     private boolean checkExistData(handy_detail handyDetail, List<handy_detail> listHandyDetail)

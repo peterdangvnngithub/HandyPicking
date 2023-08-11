@@ -33,8 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>
-    </ApplicationIcon>
+    <ApplicationIcon>Logo_TAKAKO_PTS.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DevExpress.Data.Desktop.v21.2, Version=21.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
@@ -63,41 +62,51 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extension.cs" />
+    <Compile Include="Form_Login.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_Login.Designer.cs">
+      <DependentUpon>Form_Login.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form_Main.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form_Main.Designer.cs">
       <DependentUpon>Form_Main.cs</DependentUpon>
     </Compile>
-    <Compile Include="Resources\HandyPicking_Model.Context.cs">
+    <Compile Include="HandyPicking_Model.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>HandyPicking_Model.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="Resources\HandyPicking_Model.cs">
+    <Compile Include="HandyPicking_Model.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>HandyPicking_Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="Resources\HandyPicking_Model.Designer.cs">
+    <Compile Include="HandyPicking_Model.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>HandyPicking_Model.edmx</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Resources\HANDY_PICKING_DETAIL.cs">
+    <Compile Include="HANDY_PICKING_DETAIL.cs">
       <DependentUpon>HandyPicking_Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="Resources\HANDY_PICKING_DETAIL_TEST.cs">
+    <Compile Include="HANDY_PICKING_MS.cs">
       <DependentUpon>HandyPicking_Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="Resources\HANDY_PICKING_MS.cs">
+    <Compile Include="PRODUCTMF.cs">
       <DependentUpon>HandyPicking_Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="Resources\PRODUCTMF.cs">
+    <Compile Include="USER_MS.cs">
       <DependentUpon>HandyPicking_Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="Utils\UpdateProgarm.cs" />
+    <EmbeddedResource Include="Form_Login.resx">
+      <DependentUpon>Form_Login.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form_Main.resx">
       <DependentUpon>Form_Main.cs</DependentUpon>
     </EmbeddedResource>
@@ -112,11 +121,11 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EntityDeploy Include="Resources\HandyPicking_Model.edmx">
+    <EntityDeploy Include="HandyPicking_Model.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>HandyPicking_Model.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="Resources\HandyPicking_Model.edmx.diagram">
+    <None Include="HandyPicking_Model.edmx.diagram">
       <DependentUpon>HandyPicking_Model.edmx</DependentUpon>
     </None>
     <None Include="packages.config" />
@@ -138,12 +147,17 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Content Include="Resources\HandyPicking_Model.Context.tt">
+    <Content Include="Logo_TAKAKO_PTS.ico" />
+    <None Include="Resources\ic_launcher_round.png" />
+    <None Include="Resources\Logo_TAKAKO_PTS.png" />
+    <None Include="Resources\icon_eye.png" />
+    <None Include="Resources\eye_gray.png" />
+    <Content Include="HandyPicking_Model.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>HandyPicking_Model.edmx</DependentUpon>
       <LastGenOutput>HandyPicking_Model.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="Resources\HandyPicking_Model.tt">
+    <Content Include="HandyPicking_Model.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>HandyPicking_Model.edmx</DependentUpon>
       <LastGenOutput>HandyPicking_Model.cs</LastGenOutput>

@@ -27,7 +27,8 @@ public class PickingDatabaseHelper extends SQLiteOpenHelper {
     private static final String TABLE_HANDY_MS                      = "handy_ms";
     private static final String COL_HANDY_MS_CUSTOMER_CODE          = "customer_code";
     private static final String COL_HANDY_MS_PICKING_LIST_NO        = "picking_list_no";
-    private static final String COL_HANDY_MS_DELIVERY_ADDRESS       = "delivery_address";
+    private static final String COL_HANDY_MS_DELIVERY_ADDRESS_CODE  = "delivery_address_code";
+    private static final String COL_HANDY_MS_DELIVERY_ADDRESS_NAME  = "delivery_address_name";
     private static final String COL_HANDY_MS_EMPLOYEE_CODE          = "employee_code";
     private static final String COL_HANDY_MS_CREATE_DATE            = "create_date";
     private static final String COL_HANDY_MS_CREATE_BY              = "create_by";
@@ -76,7 +77,8 @@ public class PickingDatabaseHelper extends SQLiteOpenHelper {
     private String CREATE_TABLE_HANDY_MS = "CREATE TABLE " + TABLE_HANDY_MS +
             " (" + COL_HANDY_MS_CUSTOMER_CODE   + " TEXT, "     +
             COL_HANDY_MS_PICKING_LIST_NO        + " TEXT PRIMARY KEY, " +
-            COL_HANDY_MS_DELIVERY_ADDRESS       + " TEXT, "     +
+            COL_HANDY_MS_DELIVERY_ADDRESS_CODE  + " TEXT, "     +
+            COL_HANDY_MS_DELIVERY_ADDRESS_NAME  + " TEXT, "     +
             COL_HANDY_MS_EMPLOYEE_CODE          + " TEXT, "     +
             COL_HANDY_MS_CREATE_DATE            + " TEXT, "     +
             COL_HANDY_MS_CREATE_BY              + " TEXT, "     +
@@ -129,7 +131,8 @@ public class PickingDatabaseHelper extends SQLiteOpenHelper {
     private String CREATE_TABLE_HANDY_MS_LOCAL = "CREATE TABLE " + TABLE_HANDY_MS_LOCAL +
             " (" + COL_HANDY_MS_CUSTOMER_CODE   + " TEXT, "     +
             COL_HANDY_MS_PICKING_LIST_NO        + " TEXT PRIMARY KEY, " +
-            COL_HANDY_MS_DELIVERY_ADDRESS       + " TEXT, "     +
+            COL_HANDY_MS_DELIVERY_ADDRESS_CODE  + " TEXT, "     +
+            COL_HANDY_MS_DELIVERY_ADDRESS_NAME  + " TEXT, "     +
             COL_HANDY_MS_EMPLOYEE_CODE          + " TEXT, "     +
             COL_HANDY_MS_CREATE_DATE            + " TEXT, "     +
             COL_HANDY_MS_CREATE_BY              + " TEXT, "     +
@@ -220,20 +223,38 @@ public class PickingDatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
-        cv.put(COL_HANDY_MS_CUSTOMER_CODE,      handy_ms.getCUSTOMER_CODE());
-        cv.put(COL_HANDY_MS_PICKING_LIST_NO,    handy_ms.getPICKING_LIST_NO());
-        cv.put(COL_HANDY_MS_DELIVERY_ADDRESS,   handy_ms.getDELIVERY_ADDRESS());
-        cv.put(COL_HANDY_MS_EMPLOYEE_CODE,      handy_ms.getEMPLOYEE_CODE());
-        cv.put(COL_HANDY_MS_CREATE_DATE,        handy_ms.getCREATE_DATE());
-        cv.put(COL_HANDY_MS_CREATE_BY,          handy_ms.getCREATE_BY());
-        cv.put(COL_HANDY_MS_EDIT_DATE,          handy_ms.getEDIT_DATE());
-        cv.put(COL_HANDY_MS_EDIT_BY,            handy_ms.getEDIT_BY());
-        cv.put(COL_HANDY_MS_STATUS,             handy_ms.getSTATUS());
-        cv.put(COL_HANDY_MS_COLUMN1,            handy_ms.getCOLUMN1());
-        cv.put(COL_HANDY_MS_COLUMN2,            handy_ms.getCOLUMN2());
-        cv.put(COL_HANDY_MS_COLUMN3,            handy_ms.getCOLUMN3());
-        cv.put(COL_HANDY_MS_COLUMN4,            handy_ms.getCOLUMN4());
-        cv.put(COL_HANDY_MS_COLUMN5,            handy_ms.getCOLUMN5());
+        // Define the columns to be queried
+        String[] projection = {COL_HANDY_MS_CUSTOMER_CODE, COL_HANDY_MS_PICKING_LIST_NO};
+
+        // Define the selection criteria
+        String selection = COL_HANDY_MS_CUSTOMER_CODE + " = ? AND " + COL_HANDY_MS_PICKING_LIST_NO + " = ?";
+        String[] selectionArgs = {handy_ms.getCUSTOMER_CODE(), handy_ms.getPICKING_LIST_NO()};
+
+        // Perform the query to check if data exists
+        Cursor cursor = db.query(table_name, projection, selection, selectionArgs, null, null, null);
+
+        // Check if the cursor has any rows (i.e., data exists)
+        if (cursor.moveToFirst()) {
+            // Data already exists, handle accordingly (e.g., update existing data, show an error message, etc.)
+            cursor.close();
+            return -1; // Return a value indicating data already exists
+        }
+
+        cv.put(COL_HANDY_MS_CUSTOMER_CODE,          handy_ms.getCUSTOMER_CODE());
+        cv.put(COL_HANDY_MS_PICKING_LIST_NO,        handy_ms.getPICKING_LIST_NO());
+        cv.put(COL_HANDY_MS_DELIVERY_ADDRESS_CODE,  handy_ms.getDELIVERY_ADDRESS_CODE());
+        cv.put(COL_HANDY_MS_DELIVERY_ADDRESS_NAME,  handy_ms.getDELIVERY_ADDRESS_NAME());
+        cv.put(COL_HANDY_MS_EMPLOYEE_CODE,          handy_ms.getEMPLOYEE_CODE());
+        cv.put(COL_HANDY_MS_CREATE_DATE,            handy_ms.getCREATE_DATE());
+        cv.put(COL_HANDY_MS_CREATE_BY,              handy_ms.getCREATE_BY());
+        cv.put(COL_HANDY_MS_EDIT_DATE,              handy_ms.getEDIT_DATE());
+        cv.put(COL_HANDY_MS_EDIT_BY,                handy_ms.getEDIT_BY());
+        cv.put(COL_HANDY_MS_STATUS,                 handy_ms.getSTATUS());
+        cv.put(COL_HANDY_MS_COLUMN1,                handy_ms.getCOLUMN1());
+        cv.put(COL_HANDY_MS_COLUMN2,                handy_ms.getCOLUMN2());
+        cv.put(COL_HANDY_MS_COLUMN3,                handy_ms.getCOLUMN3());
+        cv.put(COL_HANDY_MS_COLUMN4,                handy_ms.getCOLUMN4());
+        cv.put(COL_HANDY_MS_COLUMN5,                handy_ms.getCOLUMN5());
 
         long result = db.insert(table_name, null, cv);
 
@@ -383,7 +404,7 @@ public class PickingDatabaseHelper extends SQLiteOpenHelper {
         return count;
     }
 
-    public List<handy_ms> getAllData_From_HandyMS(String tableName) {
+    public List<handy_ms> getAllData_HandyMS(String tableName) {
         List<handy_ms> list_HandyMS = new ArrayList<>();
 
         SQLiteDatabase db = getReadableDatabase();
@@ -392,7 +413,8 @@ public class PickingDatabaseHelper extends SQLiteOpenHelper {
             {
                 COL_HANDY_MS_CUSTOMER_CODE,
                 COL_HANDY_MS_PICKING_LIST_NO,
-                COL_HANDY_MS_DELIVERY_ADDRESS,
+                COL_HANDY_MS_DELIVERY_ADDRESS_CODE,
+                COL_HANDY_MS_DELIVERY_ADDRESS_NAME,
                 COL_HANDY_MS_EMPLOYEE_CODE,
                 COL_HANDY_MS_CREATE_DATE,
                 COL_HANDY_MS_CREATE_BY,
@@ -420,7 +442,8 @@ public class PickingDatabaseHelper extends SQLiteOpenHelper {
                 handy_ms data = new handy_ms(
                     cursor.getString(cursor.getColumnIndexOrThrow(COL_HANDY_MS_CUSTOMER_CODE)),
                     cursor.getString(cursor.getColumnIndexOrThrow(COL_HANDY_MS_PICKING_LIST_NO)),
-                    cursor.getString(cursor.getColumnIndexOrThrow(COL_HANDY_MS_DELIVERY_ADDRESS)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(COL_HANDY_MS_DELIVERY_ADDRESS_CODE)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(COL_HANDY_MS_DELIVERY_ADDRESS_NAME)),
                     cursor.getString(cursor.getColumnIndexOrThrow(COL_HANDY_MS_EMPLOYEE_CODE)),
                     cursor.getString(cursor.getColumnIndexOrThrow(COL_HANDY_MS_CREATE_DATE)),
                     cursor.getString(cursor.getColumnIndexOrThrow(COL_HANDY_MS_CREATE_BY)),
@@ -448,7 +471,7 @@ public class PickingDatabaseHelper extends SQLiteOpenHelper {
         return list_HandyMS;
     }
 
-    public List<handy_detail> getAllData_From_HandyDetail(String tableName) {
+    public List<handy_detail> getData_HandyDetail_By_PickingListNo(String tableName, String pickingListNo) {
         List<handy_detail> list_HandyDetails = new ArrayList<>();
 
         SQLiteDatabase db = getReadableDatabase();
@@ -485,8 +508,8 @@ public class PickingDatabaseHelper extends SQLiteOpenHelper {
                     COL_HANDY_DETAIL_COLUMN5
                 };
 
-        String selection = null;
-        String[] selectionArgs = null;
+        String selection = COL_HANDY_DETAIL_PICKING_LIST_NO + "=?";
+        String[] selectionArgs = { pickingListNo };
         String groupBy = null;
         String having = null;
         String orderBy = null;

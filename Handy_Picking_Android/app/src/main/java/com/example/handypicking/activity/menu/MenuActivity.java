@@ -6,11 +6,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.content.Intent;
+
+import com.example.handypicking.activity.syncData.SyncDataActivity;
+import com.example.handypicking.preferences.AppPreferences;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import com.example.handypicking.R;
-import com.example.handypicking.Utils.Utils;
-import com.example.handypicking.Utils.UtilsView;
 import com.example.handypicking.database.PickingDatabaseHelper;
 import com.example.handypicking.activity.setting.SettingActivity;
 import com.example.handypicking.activity.picking.pickingMS.PickingMSActivity;
@@ -25,12 +26,8 @@ import java.util.List;
 public class MenuActivity extends AppCompatActivity {
     Button btnPicking, btnHistory,btnSync , btnSetting;
     ExtendedFloatingActionButton extendedFloatButton;
-    PickingDatabaseHelper myDB;
-    Utils utils;
-    List<handy_ms> list_handyMs             = new ArrayList<>();
-    List<handy_detail> list_handyDetails    = new ArrayList<>();
-    final String TABLE_HANDY_MS_LOCAL       = "handy_ms_local";
-    final String TABLE_HANDY_DETAIL_LOCAL   = "handy_detail_local";
+    private PickingDatabaseHelper myDB;
+    private AppPreferences appPreferences;
     int countBackup = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,12 +40,17 @@ public class MenuActivity extends AppCompatActivity {
         btnSetting          = findViewById(R.id.btnSetting);
         extendedFloatButton = findViewById(R.id.extendedFloatButton);
 
+        appPreferences = AppPreferences.getInstance(this);
+
         myDB = new PickingDatabaseHelper(MenuActivity.this);
 
         countBackup = myDB.countBackupData();
         extendedFloatButton.setText(String.valueOf(countBackup));
 
-        utils = new Utils(MenuActivity.this);
+        // Setting init value AppReferences
+        if (appPreferences.getApiSetting().isEmpty()) {
+            appPreferences.setApiSetting("http://192.168.12.7:3000/");
+        }
 
         if(countBackup > 0)
         {
@@ -77,34 +79,8 @@ public class MenuActivity extends AppCompatActivity {
         btnSync.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: Dong bo du lieu back up xuong SQL Server
-                list_handyMs        = myDB.getAllData_From_HandyMS(TABLE_HANDY_MS_LOCAL);
-                list_handyDetails   = myDB.getAllData_From_HandyDetail(TABLE_HANDY_DETAIL_LOCAL);
-
-                utils.isServerRunning(new UtilsView() {
-                    @Override
-                    public void onServerStatusReceived(boolean isServerRunning) {
-                        if(isServerRunning)
-                        {
-                            utils.onSendDataHandyMS(list_handyMs);
-                            utils.onSendDataHandyDetail(list_handyDetails);
-
-                            myDB.deleteData(TABLE_HANDY_MS_LOCAL);
-                            myDB.deleteData(TABLE_HANDY_DETAIL_LOCAL);
-
-                            String title = "Thông báo";
-                            String message = "Đồng bộ dữ liệu thành công";
-                            utils.displayDialogNotification(title, message);
-
-                            btnSync.setEnabled(false);
-                            extendedFloatButton.setText("0");
-                        } else {
-                            String title = "Cảnh báo";
-                            String message = "Không thể kết nối đến server. Xin hãy đồng bộ sau";
-                            utils.displayDialogNotification(title, message);
-                        }
-                    }
-                });
+                Intent intent = new Intent(MenuActivity.this, SyncDataActivity.class);
+                startActivity(intent);
             }
         });
 

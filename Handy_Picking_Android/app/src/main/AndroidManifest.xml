@@ -16,9 +16,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HandyPicking"
         android:usesCleartextTraffic="true"
-        tools:targetApi="31"
-        >
-
+        tools:targetApi="31">
+        <activity
+            android:name=".activity.syncData.SyncDataActivity"
+            android:launchMode="singleTask"
+            android:exported="false"
+            android:parentActivityName=".activity.menu.MenuActivity" />
         <activity
             android:name=".activity.historyPicking.HistoryPickingActivity"
             android:exported="false"
@@ -28,7 +31,6 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
         <activity
             android:name=".activity.picking.pickingMS.PickingMSActivity"
             android:exported="false"
@@ -39,7 +41,6 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
         <activity
             android:name=".activity.setting.SettingActivity"
             android:exported="false"
@@ -49,7 +50,6 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
         <activity
             android:name=".activity.menu.MenuActivity"
             android:exported="true">
@@ -62,7 +62,6 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
         <activity
             android:name=".activity.picking.pickingDetail.PickingDetailActivity"
             android:exported="false"
