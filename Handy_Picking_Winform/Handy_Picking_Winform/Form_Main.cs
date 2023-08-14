@@ -1221,7 +1221,7 @@ namespace Handy_Picking_Winform
                 {
                     foreach(HANDY_PICKING_DETAIL item in list_Handy_Picking_Detail_Delete)
                     {
-                        // Kiểm tra xem đối tượng có tồn tại trong cơ sở dữ liệu hay không
+                        // Kiểm tra xem đối tượng cần xóa có tồn tại trong cơ sở dữ liệu hay không
                         HANDY_PICKING_DETAIL existingItem = 
                             db.HANDY_PICKING_DETAIL
                             .Where(
@@ -1234,7 +1234,7 @@ namespace Handy_Picking_Winform
 
                         if (existingItem != null)
                         {
-                            // Đính kèm đối tượng vào context nếu nó chưa được đính kèm
+                            // Đính kèm đối tượng cần xóa vào context nếu nó chưa được đính kèm
                             db.HANDY_PICKING_DETAIL.Attach(existingItem);
                             // Xóa đối tượng
                             db.HANDY_PICKING_DETAIL.Remove(existingItem);
@@ -1263,20 +1263,20 @@ namespace Handy_Picking_Winform
                             result.EDIT_BY          = userMS.USERNAME;
                             result.EDIT_DATE        = DateTime.Now;
                         }
+                    }
 
-                        try
-                        {
-                            db.SaveChanges();  
-                        }
-                        catch (DbUpdateException ex)
-                        {
-                            // Xử lý lỗi do cơ sở dữ liệu (ví dụ: khóa chính trùng lặp, ràng buộc, ...)
-                            MessageBox.Show("Lỗi cơ sở dữ liệu: " + ex.Message, "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show($"Lỗi: {ex.GetType()}.\nLỗi: {ex}", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
+                    try
+                    {
+                        db.SaveChanges();
+                    }
+                    catch (DbUpdateException ex)
+                    {
+                        // Xử lý lỗi do cơ sở dữ liệu (ví dụ: khóa chính trùng lặp, ràng buộc, ...)
+                        MessageBox.Show("Lỗi cơ sở dữ liệu: " + ex.Message, "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Lỗi: {ex.GetType()}.\nLỗi: {ex}", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
 
                     MessageBox.Show($"Cập nhật dữ liệu picking list thành công", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
