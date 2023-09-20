@@ -89,6 +89,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>HandyPicking_Model.edmx</DependentUpon>
     </Compile>
+    <Compile Include="HANDY_PICKING_DETAIL_LOCK.cs">
+      <DependentUpon>HandyPicking_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PALLET_MASTER.cs">
+      <DependentUpon>HandyPicking_Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="HANDY_PICKING_DETAIL.cs">

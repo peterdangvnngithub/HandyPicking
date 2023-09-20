@@ -23,21 +23,26 @@ namespace Handy_Picking_Winform
     {
         #region Define the global variable
         // PICKING LIST
-        private readonly GridColumn grid_PL_Col_DELETE_ROW                      = new GridColumn();
-        private readonly GridColumn grid_PL_Col_PICKING_LIST_NO                 = new GridColumn();
-        private readonly GridColumn grid_PL_Col_PALLET_NO                       = new GridColumn();
-        private readonly GridColumn grid_PL_Col_CUS_ITEM_CODE                   = new GridColumn();
-        private readonly GridColumn grid_PL_Col_TVC_ITEM_CODE                   = new GridColumn();
-        private readonly GridColumn grid_PL_Col_SERIES                          = new GridColumn();
-        private readonly GridColumn grid_PL_Col_CUSTOMER_PO                     = new GridColumn();
-        private readonly GridColumn grid_PL_Col_QTY_CARTON                      = new GridColumn();
-        private readonly GridColumn grid_PL_Col_QTY_PER_CARTON                  = new GridColumn();
-        private readonly GridColumn grid_PL_Col_QTY_TOTAL                       = new GridColumn();
-        private readonly GridColumn grid_PL_Col_NET_WEIGHT                      = new GridColumn();
-        private readonly GridColumn grid_PL_Col_NET_WEIGHT_TOTAL                = new GridColumn();
-        private readonly GridColumn grid_PL_Col_GROSS_WEIGHT                    = new GridColumn();
-        private readonly GridColumn grid_PL_Col_LOT_NO                          = new GridColumn();
-        private readonly RepositoryItemButtonEdit grid_PL_repo_btn_DeleteRow    = new RepositoryItemButtonEdit();
+        private readonly GridColumn grid_PL_Col_DELETE_ROW                          = new GridColumn();
+        private readonly GridColumn grid_PL_Col_PICKING_LIST_NO                     = new GridColumn();
+        private readonly GridColumn grid_PL_Col_PALLET_NO                           = new GridColumn();
+        private readonly GridColumn grid_PL_Col_CUS_ITEM_CODE                       = new GridColumn();
+        private readonly GridColumn grid_PL_Col_TVC_ITEM_CODE                       = new GridColumn();
+        private readonly GridColumn grid_PL_Col_SERIES                              = new GridColumn();
+        private readonly GridColumn grid_PL_Col_CUSTOMER_PO                         = new GridColumn();
+        private readonly GridColumn grid_PL_Col_QTY_CARTON                          = new GridColumn();
+        private readonly GridColumn grid_PL_Col_QTY_PER_CARTON                      = new GridColumn();
+        private readonly GridColumn grid_PL_Col_QTY_TOTAL                           = new GridColumn();
+        private readonly GridColumn grid_PL_Col_NET_WEIGHT                          = new GridColumn();
+        private readonly GridColumn grid_PL_Col_NET_WEIGHT_TOTAL                    = new GridColumn();
+        private readonly GridColumn grid_PL_Col_GROSS_WEIGHT                        = new GridColumn();
+        private readonly GridColumn grid_PL_Col_LOT_NO                              = new GridColumn();
+        private readonly RepositoryItemButtonEdit grid_PL_repo_btn_DeleteRow        = new RepositoryItemButtonEdit();
+        private readonly RepositoryItemSearchLookUpEdit grid_PL_repo_sLookUp_Pallet = new RepositoryItemSearchLookUpEdit();
+
+        // SEARCH LOOKUP EDIT PALLET VIEW
+        private readonly GridView grid_PL_sLookUp_Pallet_View                   = new GridView();
+        private readonly GridColumn grid_PL_View_Col_PALLET_NO                  = new GridColumn();
 
         // PICKING LIST MERGE
         private readonly GridColumn grid_PL_Merge_Col_PICKING_LIST_NO           = new GridColumn();
@@ -81,7 +86,6 @@ namespace Handy_Picking_Winform
         List<Compare_DataImport_With_PickingList> compare_Invoice_PickingList   = new List<Compare_DataImport_With_PickingList>();  
         USER_MS userMS                                                          = new USER_MS();
         #endregion
-
         public Form_Main(USER_MS _userMS)
         {
             InitializeComponent();
@@ -96,8 +100,10 @@ namespace Handy_Picking_Winform
             Define_GridView(gridView_Data_Compare);
             Define_GridView(gridView_Compare_With_Invoice);
             Define_GridView(gridView_sLookUp_PL_No);
+            Define_GridView(grid_PL_sLookUp_Pallet_View);
 
             Setting_Data_Item_SLookUp(sLookUp_PickingList);
+            Setting_Data_GriView_Item_SLookUp(grid_PL_repo_sLookUp_Pallet);
             SettingInit();
         }
 
@@ -115,12 +121,29 @@ namespace Handy_Picking_Winform
                 sLookUp_PickingList.Properties.DisplayMember    = "PICKING_LIST_NO";
             }
         }
-
         private List<HANDY_PICKING_MS> Get_Data_PickingList_MS()    
         {
             using (HANDY_PICKING_Entities db = new HANDY_PICKING_Entities())
             {   
                 return db.HANDY_PICKING_MS.ToList();
+            }
+        }
+
+        private void Setting_Data_GriView_Item_SLookUp(RepositoryItemSearchLookUpEdit item)
+        {
+            if (item.Name == grid_PL_repo_sLookUp_Pallet.Name)
+            {
+                grid_PL_repo_sLookUp_Pallet.DataSource      = Get_Data_Pallet_Master(); ;
+                grid_PL_repo_sLookUp_Pallet.ValueMember     = "PALLET_NO";
+                grid_PL_repo_sLookUp_Pallet.DisplayMember   = "PALLET_NO";
+            }
+        }
+
+        private List<PALLET_MASTER> Get_Data_Pallet_Master()
+        {
+            using (HANDY_PICKING_Entities db = new HANDY_PICKING_Entities())
+            {
+                return db.PALLET_MASTER.ToList();
             }
         }
 
@@ -173,10 +196,15 @@ namespace Handy_Picking_Winform
                 grid_PL_Col_PALLET_NO.Name                                          = "grid_PL_Col_PALLET_NO";
                 grid_PL_Col_PALLET_NO.Caption                                       = "PALLET NO";
                 grid_PL_Col_PALLET_NO.FieldName                                     = "PALLET_NO";
+                grid_PL_Col_PALLET_NO.ColumnEdit                                    = grid_PL_repo_sLookUp_Pallet;
                 grid_PL_Col_PALLET_NO.VisibleIndex                                  = 1;
                 grid_PL_Col_PALLET_NO.Width                                         = 70;
-                grid_PL_Col_PALLET_NO.OptionsColumn.AllowEdit                       = false;
+                grid_PL_Col_PALLET_NO.OptionsColumn.AllowEdit                       = true;
                 grid_PL_Col_PALLET_NO.OptionsColumn.AllowMerge                      = DefaultBoolean.False;
+                grid_PL_Col_PALLET_NO.AppearanceCell.Options.UseBackColor           = true;
+                grid_PL_Col_PALLET_NO.AppearanceCell.Options.UseForeColor           = true;
+                grid_PL_Col_PALLET_NO.AppearanceCell.ForeColor                      = Color.Black;
+                grid_PL_Col_PALLET_NO.AppearanceCell.BackColor                      = ColorTranslator.FromHtml("#FFFFC0");
                 grid_PL_Col_PALLET_NO.AppearanceCell.Options.UseTextOptions         = true;
                 grid_PL_Col_PALLET_NO.AppearanceCell.TextOptions.HAlignment         = HorzAlignment.Center;
 
@@ -235,7 +263,7 @@ namespace Handy_Picking_Winform
                 grid_PL_Col_QTY_CARTON.AppearanceCell.TextOptions.HAlignment        = HorzAlignment.Far;
                 grid_PL_Col_QTY_CARTON.DisplayFormat.FormatString                   = "#,##0";
                 grid_PL_Col_QTY_CARTON.DisplayFormat.FormatType                     = FormatType.Numeric;
-                // QTY CARTON SUM
+                // QTY CARTON SUM 
                 grid_PL_Col_QTY_CARTON.SummaryItem.SummaryType                      = SummaryItemType.Sum;
                 grid_PL_Col_QTY_CARTON.SummaryItem.DisplayFormat                    = "{0:#,##0.####}";
 
@@ -339,8 +367,18 @@ namespace Handy_Picking_Winform
                 grid_PL_Col_GROSS_WEIGHT.SummaryItem.SummaryType                    = SummaryItemType.Sum;
                 grid_PL_Col_GROSS_WEIGHT.SummaryItem.DisplayFormat                  = "{0:#,##0.####}";
 
-
-
+                // 
+                // sLookUpPallet
+                // 
+                grid_PL_repo_sLookUp_Pallet.AutoHeight = false;
+                //grid_PL_repo_sLookUp_Pallet.Buttons.AddRange(
+                //    new EditorButton[] {
+                //        new EditorButton(ButtonPredefines.Combo)
+                //    }
+                //);
+                grid_PL_repo_sLookUp_Pallet.Name = "grid_PL_Col_PALLET_NO";
+                grid_PL_repo_sLookUp_Pallet.PopupView = this.grid_PL_sLookUp_Pallet_View;
+                
                 // Add column to gridview
                 gridView_Picking_List.Columns.Add(grid_PL_Col_DELETE_ROW);
                 gridView_Picking_List.Columns.Add(grid_PL_Col_PICKING_LIST_NO);
@@ -820,6 +858,37 @@ namespace Handy_Picking_Winform
                     }
                 };
             }
+            else if (gridViewControl.Name == grid_PL_sLookUp_Pallet_View.Name)
+            {
+                grid_PL_sLookUp_Pallet_View.OptionsView.ColumnAutoWidth             = false;
+                grid_PL_sLookUp_Pallet_View.OptionsView.ColumnHeaderAutoHeight      = DefaultBoolean.True;
+
+                // PALLET_NO
+                grid_PL_View_Col_PALLET_NO.Name                                     = "grid_PL_View_Col_PALLET_NO";
+                grid_PL_View_Col_PALLET_NO.Caption                                  = "PALLET NO";
+                grid_PL_View_Col_PALLET_NO.FieldName                                = "PALLET_NO";
+                grid_PL_View_Col_PALLET_NO.VisibleIndex                             = 0;
+                grid_PL_View_Col_PALLET_NO.Width                                    = 120;
+                grid_PL_View_Col_PALLET_NO.OptionsColumn.AllowEdit                  = false;
+                grid_PL_View_Col_PALLET_NO.OptionsColumn.AllowMerge                 = DefaultBoolean.False;
+                grid_PL_View_Col_PALLET_NO.AppearanceCell.Options.UseTextOptions    = true;
+                grid_PL_View_Col_PALLET_NO.AppearanceCell.TextOptions.HAlignment    = HorzAlignment.Center;
+
+                // Add column to gridview
+                grid_PL_sLookUp_Pallet_View.Columns.Add(grid_PL_View_Col_PALLET_NO);
+
+                // Set common attribute
+                foreach (GridColumn c in grid_PL_sLookUp_Pallet_View.Columns)
+                {
+                    c.AppearanceHeader.Options.UseFont          = true;
+                    c.AppearanceHeader.Options.UseForeColor     = true;
+                    c.AppearanceHeader.Options.UseTextOptions   = true;
+                    c.AppearanceHeader.Font                     = new Font("Segoe UI", 8.25F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(0)));
+                    c.AppearanceHeader.ForeColor                = Color.Black;
+                    c.AppearanceHeader.TextOptions.HAlignment   = HorzAlignment.Center;
+                    c.AppearanceHeader.TextOptions.WordWrap     = WordWrap.Wrap;
+                }
+            }    
         }
 
         private void gridView_Compare_CustomDrawCell(object sender, RowCellCustomDrawEventArgs e)
@@ -1341,18 +1410,27 @@ namespace Handy_Picking_Winform
 
                     if(!String.IsNullOrEmpty(pickingListNo))
                     {
+                        // Kiểm tra Picking List có tồn tại trong HANDY_PICKING_MS
                         HANDY_PICKING_MS handyPickingMS =
-                            db.HANDY_PICKING_MS.Where(x => x.PICKING_LIST_NO.Equals(pickingListNo)).FirstOrDefault();
+                            (db.HANDY_PICKING_MS.Where(x => x.PICKING_LIST_NO.Equals(pickingListNo)))
+                            .FirstOrDefault();
 
                         if(handyPickingMS != null)
                         {
-                            if(handyPickingMS.STATUS == 0)
+                            // Xóa dữ liệu đã copy tại HANDY_PICKING_DETAIL
+                            if (handyPickingMS.STATUS == 0)
                             {
                                 handyPickingMS.STATUS = 1;
+
+                                // Copy dữ liệu Picking từ HANDY_PICKING_DETAIL sang HANDY_PICKING_DETAIL_LOCK
+
                                 message = $"Khóa picking list {handyPickingMS.PICKING_LIST_NO} thành công";                            
                             } else if (handyPickingMS.STATUS == 1)
                             {
                                 handyPickingMS.STATUS = 0;
+
+                                // Copy dữ liệu Picking từ HANDY_PICKING_DETAIL_LOCK sang HANDY_PICKING_DETAIL
+
                                 message = $"Mở khóa picking list {handyPickingMS.PICKING_LIST_NO} thành công";
                             }
                         }

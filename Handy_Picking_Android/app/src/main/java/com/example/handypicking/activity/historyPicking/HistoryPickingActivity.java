@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.widget.Filter;
 import android.widget.Toast;
 import android.content.Intent;
 
@@ -73,17 +74,39 @@ public class HistoryPickingActivity extends AppCompatActivity implements History
     public void onGetResult(List<handy_ms> resultModels) {
         // Item click
         itemClickListener = (((view, position) -> {
-            if(resultModels.get(position).getSTATUS() == 0) {
+            handy_ms handy = new handy_ms();
+            if (IsFilter){
+                for (handy_ms item : resultModels)
+                {
+                    if (item.getPICKING_LIST_NO().equalsIgnoreCase(PLNumber))
+                    {
+                        handy = item;
+                    }
+                }
+            } else {
+                handy = resultModels.get(position);
+            }
+
+            if(handy == null)
+            {
+                String title = "Thông Báo";
+                String message = "Lỗi giá trị History.\nKhông thể kết nối tới database.";
+                utils.displayDialogNotification(title, message);
+                return;
+            }
+
+            if(handy.getSTATUS() == 0) {
                 //Fix bug get position không đúng khi dùng chức năng filter
                 Intent intent = new Intent(HistoryPickingActivity.this, PickingDetailActivity.class);
                 if (IsFilter)
                 {
                     intent.putExtra("HistoryPicking-PLNo", PLNumber);
+
                 } else {
                     intent.putExtra("HistoryPicking-PLNo", resultModels.get(position).getPICKING_LIST_NO());
                 }
                 startActivity(intent);
-            } else if(resultModels.get(position).getSTATUS() == 1) {
+            } else if(handy.getSTATUS() == 1) {
                 String title = "Thông Báo";
                 String message = "Packing đã khóa, không thể chỉnh sửa";
                 utils.displayDialogNotification(title, message);
@@ -115,13 +138,12 @@ public class HistoryPickingActivity extends AppCompatActivity implements History
         if (event.getCharacters() != null && !event.getCharacters().isEmpty())
         {
             String inputString = event.getCharacters();
-            if(inputString.length() != 126)
+            if(inputString.length() != 139)
             {
                 String title    = "Lỗi";
-                String message  = "QR Code không đúng định dạng";
+                String message  = "QR Code không đúng định dạng\nĐộ dài QR Code đúng: 139\nĐộ dài QR Code đang bấm: " + String.valueOf(inputString.length());
 
-                /*utils.displayDialogNotification(title, message);*/
-                utils.displayDialogNotification(title, String.valueOf(inputString.length()));
+                utils.displayDialogNotification(title, message);
             } else {
                 PLNumber = inputString.substring(66, 96).trim();
 

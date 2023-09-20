@@ -5,10 +5,12 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="bf4126fa252243048c751884ce51fb69" Name="Diagram1">
-        <EntityTypeShape EntityType="HANDY_PICKING_Model.PRODUCTMF" Width="1.5" PointX="4.75" PointY="0.75" />
+        <EntityTypeShape EntityType="HANDY_PICKING_Model.PRODUCTMF" Width="1.5" PointX="6.875" PointY="0.75" />
         <EntityTypeShape EntityType="HANDY_PICKING_Model.HANDY_PICKING_DETAIL" Width="1.5" PointX="0.75" PointY="0.75" />
-        <EntityTypeShape EntityType="HANDY_PICKING_Model.HANDY_PICKING_MS" Width="1.5" PointX="2.75" PointY="0.75" />
-        <EntityTypeShape EntityType="HANDY_PICKING_Model.USER_MS" Width="1.5" PointX="6.75" PointY="0.75" />
+        <EntityTypeShape EntityType="HANDY_PICKING_Model.HANDY_PICKING_MS" Width="1.5" PointX="8.625" PointY="0.75" />
+        <EntityTypeShape EntityType="HANDY_PICKING_Model.USER_MS" Width="1.5" PointX="5.25" PointY="0.75" />
+        <EntityTypeShape EntityType="HANDY_PICKING_Model.PALLET_MASTER" Width="1.5" PointX="10.25" PointY="0.75" />
+        <EntityTypeShape EntityType="HANDY_PICKING_Model.HANDY_PICKING_DETAIL_LOCK" Width="2.5" PointX="2.5" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

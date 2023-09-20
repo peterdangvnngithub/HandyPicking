@@ -2,9 +2,8 @@ package com.example.handypicking.activity.picking.pickingMS;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -71,62 +70,6 @@ public class PickingMSActivity extends AppCompatActivity {
             }
         });
 
-        edCustomerCode.addTextChangedListener(new TextWatcher() {
-            boolean ignoreChange = false;
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String qrCodeValue1 = edCustomerCode.getText().toString();
-                if(qrCodeValue1.length() == 126)
-                {
-                    String customerCode = qrCodeValue1.substring(0, 6).trim();
-                    String addressName  = qrCodeValue1.substring(6, 66).trim();
-                    String PLNumber     = qrCodeValue1.substring(66, 96).trim();
-                    String addressCode  = qrCodeValue1.substring(96, 126).trim();
-
-                    pickingMSPresenter.check_Exists_Data_Handy_MS(PLNumber, new PickingMSView() {
-                        @Override
-                        public void isPickingMSNull(boolean isPickingNull) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (isPickingNull) {
-                                        if (!ignoreChange) {
-                                            ignoreChange = true;
-
-                                            txtCustomerCode.setTextColor(Color.parseColor("#FF0000"));
-
-                                            edCustomerCode.setText(customerCode);
-                                            edPLNumber.setText(PLNumber);
-                                            edDeliveryAddressName.setText(addressName);
-                                            edDeliveryAddressCode.setText(addressCode);
-
-                                            edEmpCode.requestFocus();
-
-                                            ignoreChange = false;
-                                        }
-                                    } else {
-                                        String message = "Packing List: " + PLNumber + " đã tồn tại trong hệ thống";
-                                        utils.displayDialogNotification("Cảnh báo", message);
-                                        edCustomerCode.setText("");
-                                    }
-                                }
-                            });
-                        }
-                    });
-                }
-            }
-        });
-
         txtEmpCode.setOnClickListener   (new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -135,41 +78,6 @@ public class PickingMSActivity extends AppCompatActivity {
                     edEmpCode.setText("");
                     txtEmpCode.setTextColor(Color.parseColor("#000000"));
                 }
-            }
-        });
-
-        edEmpCode.addTextChangedListener(new TextWatcher() {
-            boolean ignoreChange = false;
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if(!ignoreChange)
-                {
-                    ignoreChange = true;
-
-                    if(edEmpCode.getText().toString().length() == 20) {
-                        edEmpCode.setText(edEmpCode.getText().toString().trim());
-                        txtEmpCode.setTextColor(Color.parseColor("#FF0000"));
-
-                        btnNext.callOnClick();
-                    } else {
-                        String title = "Lỗi";
-                        String messageError = "Scan mã số nhân viên không đúng định dạng";
-                        utils.displayDialogNotification(title, messageError);
-                    }
-
-                    ignoreChange = false;
-                }
-
             }
         });
 
@@ -238,6 +146,76 @@ public class PickingMSActivity extends AppCompatActivity {
 
         // Set focus 1 edittext
         edCustomerCode.requestFocus();
+    }
+
+    /***
+     * When press Scan button
+     * @param event The key event.
+     *
+     * @return
+     */
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event){
+        if (event.getCharacters() != null && !event.getCharacters().isEmpty())
+        {
+            // Check if Customer Code is empty
+            if(edCustomerCode.getText().toString().trim().isEmpty()) {
+                String customerQR = event.getCharacters();
+
+                // Check format customerCode No scan
+                if(customerQR.length() == 139) {
+                    String customerCode = customerQR.substring(0, 6).trim();
+                    String addressName  = customerQR.substring(6, 66).trim();
+                    String PLNumber     = customerQR.substring(66, 96).trim();
+                    String addressCode  = customerQR.substring(96, 126).trim();
+
+                    pickingMSPresenter.check_Exists_Data_Handy_MS(PLNumber, new PickingMSView() {
+                        @Override
+                        public void isPickingMSNull(boolean isPickingNull) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (isPickingNull) {
+                                        txtCustomerCode.setTextColor(Color.parseColor("#FF0000"));
+
+                                        edCustomerCode.setText(customerCode);
+                                        edPLNumber.setText(PLNumber);
+                                        edDeliveryAddressName.setText(addressName);
+                                        edDeliveryAddressCode.setText(addressCode);
+
+                                        edEmpCode.requestFocus();
+                                    } else {
+                                        String message = "Packing List: " + PLNumber + " đã tồn tại trong hệ thống";
+                                        utils.displayDialogNotification("Cảnh báo", message);
+                                        edCustomerCode.setText("");
+                                    }
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    String title = "Lỗi";
+                    String messageError = "Scan Customer Code không đúng định dạng\nĐộ dài QR Code đúng: 139\nĐộ dài QR Code đang bấm: " + String.valueOf(customerQR.length());
+                    utils.displayDialogNotification(title, messageError);
+                }
+            } else if(edEmpCode.getText().toString().trim().isEmpty()) // Check if Employee code is empty
+            {
+                String employeeCode = event.getCharacters();
+
+                // Check format customerCode No scan
+                if(employeeCode.length() == 20) {
+                    edEmpCode.setText(employeeCode.toString().trim());
+                    txtEmpCode.setTextColor(Color.parseColor("#FF0000"));
+
+                    btnNext.callOnClick();
+                } else {
+                    String title = "Lỗi";
+                    String messageError = "Scan mã số nhân viên không đúng định dạng\nĐộ dài QR Code đúng: 20\nĐộ dài QR Code đang bấm: " + String.valueOf(employeeCode.length());
+                    utils.displayDialogNotification(title, messageError);
+                }
+            }
+        }
+        return super.dispatchKeyEvent(event);
     }
 
     private boolean checkError() {

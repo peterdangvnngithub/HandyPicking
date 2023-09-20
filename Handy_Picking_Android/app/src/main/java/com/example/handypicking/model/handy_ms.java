@@ -51,6 +51,10 @@ public class handy_ms implements Serializable {
         this.COLUMN5                = COLUMN5;
     }
 
+    public handy_ms() {
+
+    }
+
     public String getCUSTOMER_CODE() {
         return CUSTOMER_CODE;
     }
