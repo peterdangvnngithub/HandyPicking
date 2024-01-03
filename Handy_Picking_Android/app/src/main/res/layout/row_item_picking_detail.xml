@@ -6,48 +6,56 @@
     android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/txtItemCode"
-        android:layout_width="90dp"
+        android:id="@+id/txtPalletNo"
+        android:layout_width="60dp"
         android:layout_height="wrap_content"
-        android:text="TextView"
-        android:maxLines="3"
+        android:layout_marginStart="1dp"
+        android:ellipsize="start"
+        android:singleLine="true"
+        android:text="No. 01"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/txtSeries"
-        android:layout_width="90dp"
+        android:id="@+id/txtItemCode"
+        android:layout_width="140dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:text="TextView"
+        android:layout_marginTop="5dp"
+        android:ellipsize="start"
+        android:singleLine="true"
+        android:text="Item Code"
         android:textColor="@color/black"
-        android:maxLines="3"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/txtItemCode"
+        app:layout_constraintStart_toEndOf="@+id/txtPalletNo"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/txtQuantity"
-        android:layout_width="62dp"
+        android:id="@+id/txtSeries"
+        android:layout_width="213dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:ellipsize="start"
+        android:singleLine="true"
+        android:text="Series"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/txtPalletNo"
+        app:layout_constraintTop_toBottomOf="@+id/txtItemCode" />
+
+    <TextView
+        android:id="@+id/txtQuantity"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="13dp"
+        android:layout_marginTop="5dp"
         android:text="111,000"
         android:textAlignment="textEnd"
         android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/txtSeries"
+        app:layout_constraintStart_toEndOf="@+id/txtItemCode"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/btnDelete"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_marginEnd="3dp"
-        android:background="@drawable/ic_delete"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

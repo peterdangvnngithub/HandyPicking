@@ -1,5 +1,6 @@
 package com.example.handypicking.api;
 
+import com.example.handypicking.model.handy;
 import com.example.handypicking.model.handy_ms;
 import com.example.handypicking.model.handy_detail;
 
@@ -35,4 +36,7 @@ public interface ApiInterface {
 
     @POST("handyPickingDetail")
     Call<ResponseBody> send_Handy_Detail(@Body RequestBody requestBody);
+
+    @POST("handyPicking")
+    Call<Void> send_Handy_Data(@Body handy handy_Data);
 }

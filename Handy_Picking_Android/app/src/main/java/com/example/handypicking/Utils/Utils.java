@@ -4,20 +4,17 @@ import android.util.Log;
 import android.app.Dialog;
 import android.os.AsyncTask;
 import android.content.Context;
-import android.net.NetworkInfo;
-import android.net.ConnectivityManager;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.example.handypicking.R;
-import com.example.handypicking.activity.picking.pickingDetail.PickingDetailView;
 import com.example.handypicking.api.ApiClient;
 import com.example.handypicking.api.ApiInterface;
+import com.example.handypicking.model.handy;
 import com.example.handypicking.model.handy_detail;
 import com.example.handypicking.model.handy_ms;
 import com.example.handypicking.preferences.AppPreferences;
@@ -132,9 +129,43 @@ public class Utils {
         }.execute();
     }
 
-    // Interface để lắng nghe kết quả kết nối API Node.js
+    // Interface that listen for Node.js API connection results
     public interface NodeApiConnectionListener {
         void onConnectionResult(boolean isConnected);
+    }
+
+    public void onSendDataHandy(List<handy_ms> list_handyMS, List<handy_detail> list_handyDetail)
+    {
+        handy listHandy = new handy(list_handyMS, list_handyDetail);
+        Gson gson   = new GsonBuilder().serializeNulls().create();
+        String json = gson.toJson(list_handyMS);
+
+        Log.d(TAG, "onSendDataHandy");
+
+        //Request to server
+        RequestBody body            = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
+        ApiInterface apiInterface   = ApiClient.getApiClient(appPreferences).create(ApiInterface.class);
+        Call<Void> call             = apiInterface.send_Handy_Data(listHandy);
+
+        Log.d(TAG, bodyToString(body));
+
+        call.enqueue( new Callback<Void>() {
+            @Override
+            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                try {
+                    if (response.isSuccessful()) {
+                        Log.d(TAG,"Success:" + response.body().toString());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+                Log.d(TAG,"Error:" + t.getLocalizedMessage());
+            }
+        } );
     }
 
     public void onSendDataHandyMS(List<handy_ms> list_handyMS) {

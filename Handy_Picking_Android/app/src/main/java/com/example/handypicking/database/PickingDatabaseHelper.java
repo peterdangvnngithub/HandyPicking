@@ -256,7 +256,7 @@ public class PickingDatabaseHelper extends SQLiteOpenHelper {
         cv.put(COL_HANDY_MS_COLUMN4,                handy_ms.getCOLUMN4());
         cv.put(COL_HANDY_MS_COLUMN5,                handy_ms.getCOLUMN5());
 
-        long result = db.insert(table_name, null, cv);
+        long result = db.insertWithOnConflict(table_name, null, cv, SQLiteDatabase.CONFLICT_IGNORE);
 
         return result;
     }
@@ -295,7 +295,7 @@ public class PickingDatabaseHelper extends SQLiteOpenHelper {
             cv.put(COL_HANDY_DETAIL_COLUMN4,            handyDetail.getCOLUMN4());
             cv.put(COL_HANDY_DETAIL_COLUMN5,            handyDetail.getCOLUMN5());
 
-            long result = db.insert(table_name, null, cv);
+            long result = db.insertWithOnConflict(table_name, null, cv, SQLiteDatabase.CONFLICT_IGNORE);
 
             return result;
         } catch (SQLiteException e) {
@@ -342,7 +342,7 @@ public class PickingDatabaseHelper extends SQLiteOpenHelper {
                 cv.put(COL_HANDY_DETAIL_COLUMN4,            handyDetail.getCOLUMN4());
                 cv.put(COL_HANDY_DETAIL_COLUMN5,            handyDetail.getCOLUMN5());
 
-                result = db.insert(table_name, null, cv);
+                result = db.insertWithOnConflict(table_name, null, cv, SQLiteDatabase.CONFLICT_IGNORE);
             }
 
             db.setTransactionSuccessful();

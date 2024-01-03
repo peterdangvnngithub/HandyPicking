@@ -41,7 +41,7 @@ import retrofit2.Response;
 public class PickingDetailActivity extends AppCompatActivity{
     TextView txtLabelPalletNo, txtPalletNo, txtLabelItem_A, txtItem, txtQuantity, txtSaleOrder, txtLotID;
     TextView labelEmployeeCode, txtEmployeeCode , txtTotalQRCodeScan,txtQuantityDetailTotal;
-    Button  btnPost, btnCancel;
+    Button  btnCancel, btnPost, btnAdd;
     RecyclerView recyclerView;
     PickingDatabaseHelper myDB;
     PickingDetailAdapter.ItemClickListener itemClickListener;
@@ -77,6 +77,7 @@ public class PickingDetailActivity extends AppCompatActivity{
 
         btnPost                 = findViewById(R.id.btnPost);
         btnCancel               = findViewById(R.id.btnCancel);
+        btnAdd                  = findViewById(R.id.btnAdd);
 
         appPreferences          = new AppPreferences(PickingDetailActivity.this);
         utils                   = new Utils(PickingDetailActivity.this, appPreferences);
@@ -95,6 +96,7 @@ public class PickingDetailActivity extends AppCompatActivity{
             {
                 // Get data PickingMS
                 Call<List<handy_ms>> call = pickingDetailPresenter.get_Data_Handy_MS_By_PLNo(plNo);
+
                 call.enqueue(new Callback<List<handy_ms>>() {
                     @Override
                     public void onResponse(Call<List<handy_ms>> call, Response<List<handy_ms>> response) {
@@ -113,6 +115,8 @@ public class PickingDetailActivity extends AppCompatActivity{
                     }
                 });
             }
+
+            setTitle(handyMS.getPICKING_LIST_NO());
         }
 
         itemClickListener = ((view, position) -> {
@@ -194,6 +198,82 @@ public class PickingDetailActivity extends AppCompatActivity{
         });
 
         btnPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                utils.checkApiConnection(appPreferences.getApiSetting(), new Utils.validateApiConnection() {
+                    @Override
+                    public void isApiConnectionValid(boolean isConnected) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if(isConnected) {
+                                    if(checkError_Post())
+                                    {
+                                        try {
+                                            //Send data picking to Web API
+                                            List<handy_ms> list_handyMS = new ArrayList<>();
+                                            list_handyMS.add(handyMS);
+                                            utils.onSendDataHandy(list_handyMS, list_handyDetail);
+                                        } catch (Exception ex) {
+                                            Log.d(TAG, ex.getMessage());
+                                        }
+                                    }
+                                } else {
+                                    // Display dialog confirm save data local
+                                    final Dialog dialog = new Dialog(PickingDetailActivity.this);
+                                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                    dialog.setContentView(R.layout.dialog_confirm_save_data_local);
+
+                                    Button btnCancel, btnSaveLocal;
+
+                                    btnCancel       = dialog.findViewById(R.id.btnCancel);
+                                    btnSaveLocal    = dialog.findViewById(R.id.btnSaveLocal);
+
+                                    btnCancel.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+
+                                    btnSaveLocal.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            // Save to the local SQLite table and return to main menu
+                                            // Save the data to the temporary table
+                                            myDB.addHandyMS(TABLE_HANDY_MS_LOCAL, handyMS);
+                                            myDB.addListHandyDetails(TABLE_HANDY_DETAIL_LOCAL, list_handyDetail);
+
+                                            // Delete data in main table
+                                            myDB.deleteData(TABLE_HANDY_MS);
+                                            myDB.deleteData(TABLE_HANDY_DETAIL);
+
+                                            // Clear list data
+                                            list_handyDetail.clear();
+
+                                            // Refresh recyclerView
+                                            pickingDetailAdapter.notifyDataSetChanged();
+
+                                            txtItem.setText("");
+                                            txtQuantity.setText(String.valueOf(0));
+                                            txtSaleOrder.setText("");
+                                            txtLotID.setText("");
+                                            txtTotalQRCodeScan.setText(String.valueOf(0));
+                                            txtQuantityDetailTotal.setText(String.valueOf(0));
+
+                                            dialog.dismiss();
+                                        }
+                                    });
+                                    dialog.show();
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        });
+
+        /*btnPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 utils.checkApiConnection(appPreferences.getApiSetting(), new Utils.validateApiConnection() {
@@ -321,7 +401,7 @@ public class PickingDetailActivity extends AppCompatActivity{
                     }
                 });
             }
-        });
+        });*/
 
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -329,6 +409,13 @@ public class PickingDetailActivity extends AppCompatActivity{
                 Intent intent = new Intent(PickingDetailActivity.this, MenuActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+            }
+        });
+
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                refresh_layout();
             }
         });
 
@@ -505,6 +592,7 @@ public class PickingDetailActivity extends AppCompatActivity{
                 }
             }
         }
+
         return super.dispatchKeyEvent(event);
     }
 
@@ -647,7 +735,21 @@ public class PickingDetailActivity extends AppCompatActivity{
                 return true;
             }
         }
-
         return false;
+    }
+
+    private void refresh_layout()
+    {
+        txtPalletNo.setText("");
+        txtLabelPalletNo.setTextColor(Color.parseColor("#000000"));
+
+        txtItem.setText("");
+        txtSaleOrder.setText("");
+        txtLotID.setText("");
+        txtQuantity.setText("");
+        txtLabelItem_A.setTextColor(Color.parseColor("#000000"));
+
+        txtEmployeeCode.setText("");
+        labelEmployeeCode.setTextColor(Color.parseColor("#000000"));
     }
 }

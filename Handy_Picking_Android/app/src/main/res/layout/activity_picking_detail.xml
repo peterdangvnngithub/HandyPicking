@@ -5,6 +5,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    style="@style/customFontStyle"
     tools:context=".activity.picking.pickingDetail.PickingDetailActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -95,7 +96,6 @@
                     android:text="Quantity"
                     android:textColor="@color/black"
                     android:textStyle="bold" />
-
                 <TextView
                     android:id="@+id/txtQuantity"
                     android:layout_width="@dimen/width_zero"
@@ -191,7 +191,7 @@
                     android:id="@+id/labelTotalQRCodeScan"
                     android:layout_width="@dimen/width_zero"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.63"
+                    android:layout_weight="0.65"
                     android:text="Total Scanned QR"
                     android:textColor="@color/black"
                     android:textStyle="bold" />
@@ -200,7 +200,7 @@
                     android:id="@+id/txtTotalQRCodeScan"
                     android:layout_width="@dimen/width_zero"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.37"
+                    android:layout_weight="0.35"
                     android:text="0"
                     android:textColor="@color/black" />
             </LinearLayout>
@@ -215,7 +215,7 @@
                     android:id="@+id/labelTotal"
                     android:layout_width="@dimen/width_zero"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.63"
+                    android:layout_weight="0.65"
                     android:text="Total Quantity"
                     android:textColor="@color/black"
                     android:textStyle="bold" />
@@ -224,7 +224,7 @@
                     android:id="@+id/txtQuantityDetailTotal"
                     android:layout_width="@dimen/width_zero"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.37"
+                    android:layout_weight="0.35"
                     android:text="0"
                     android:textColor="@color/black" />
             </LinearLayout>
@@ -236,15 +236,17 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:orientation="vertical"
+            android:background="@color/green_500"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
             <TextView
                 android:id="@+id/headerItemCode"
                 android:layout_width="@dimen/width_zero"
                 android:layout_height="wrap_content"
-                android:layout_weight="@integer/width_point_four"
-                android:text="ITEMCODE"
-                android:textColor="@color/black"
+                android:layout_marginStart="1dp"
+                android:layout_weight="0.2"
+                android:text="PALLET"
+                android:textColor="@color/white"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -253,10 +255,10 @@
                 android:id="@+id/headerSeries"
                 android:layout_width="@dimen/width_zero"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="31dp"
-                android:layout_weight="@integer/width_point_four"
-                android:text="SERIES"
-                android:textColor="@color/black"
+                android:layout_marginStart="20dp"
+                android:layout_weight="0.4"
+                android:text="ITEM / SERIES"
+                android:textColor="@color/white"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/headerItemCode"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -265,10 +267,10 @@
                 android:id="@+id/headerQuantity"
                 android:layout_width="@dimen/width_zero"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="52dp"
-                android:layout_weight="@integer/width_point_four"
+                android:layout_marginStart="58dp"
+                android:layout_weight="0.4"
                 android:text="QUANTITY"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/headerSeries"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -297,23 +299,35 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
-
-            <Button
-                android:id="@+id/btnPost"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_marginStart="64dp"
-                android:text="POST"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"></Button>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
 
             <Button
                 android:id="@+id/btnCancel"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:layout_marginStart="8dp"
                 android:text="Cancel"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"></Button>
+
+            <Button
+                android:id="@+id/btnPost"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginStart="8dp"
+                android:text="Post"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/btnCancel"
+                app:layout_constraintTop_toTopOf="parent"></Button>
+
+            <Button
+                android:id="@+id/btnAdd"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginStart="8dp"
+                android:text="Add New"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/btnPost"
                 app:layout_constraintTop_toTopOf="parent"></Button>
         </androidx.constraintlayout.widget.ConstraintLayout>

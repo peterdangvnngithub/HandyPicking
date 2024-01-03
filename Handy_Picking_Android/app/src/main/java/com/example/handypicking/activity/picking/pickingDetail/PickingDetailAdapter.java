@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.LayoutInflater;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,6 +18,8 @@ import java.util.List;
 public class PickingDetailAdapter extends RecyclerView.Adapter<PickingDetailAdapter.PickingHolder> {
     private final Context mContext;
     private final List<handy_detail> list_handyDetail;
+    private long lastClickTime = 0;
+    private static final long DOUBLE_CLICK_TIME_DELTA = 300;
     ItemClickListener itemClickListener;
     public PickingDetailAdapter(Context mContext,
                                 List<handy_detail> list_handyDetail,
@@ -57,7 +58,7 @@ public class PickingDetailAdapter extends RecyclerView.Adapter<PickingDetailAdap
     //2. Holder
     public class PickingHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final TextView txtItemCode, txtSeries, txtQuantity;
-        private final Button btnDelete;
+        /*private final Button btnDelete;*/
 
         ItemClickListener itemClickListener;
 
@@ -66,10 +67,10 @@ public class PickingDetailAdapter extends RecyclerView.Adapter<PickingDetailAdap
             txtItemCode = itemView.findViewById(R.id.txtItemCode);
             txtSeries   = itemView.findViewById(R.id.txtSeries);
             txtQuantity = itemView.findViewById(R.id.txtQuantity);
-            btnDelete   = itemView.findViewById(R.id.btnDelete);
+/*            btnDelete   = itemView.findViewById(R.id.btnDelete);*/
 
             this.itemClickListener = itemClickListener;
-            btnDelete.setOnClickListener(this);
+            itemView.setOnClickListener(this);
         }
 
         void SetDetails(handy_detail handyDetail)
@@ -83,7 +84,12 @@ public class PickingDetailAdapter extends RecyclerView.Adapter<PickingDetailAdap
         @Override
         public void onClick(View v)
         {
-            itemClickListener.onItemClick( v, getAdapterPosition() );
+            long clickTime = System.currentTimeMillis();
+            if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA) {
+                // Double-click detected
+                itemClickListener.onItemClick(v, getAdapterPosition());
+            }
+            lastClickTime = clickTime;
         }
     }
 }
