@@ -22,6 +22,9 @@ public interface ApiInterface {
     @GET("handyPickingMS")
     Call<List<handy_ms>> getHandyMS();
 
+    @GET("handy")
+    Call<handy> getDataServer();
+
     @GET("handyPickingMS/{plNo}")
     Call<List<handy_ms>> check_Exists_HandyPicking_MS(@Path("plNo") String plNo);
 

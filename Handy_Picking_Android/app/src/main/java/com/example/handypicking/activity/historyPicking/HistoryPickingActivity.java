@@ -1,11 +1,9 @@
 package com.example.handypicking.activity.historyPicking;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.KeyEvent;
 import android.view.MenuItem;
-import android.widget.Filter;
 import android.widget.Toast;
 import android.content.Intent;
 
@@ -157,7 +155,7 @@ public class HistoryPickingActivity extends AppCompatActivity implements History
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_history, menu);
+        getMenuInflater().inflate(R.menu.menu_dataserver, menu);
 
         return true;
     }

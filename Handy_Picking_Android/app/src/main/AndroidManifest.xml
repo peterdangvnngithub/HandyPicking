@@ -20,13 +20,13 @@
             android:name=".activity.syncDataDetail.SyncDataDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.dataLocal.DataLocalActivity"
+            android:name=".activity.dataLocal.DataActivity"
             android:exported="false"
             android:label="Data"
             android:launchMode="singleTask"
             android:parentActivityName=".activity.menu.MenuActivity" />
         <activity
-            android:name=".activity.syncData.DataActivity"
+            android:name=".activity.dataServer.DataServerActivity"
             android:exported="false"
             android:launchMode="singleTask"
             android:parentActivityName=".activity.menu.MenuActivity" />

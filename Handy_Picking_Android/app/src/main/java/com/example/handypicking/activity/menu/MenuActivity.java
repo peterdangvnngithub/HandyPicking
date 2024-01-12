@@ -10,6 +10,7 @@ import com.example.handypicking.R;
 import com.example.handypicking.preferences.AppPreferences;
 import com.example.handypicking.database.PickingDatabaseHelper;
 import com.example.handypicking.activity.setting.SettingActivity;
+import com.example.handypicking.activity.dataServer.DataServerActivity;
 import com.example.handypicking.activity.picking.pickingMS.PickingMSActivity;
 import com.example.handypicking.activity.historyPicking.HistoryPickingActivity;
 
@@ -18,7 +19,7 @@ public class MenuActivity extends AppCompatActivity {
     /*ExtendedFloatingActionButton extendedFloatButton;*/
     private PickingDatabaseHelper myDB;
     private AppPreferences appPreferences;
-    int countBackup = 0;
+    /*int countBackup = 0;*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,9 +34,6 @@ public class MenuActivity extends AppCompatActivity {
         appPreferences = AppPreferences.getInstance(this);
 
         myDB = new PickingDatabaseHelper(MenuActivity.this);
-
-        countBackup = myDB.countBackupData();
-        /*extendedFloatButton.setText(String.valueOf(countBackup));*/
 
         // Setting init value AppReferences
         if (appPreferences.getApiSetting().isEmpty()) {
@@ -53,8 +51,8 @@ public class MenuActivity extends AppCompatActivity {
         });
 
         btnData.setOnClickListener(v -> {
-            /*Intent intent = new Intent(MenuActivity.this, DataLocalActivity.class);
-            startActivity(intent);*/
+            Intent intent = new Intent(MenuActivity.this, DataServerActivity.class);
+            startActivity(intent);
         });
 
         btnSetting.setOnClickListener(v -> {

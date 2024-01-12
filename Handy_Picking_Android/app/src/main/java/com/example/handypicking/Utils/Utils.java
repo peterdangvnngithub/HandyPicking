@@ -136,7 +136,7 @@ public class Utils {
 
     public void onSendDataHandy(List<handy_ms> list_handyMS, List<handy_detail> list_handyDetail)
     {
-        handy listHandy = new handy(list_handyMS, list_handyDetail);
+        /*handy listHandy = new handy(list_handyMS, list_handyDetail);
         Gson gson   = new GsonBuilder().serializeNulls().create();
         String json = gson.toJson(list_handyMS);
 
@@ -165,7 +165,7 @@ public class Utils {
             public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
                 Log.d(TAG,"Error:" + t.getLocalizedMessage());
             }
-        } );
+        } );*/
     }
 
     public void onSendDataHandyMS(List<handy_ms> list_handyMS) {

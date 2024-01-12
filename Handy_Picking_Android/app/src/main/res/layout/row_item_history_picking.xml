@@ -7,20 +7,20 @@
     android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/data_txtDateCreate"
+        android:id="@+id/txtDateCreate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
         android:textColor="@color/red"
         android:textStyle="bold|italic"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@id/data_txtPickingListNo"
+        app:layout_constraintBottom_toTopOf="@id/txtPickingListNo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
-        android:id="@+id/data_txtPickingListNo"
+        android:id="@+id/txtPickingListNo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -29,10 +29,10 @@
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/data_txtDateCreate" />
+        app:layout_constraintTop_toBottomOf="@id/txtDateCreate" />
 
     <ImageView
-        android:id="@+id/data_imgStatusPicking"
+        android:id="@+id/imgStatusPicking"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="19dp"

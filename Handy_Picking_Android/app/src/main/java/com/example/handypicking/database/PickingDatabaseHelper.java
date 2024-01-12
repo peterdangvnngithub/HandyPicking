@@ -11,6 +11,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.example.handypicking.model.handy;
 import com.example.handypicking.model.handy_detail;
 import com.example.handypicking.model.handy_ms;
 
@@ -22,7 +23,11 @@ public class PickingDatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG             = "PK_DB_HELPER";
     private static final String DATABASE_NAME   = "Handy.db";
     private static final int DATABASE_VERSION   = 1;
-
+    /*-------------------------------SYNC VERSION-------------------------------*/
+    private static final String TABLE_SYNC_VERSION  = "sync_version";
+    private static final String COL_SERVER_VERSION  = "server_version";
+    private String CREATE_TABLE_SYNC_VERSION        = "CREATE TABLE " + TABLE_SYNC_VERSION
+            + " (" + COL_SERVER_VERSION   + " INTEGER PRIMARY KEY)";
     /*---------------------------------HANDY MS---------------------------------*/
     private static final String TABLE_HANDY_MS                      = "handy_ms";
     private static final String COL_HANDY_MS_CUSTOMER_CODE          = "customer_code";
@@ -40,6 +45,42 @@ public class PickingDatabaseHelper extends SQLiteOpenHelper {
     private static final String COL_HANDY_MS_COLUMN3                = "column3";
     private static final String COL_HANDY_MS_COLUMN4                = "column4";
     private static final String COL_HANDY_MS_COLUMN5                = "column5";
+
+    private String CREATE_TABLE_HANDY_MS = "CREATE TABLE " + TABLE_HANDY_MS +
+            " (" + COL_HANDY_MS_CUSTOMER_CODE   + " TEXT, "     +
+            COL_HANDY_MS_PICKING_LIST_NO        + " TEXT PRIMARY KEY, " +
+            COL_HANDY_MS_DELIVERY_ADDRESS_CODE  + " TEXT, "     +
+            COL_HANDY_MS_DELIVERY_ADDRESS_NAME  + " TEXT, "     +
+            COL_HANDY_MS_EMPLOYEE_CODE          + " TEXT, "     +
+            COL_HANDY_MS_CREATE_DATE            + " TEXT, "     +
+            COL_HANDY_MS_CREATE_BY              + " TEXT, "     +
+            COL_HANDY_MS_EDIT_DATE              + " TEXT, "     +
+            COL_HANDY_MS_EDIT_BY                + " TEXT, "     +
+            COL_HANDY_MS_STATUS                 + " INTEGER, "  +
+            COL_HANDY_MS_COLUMN1                + " TEXT, "     +
+            COL_HANDY_MS_COLUMN2                + " TEXT, "     +
+            COL_HANDY_MS_COLUMN3                + " TEXT, "     +
+            COL_HANDY_MS_COLUMN4                + " TEXT, "     +
+            COL_HANDY_MS_COLUMN5                + " TEXT)";
+
+    /*----------------------------HANDY MS SERVER----------------------------*/
+    private static final String TABLE_HANDY_MS_SERVER = "handy_ms_server";
+    private String CREATE_TABLE_HANDY_MS_SERVER = "CREATE TABLE " + TABLE_HANDY_MS_SERVER +
+            " (" + COL_HANDY_MS_CUSTOMER_CODE   + " TEXT, "     +
+            COL_HANDY_MS_PICKING_LIST_NO        + " TEXT PRIMARY KEY, " +
+            COL_HANDY_MS_DELIVERY_ADDRESS_CODE  + " TEXT, "     +
+            COL_HANDY_MS_DELIVERY_ADDRESS_NAME  + " TEXT, "     +
+            COL_HANDY_MS_EMPLOYEE_CODE          + " TEXT, "     +
+            COL_HANDY_MS_CREATE_DATE            + " TEXT, "     +
+            COL_HANDY_MS_CREATE_BY              + " TEXT, "     +
+            COL_HANDY_MS_EDIT_DATE              + " TEXT, "     +
+            COL_HANDY_MS_EDIT_BY                + " TEXT, "     +
+            COL_HANDY_MS_STATUS                 + " INTEGER, "  +
+            COL_HANDY_MS_COLUMN1                + " TEXT, "     +
+            COL_HANDY_MS_COLUMN2                + " TEXT, "     +
+            COL_HANDY_MS_COLUMN3                + " TEXT, "     +
+            COL_HANDY_MS_COLUMN4                + " TEXT, "     +
+            COL_HANDY_MS_COLUMN5                + " TEXT)";
     /*---------------------------------HANDY DETAIL---------------------------------*/
     private static final String TABLE_HANDY_DETAIL                  = "handy_detail";
     private static final String COL_HANDY_DETAIL_PICKING_LIST_NO    = "picking_list_no";
@@ -70,28 +111,7 @@ public class PickingDatabaseHelper extends SQLiteOpenHelper {
     private static final String COL_HANDY_DETAIL_COLUMN3            = "column3";
     private static final String COL_HANDY_DETAIL_COLUMN4            = "column4";
     private static final String COL_HANDY_DETAIL_COLUMN5            = "column5";
-    /*---------------------------------DB BACKUP---------------------------------*/
-    private static final String TABLE_HANDY_MS_LOCAL                = "handy_ms_local";
-    private static final String TABLE_HANDY_DETAIL_LOCAL            = "handy_detail_local";
-    /*---------------------------------HANDY MS---------------------------------*/
-    private String CREATE_TABLE_HANDY_MS = "CREATE TABLE " + TABLE_HANDY_MS +
-            " (" + COL_HANDY_MS_CUSTOMER_CODE   + " TEXT, "     +
-            COL_HANDY_MS_PICKING_LIST_NO        + " TEXT PRIMARY KEY, " +
-            COL_HANDY_MS_DELIVERY_ADDRESS_CODE  + " TEXT, "     +
-            COL_HANDY_MS_DELIVERY_ADDRESS_NAME  + " TEXT, "     +
-            COL_HANDY_MS_EMPLOYEE_CODE          + " TEXT, "     +
-            COL_HANDY_MS_CREATE_DATE            + " TEXT, "     +
-            COL_HANDY_MS_CREATE_BY              + " TEXT, "     +
-            COL_HANDY_MS_EDIT_DATE              + " TEXT, "     +
-            COL_HANDY_MS_EDIT_BY                + " TEXT, "     +
-            COL_HANDY_MS_STATUS                 + " INTEGER, "  +
-            COL_HANDY_MS_COLUMN1                + " TEXT, "     +
-            COL_HANDY_MS_COLUMN2                + " TEXT, "     +
-            COL_HANDY_MS_COLUMN3                + " TEXT, "     +
-            COL_HANDY_MS_COLUMN4                + " TEXT, "     +
-            COL_HANDY_MS_COLUMN5                + " TEXT)";
 
-    /*---------------------------------HANDY DETAIL---------------------------------*/
     private final String CREATE_TABLE_HANDY_DETAIL = "CREATE TABLE " + TABLE_HANDY_DETAIL +
             " (" +
             COL_HANDY_DETAIL_PICKING_LIST_NO        + " TEXT, "     +
@@ -127,25 +147,10 @@ public class PickingDatabaseHelper extends SQLiteOpenHelper {
             COL_HANDY_DETAIL_CUSTOMER_ITEM_CODE     + "," +
             COL_HANDY_DETAIL_SERIES                 + ")" +
             ")";
-    /*---------------------------------HANDY MS BACKUP---------------------------------*/
-    private String CREATE_TABLE_HANDY_MS_LOCAL = "CREATE TABLE " + TABLE_HANDY_MS_LOCAL +
-            " (" + COL_HANDY_MS_CUSTOMER_CODE   + " TEXT, "     +
-            COL_HANDY_MS_PICKING_LIST_NO        + " TEXT PRIMARY KEY, " +
-            COL_HANDY_MS_DELIVERY_ADDRESS_CODE  + " TEXT, "     +
-            COL_HANDY_MS_DELIVERY_ADDRESS_NAME  + " TEXT, "     +
-            COL_HANDY_MS_EMPLOYEE_CODE          + " TEXT, "     +
-            COL_HANDY_MS_CREATE_DATE            + " TEXT, "     +
-            COL_HANDY_MS_CREATE_BY              + " TEXT, "     +
-            COL_HANDY_MS_EDIT_DATE              + " TEXT, "     +
-            COL_HANDY_MS_EDIT_BY                + " TEXT, "     +
-            COL_HANDY_MS_STATUS                 + " INTEGER, "  +
-            COL_HANDY_MS_COLUMN1                + " TEXT, "     +
-            COL_HANDY_MS_COLUMN2                + " TEXT, "     +
-            COL_HANDY_MS_COLUMN3                + " TEXT, "     +
-            COL_HANDY_MS_COLUMN4                + " TEXT, "     +
-            COL_HANDY_MS_COLUMN5                + " TEXT)";
-    /*---------------------------------HANDY DETAIL BACKUP---------------------------------*/
-    private final String CREATE_TABLE_HANDY_DETAIL_LOCAL = "CREATE TABLE " + TABLE_HANDY_DETAIL_LOCAL +
+
+    /*---------------------------------HANDY DETAIL SERVER---------------------------------*/
+    private static final String TABLE_HANDY_DETAIL_SERVER           = "handy_detail_server";
+    private final String CREATE_TABLE_HANDY_DETAIL_SERVER = "CREATE TABLE " + TABLE_HANDY_DETAIL_SERVER +
             " (" +
             COL_HANDY_DETAIL_PICKING_LIST_NO        + " TEXT, "     +
             COL_HANDY_DETAIL_INVOICE_NO             + " TEXT, "     +
@@ -188,34 +193,21 @@ public class PickingDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        db.execSQL(CREATE_TABLE_SYNC_VERSION);
         db.execSQL(CREATE_TABLE_HANDY_MS);
         db.execSQL(CREATE_TABLE_HANDY_DETAIL);
-        db.execSQL(CREATE_TABLE_HANDY_MS_LOCAL);
-        db.execSQL(CREATE_TABLE_HANDY_DETAIL_LOCAL);
+        db.execSQL(CREATE_TABLE_HANDY_MS_SERVER);
+        db.execSQL(CREATE_TABLE_HANDY_DETAIL_SERVER);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SYNC_VERSION);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_HANDY_MS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_HANDY_DETAIL);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_HANDY_MS_LOCAL);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_HANDY_DETAIL_LOCAL);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_HANDY_MS_SERVER);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_HANDY_DETAIL_SERVER);
         onCreate(db);
-    }
-
-    public void backUpData()
-    {
-        try {
-            SQLiteDatabase db = this.getWritableDatabase();
-            db.beginTransaction();
-
-            db.execSQL("INSERT INTO " + TABLE_HANDY_MS_LOCAL        + " SELECT * FROM " + TABLE_HANDY_MS);
-            db.execSQL("INSERT INTO " + TABLE_HANDY_DETAIL_LOCAL    + " SELECT * FROM " + TABLE_HANDY_DETAIL);
-
-            db.endTransaction();
-        } catch (SQLiteException e) {
-            Log.d(TAG, e.getMessage());
-        }
     }
 
     public long addHandyMS(String table_name,handy_ms handy_ms)
@@ -365,7 +357,7 @@ public class PickingDatabaseHelper extends SQLiteOpenHelper {
         return result;
     }
 
-    Cursor readAllHandyMSData() {
+   /* Cursor readAllHandyMSData() {
         String query = "SELECT * FROM " + TABLE_HANDY_MS;
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -375,7 +367,7 @@ public class PickingDatabaseHelper extends SQLiteOpenHelper {
         }
 
         return cursor;
-    }
+    }*/
 
     /*public List<handy_ms> getDataHandyMS(Context)
     {
@@ -388,7 +380,7 @@ public class PickingDatabaseHelper extends SQLiteOpenHelper {
         db.delete(tableName, null, null);
     }
 
-    public int countBackupData()
+/*    public int countBackupData()
     {
         // Execute the query to count the items
         String query = "SELECT COUNT(*) FROM " + TABLE_HANDY_MS_LOCAL;
@@ -402,6 +394,23 @@ public class PickingDatabaseHelper extends SQLiteOpenHelper {
         db.close();
 
         return count;
+    }*/
+
+    public void syncDataServer(handy handyData)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        /*for (handyDa user : userList) {
+            ContentValues values = new ContentValues();
+            values.put(DatabaseHelper.COLUMN_ID, user.getId());
+            values.put(DatabaseHelper.COLUMN_NAME, user.getName());
+            values.put(DatabaseHelper.COLUMN_AGE, user.getAge());
+
+            // INSERT OR REPLACE
+            db.insertWithOnConflict(DatabaseHelper.TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+        }*/
+
+        db.close();
     }
 
     public List<handy_ms> getAllData_HandyMS(String tableName) {

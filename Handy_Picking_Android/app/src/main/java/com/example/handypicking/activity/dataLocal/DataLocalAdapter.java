@@ -1,13 +1,11 @@
 package com.example.handypicking.activity.dataLocal;
 
-import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.LayoutInflater;
+import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,10 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.handypicking.R;
 import com.example.handypicking.model.handy_ms;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 public class DataLocalAdapter extends RecyclerView.Adapter<DataLocalAdapter.DataLocalHolder> implements Filterable {
     private final Context mContext;
@@ -39,7 +34,7 @@ public class DataLocalAdapter extends RecyclerView.Adapter<DataLocalAdapter.Data
     @NonNull
     @Override
     public DataLocalHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.row_item_data_local, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.row_item_data, parent, false);
         return new DataLocalHolder(view, itemClickListener);
     }
 
@@ -60,21 +55,21 @@ public class DataLocalAdapter extends RecyclerView.Adapter<DataLocalAdapter.Data
     }
 
     public class DataLocalHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private final TextView dataLocal_txtDateCreate, dataLocal_txtPickingListNo;
-        private final ImageView dataLocal_imgStatusPicking;
+        /*private final TextView dataLocal_txtDateCreate, dataLocal_txtPickingListNo;
+        private final ImageView dataLocal_imgStatusPicking;*/
         public DataLocalHolder(@NonNull View itemView, ItemClickListener itemClickListener)
         {
             super(itemView);
 
-            dataLocal_txtDateCreate       = itemView.findViewById(R.id.data_txtDateCreate);
+            /*dataLocal_txtDateCreate       = itemView.findViewById(R.id.data_txtDateCreate);
             dataLocal_txtPickingListNo    = itemView.findViewById(R.id.data_txtPickingListNo);
-            dataLocal_imgStatusPicking    = itemView.findViewById(R.id.data_imgStatusPicking);
+            dataLocal_imgStatusPicking    = itemView.findViewById(R.id.data_imgStatusPicking);*/
 
             itemView.setOnClickListener(this);
         }
 
         public void SetDetail(handy_ms handyMS) {
-            String createDateStr = handyMS.getCREATE_DATE();
+            /*String createDateStr = handyMS.getCREATE_DATE();
             SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
             SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.US);
             try {
@@ -90,7 +85,7 @@ public class DataLocalAdapter extends RecyclerView.Adapter<DataLocalAdapter.Data
             } catch (Exception e)
             {
                 e.printStackTrace();
-            }
+            }*/
         }
 
         @Override
