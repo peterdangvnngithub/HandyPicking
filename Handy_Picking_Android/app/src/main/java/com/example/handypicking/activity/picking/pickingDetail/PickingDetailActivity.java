@@ -70,7 +70,7 @@ public class PickingDetailActivity extends AppCompatActivity{
         txtLotID                = findViewById(R.id.txtLotID);
         labelEmployeeCode       = findViewById(R.id.labelEmployeeCode);
         txtEmployeeCode         = findViewById(R.id.txtEmployeeCode);
-        txtTotalQRCodeScan      = findViewById(R.id.txtTotalQRCodeScan);
+        txtTotalQRCodeScan      = findViewById(R.id.dataServer_txtTotalQRCodeScan);
         txtQuantityDetailTotal  = findViewById(R.id.txtQuantityDetailTotal);
 
         recyclerView            = findViewById(R.id.recyclerView);
@@ -90,31 +90,6 @@ public class PickingDetailActivity extends AppCompatActivity{
         if(intent != null)
         {
             handyMS = (handy_ms) intent.getSerializableExtra("handyMS");
-
-            String plNo = intent.getStringExtra("HistoryPicking-PLNo");
-            if(plNo != null)
-            {
-                // Get data PickingMS
-                Call<List<handy_ms>> call = pickingDetailPresenter.get_Data_Handy_MS_By_PLNo(plNo);
-
-                call.enqueue(new Callback<List<handy_ms>>() {
-                    @Override
-                    public void onResponse(Call<List<handy_ms>> call, Response<List<handy_ms>> response) {
-                        if (response.isSuccessful() && response.body() != null) {
-                            List<handy_ms> handyMsList = response.body();
-                            // Xử lý danh sách handy_ms ở đây
-                            handyMS = handyMsList.get(0);
-                        } else {
-                            // Xử lý khi response không thành công hoặc body null
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<List<handy_ms>> call, Throwable t) {
-                        // Xử lý khi gặp lỗi
-                    }
-                });
-            }
 
             setTitle(handyMS.getPICKING_LIST_NO());
         }

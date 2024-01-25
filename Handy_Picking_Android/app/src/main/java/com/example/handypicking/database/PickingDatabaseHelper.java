@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -23,11 +22,7 @@ public class PickingDatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG             = "PK_DB_HELPER";
     private static final String DATABASE_NAME   = "Handy.db";
     private static final int DATABASE_VERSION   = 1;
-    /*-------------------------------SYNC VERSION-------------------------------*/
-    private static final String TABLE_SYNC_VERSION  = "sync_version";
-    private static final String COL_SERVER_VERSION  = "server_version";
-    private String CREATE_TABLE_SYNC_VERSION        = "CREATE TABLE " + TABLE_SYNC_VERSION
-            + " (" + COL_SERVER_VERSION   + " INTEGER PRIMARY KEY)";
+
     /*---------------------------------HANDY MS---------------------------------*/
     private static final String TABLE_HANDY_MS                      = "handy_ms";
     private static final String COL_HANDY_MS_CUSTOMER_CODE          = "customer_code";
@@ -45,7 +40,6 @@ public class PickingDatabaseHelper extends SQLiteOpenHelper {
     private static final String COL_HANDY_MS_COLUMN3                = "column3";
     private static final String COL_HANDY_MS_COLUMN4                = "column4";
     private static final String COL_HANDY_MS_COLUMN5                = "column5";
-
     private String CREATE_TABLE_HANDY_MS = "CREATE TABLE " + TABLE_HANDY_MS +
             " (" + COL_HANDY_MS_CUSTOMER_CODE   + " TEXT, "     +
             COL_HANDY_MS_PICKING_LIST_NO        + " TEXT PRIMARY KEY, " +
@@ -62,8 +56,7 @@ public class PickingDatabaseHelper extends SQLiteOpenHelper {
             COL_HANDY_MS_COLUMN3                + " TEXT, "     +
             COL_HANDY_MS_COLUMN4                + " TEXT, "     +
             COL_HANDY_MS_COLUMN5                + " TEXT)";
-
-    /*----------------------------HANDY MS SERVER----------------------------*/
+    /*-------------------------------HANDY MS SERVER--------------------------------*/
     private static final String TABLE_HANDY_MS_SERVER = "handy_ms_server";
     private String CREATE_TABLE_HANDY_MS_SERVER = "CREATE TABLE " + TABLE_HANDY_MS_SERVER +
             " (" + COL_HANDY_MS_CUSTOMER_CODE   + " TEXT, "     +
@@ -111,81 +104,80 @@ public class PickingDatabaseHelper extends SQLiteOpenHelper {
     private static final String COL_HANDY_DETAIL_COLUMN3            = "column3";
     private static final String COL_HANDY_DETAIL_COLUMN4            = "column4";
     private static final String COL_HANDY_DETAIL_COLUMN5            = "column5";
-
     private final String CREATE_TABLE_HANDY_DETAIL = "CREATE TABLE " + TABLE_HANDY_DETAIL +
             " (" +
-            COL_HANDY_DETAIL_PICKING_LIST_NO        + " TEXT, "     +
-            COL_HANDY_DETAIL_INVOICE_NO             + " TEXT, "     +
-            COL_HANDY_DETAIL_SALE_ORDER             + " TEXT, "     +
-            COL_HANDY_DETAIL_ITEM_CODE              + " TEXT, "     +
-            COL_HANDY_DETAIL_LOT_ID                 + " TEXT, "     +
-            COL_HANDY_DETAIL_QUANTITY               + " INTEGER, "  +
-            COL_HANDY_DETAIL_PALLET_NO              + " TEXT, "     +
-            COL_HANDY_DETAIL_SERIES                 + " TEXT, "     +
-            COL_HANDY_DETAIL_CUSTOMER_ITEM_CODE     + " TEXT, "     +
-            COL_HANDY_DETAIL_TVC_ITEM_CODE          + " TEXT, "     +
-            COL_HANDY_DETAIL_CUSTOMER_PO            + " TEXT, "     +
-            COL_HANDY_DETAIL_QTY_CARTON             + " INTEGER, "  +
-            COL_HANDY_DETAIL_QTY_PER_CARTON         + " INTEGER, "  +
-            COL_HANDY_DETAIL_QTY_TOTAL              + " INTEGER, "  +
-            COL_HANDY_DETAIL_NET_WEIGHT             + " INTEGER, "  +
-            COL_HANDY_DETAIL_NET_WEIGHT_TOTAL       + " INTEGER, "  +
-            COL_HANDY_DETAIL_GROSS_WEIGHT           + " INTEGER, "  +
-            COL_HANDY_DETAIL_LOT_NO                 + " TEXT, "     +
-            COL_HANDY_DETAIL_CREATE_DATE            + " TEXT, "     +
-            COL_HANDY_DETAIL_CREATE_BY              + " TEXT, "     +
-            COL_HANDY_DETAIL_EDIT_DATE              + " TEXT, "     +
-            COL_HANDY_DETAIL_EDIT_BY                + " TEXT, "     +
-            COL_HANDY_DETAIL_STATUS                 + " INTEGER, "  +
-            COL_HANDY_DETAIL_COLUMN1                + " TEXT, "     +
-            COL_HANDY_DETAIL_COLUMN2                + " TEXT, "     +
-            COL_HANDY_DETAIL_COLUMN3                + " TEXT, "     +
-            COL_HANDY_DETAIL_COLUMN4                + " TEXT, "     +
-            COL_HANDY_DETAIL_COLUMN5                + " TEXT, "     +
+            COL_HANDY_DETAIL_PICKING_LIST_NO            + " TEXT, "     +
+            COL_HANDY_DETAIL_INVOICE_NO                 + " TEXT, "     +
+            COL_HANDY_DETAIL_SALE_ORDER                 + " TEXT, "     +
+            COL_HANDY_DETAIL_ITEM_CODE                  + " TEXT, "     +
+            COL_HANDY_DETAIL_LOT_ID                     + " TEXT, "     +
+            COL_HANDY_DETAIL_QUANTITY                   + " INTEGER, "  +
+            COL_HANDY_DETAIL_PALLET_NO                  + " TEXT, "     +
+            COL_HANDY_DETAIL_SERIES                     + " TEXT, "     +
+            COL_HANDY_DETAIL_CUSTOMER_ITEM_CODE         + " TEXT, "     +
+            COL_HANDY_DETAIL_TVC_ITEM_CODE              + " TEXT, "     +
+            COL_HANDY_DETAIL_CUSTOMER_PO                + " TEXT, "     +
+            COL_HANDY_DETAIL_QTY_CARTON                 + " INTEGER, "  +
+            COL_HANDY_DETAIL_QTY_PER_CARTON             + " INTEGER, "  +
+            COL_HANDY_DETAIL_QTY_TOTAL                  + " INTEGER, "  +
+            COL_HANDY_DETAIL_NET_WEIGHT                 + " INTEGER, "  +
+            COL_HANDY_DETAIL_NET_WEIGHT_TOTAL           + " INTEGER, "  +
+            COL_HANDY_DETAIL_GROSS_WEIGHT               + " INTEGER, "  +
+            COL_HANDY_DETAIL_LOT_NO                     + " TEXT, "     +
+            COL_HANDY_DETAIL_CREATE_DATE                + " TEXT, "     +
+            COL_HANDY_DETAIL_CREATE_BY                  + " TEXT, "     +
+            COL_HANDY_DETAIL_EDIT_DATE                  + " TEXT, "     +
+            COL_HANDY_DETAIL_EDIT_BY                    + " TEXT, "     +
+            COL_HANDY_DETAIL_STATUS                     + " INTEGER, "  +
+            COL_HANDY_DETAIL_COLUMN1                    + " TEXT, "     +
+            COL_HANDY_DETAIL_COLUMN2                    + " TEXT, "     +
+            COL_HANDY_DETAIL_COLUMN3                    + " TEXT, "     +
+            COL_HANDY_DETAIL_COLUMN4                    + " TEXT, "     +
+            COL_HANDY_DETAIL_COLUMN5                    + " TEXT, "     +
             "PRIMARY KEY (" +
-            COL_HANDY_DETAIL_PICKING_LIST_NO        + "," +
-            COL_HANDY_DETAIL_CUSTOMER_ITEM_CODE     + "," +
-            COL_HANDY_DETAIL_SERIES                 + ")" +
+                COL_HANDY_DETAIL_PICKING_LIST_NO        + "," +
+                COL_HANDY_DETAIL_CUSTOMER_ITEM_CODE     + "," +
+                COL_HANDY_DETAIL_SERIES                 + ")" +
             ")";
-
     /*---------------------------------HANDY DETAIL SERVER---------------------------------*/
-    private static final String TABLE_HANDY_DETAIL_SERVER           = "handy_detail_server";
+    private static final String TABLE_HANDY_DETAIL_SERVER = "handy_detail_server";
     private final String CREATE_TABLE_HANDY_DETAIL_SERVER = "CREATE TABLE " + TABLE_HANDY_DETAIL_SERVER +
             " (" +
-            COL_HANDY_DETAIL_PICKING_LIST_NO        + " TEXT, "     +
-            COL_HANDY_DETAIL_INVOICE_NO             + " TEXT, "     +
-            COL_HANDY_DETAIL_SALE_ORDER             + " TEXT, "     +
-            COL_HANDY_DETAIL_ITEM_CODE              + " TEXT, "     +
-            COL_HANDY_DETAIL_LOT_ID                 + " TEXT, "     +
-            COL_HANDY_DETAIL_QUANTITY               + " INTEGER, "  +
-            COL_HANDY_DETAIL_PALLET_NO              + " TEXT, "     +
-            COL_HANDY_DETAIL_SERIES                 + " TEXT, "     +
-            COL_HANDY_DETAIL_CUSTOMER_ITEM_CODE     + " TEXT, "     +
-            COL_HANDY_DETAIL_TVC_ITEM_CODE          + " TEXT, "     +
-            COL_HANDY_DETAIL_CUSTOMER_PO            + " TEXT, "     +
-            COL_HANDY_DETAIL_QTY_CARTON             + " INTEGER, "  +
-            COL_HANDY_DETAIL_QTY_PER_CARTON         + " INTEGER, "  +
-            COL_HANDY_DETAIL_QTY_TOTAL              + " INTEGER, "  +
-            COL_HANDY_DETAIL_NET_WEIGHT             + " REAL, "     +
-            COL_HANDY_DETAIL_NET_WEIGHT_TOTAL       + " REAL, "     +
-            COL_HANDY_DETAIL_GROSS_WEIGHT           + " REAL, "     +
-            COL_HANDY_DETAIL_LOT_NO                 + " TEXT, "     +
-            COL_HANDY_DETAIL_CREATE_DATE            + " TEXT, "     +
-            COL_HANDY_DETAIL_CREATE_BY              + " TEXT, "     +
-            COL_HANDY_DETAIL_EDIT_DATE              + " TEXT, "     +
-            COL_HANDY_DETAIL_EDIT_BY                + " TEXT, "     +
-            COL_HANDY_DETAIL_STATUS                 + " INTEGER, "  +
-            COL_HANDY_DETAIL_COLUMN1                + " TEXT, "     +
-            COL_HANDY_DETAIL_COLUMN2                + " TEXT, "     +
-            COL_HANDY_DETAIL_COLUMN3                + " TEXT, "     +
-            COL_HANDY_DETAIL_COLUMN4                + " TEXT, "     +
-            COL_HANDY_DETAIL_COLUMN5                + " TEXT, "     +
+            COL_HANDY_DETAIL_PICKING_LIST_NO            + " TEXT, "     +
+            COL_HANDY_DETAIL_INVOICE_NO                 + " TEXT, "     +
+            COL_HANDY_DETAIL_SALE_ORDER                 + " TEXT, "     +
+            COL_HANDY_DETAIL_ITEM_CODE                  + " TEXT, "     +
+            COL_HANDY_DETAIL_LOT_ID                     + " TEXT, "     +
+            COL_HANDY_DETAIL_QUANTITY                   + " INTEGER, "  +
+            COL_HANDY_DETAIL_PALLET_NO                  + " TEXT, "     +
+            COL_HANDY_DETAIL_SERIES                     + " TEXT, "     +
+            COL_HANDY_DETAIL_CUSTOMER_ITEM_CODE         + " TEXT, "     +
+            COL_HANDY_DETAIL_TVC_ITEM_CODE              + " TEXT, "     +
+            COL_HANDY_DETAIL_CUSTOMER_PO                + " TEXT, "     +
+            COL_HANDY_DETAIL_QTY_CARTON                 + " INTEGER, "  +
+            COL_HANDY_DETAIL_QTY_PER_CARTON             + " INTEGER, "  +
+            COL_HANDY_DETAIL_QTY_TOTAL                  + " INTEGER, "  +
+            COL_HANDY_DETAIL_NET_WEIGHT                 + " REAL, "     +
+            COL_HANDY_DETAIL_NET_WEIGHT_TOTAL           + " REAL, "     +
+            COL_HANDY_DETAIL_GROSS_WEIGHT               + " REAL, "     +
+            COL_HANDY_DETAIL_LOT_NO                     + " TEXT, "     +
+            COL_HANDY_DETAIL_CREATE_DATE                + " TEXT, "     +
+            COL_HANDY_DETAIL_CREATE_BY                  + " TEXT, "     +
+            COL_HANDY_DETAIL_EDIT_DATE                  + " TEXT, "     +
+            COL_HANDY_DETAIL_EDIT_BY                    + " TEXT, "     +
+            COL_HANDY_DETAIL_STATUS                     + " INTEGER, "  +
+            COL_HANDY_DETAIL_COLUMN1                    + " TEXT, "     +
+            COL_HANDY_DETAIL_COLUMN2                    + " TEXT, "     +
+            COL_HANDY_DETAIL_COLUMN3                    + " TEXT, "     +
+            COL_HANDY_DETAIL_COLUMN4                    + " TEXT, "     +
+            COL_HANDY_DETAIL_COLUMN5                    + " TEXT, "     +
             "PRIMARY KEY (" +
-            COL_HANDY_DETAIL_PICKING_LIST_NO        + "," +
-            COL_HANDY_DETAIL_CUSTOMER_ITEM_CODE     + "," +
-            COL_HANDY_DETAIL_SERIES                 + ")" +
+                COL_HANDY_DETAIL_PICKING_LIST_NO        + "," +
+                COL_HANDY_DETAIL_CUSTOMER_ITEM_CODE     + "," +
+                COL_HANDY_DETAIL_SERIES                 + ")" +
             ")";
 
+    /*---------------------------------SQLITE COMMAND---------------------------------*/
     public PickingDatabaseHelper(@Nullable Context mContext) {
         super(mContext, DATABASE_NAME, null, DATABASE_VERSION);
         this.mContext = mContext;
@@ -193,7 +185,6 @@ public class PickingDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(CREATE_TABLE_SYNC_VERSION);
         db.execSQL(CREATE_TABLE_HANDY_MS);
         db.execSQL(CREATE_TABLE_HANDY_DETAIL);
         db.execSQL(CREATE_TABLE_HANDY_MS_SERVER);
@@ -202,7 +193,6 @@ public class PickingDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SYNC_VERSION);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_HANDY_MS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_HANDY_DETAIL);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_HANDY_MS_SERVER);
@@ -225,13 +215,11 @@ public class PickingDatabaseHelper extends SQLiteOpenHelper {
         // Perform the query to check if data exists
         Cursor cursor = db.query(table_name, projection, selection, selectionArgs, null, null, null);
 
-        // Check if the cursor has any rows (i.e., data exists)
+        // Check if the cursor has any rows
         if (cursor.moveToFirst()) {
-            // Data already exists, handle accordingly (e.g., update existing data, show an error message, etc.)
-            cursor.close();
-            return -1; // Return a value indicating data already exists
+            cursor.close(); // Data already exists, handle accordingly
+            return -1;      // Return a value indicating data already exists
         }
-
         cv.put(COL_HANDY_MS_CUSTOMER_CODE,          handy_ms.getCUSTOMER_CODE());
         cv.put(COL_HANDY_MS_PICKING_LIST_NO,        handy_ms.getPICKING_LIST_NO());
         cv.put(COL_HANDY_MS_DELIVERY_ADDRESS_CODE,  handy_ms.getDELIVERY_ADDRESS_CODE());
@@ -336,7 +324,6 @@ public class PickingDatabaseHelper extends SQLiteOpenHelper {
 
                 result = db.insertWithOnConflict(table_name, null, cv, SQLiteDatabase.CONFLICT_IGNORE);
             }
-
             db.setTransactionSuccessful();
         } catch (SQLiteException e) {
             Log.d(TAG, e.getMessage());
@@ -357,60 +344,10 @@ public class PickingDatabaseHelper extends SQLiteOpenHelper {
         return result;
     }
 
-   /* Cursor readAllHandyMSData() {
-        String query = "SELECT * FROM " + TABLE_HANDY_MS;
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        Cursor cursor = null;
-        if(db != null) {
-            cursor = db.rawQuery(query, null);
-        }
-
-        return cursor;
-    }*/
-
-    /*public List<handy_ms> getDataHandyMS(Context)
-    {
-
-    }*/
-
     public void deleteData(String tableName)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(tableName, null, null);
-    }
-
-/*    public int countBackupData()
-    {
-        // Execute the query to count the items
-        String query = "SELECT COUNT(*) FROM " + TABLE_HANDY_MS_LOCAL;
-        SQLiteDatabase db = this.getReadableDatabase();
-        SQLiteStatement statement = db.compileStatement(query);
-
-        // Retrieve the count value from the statement
-        int count = (int) statement.simpleQueryForLong();
-
-        // Close the database
-        db.close();
-
-        return count;
-    }*/
-
-    public void syncDataServer(handy handyData)
-    {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        /*for (handyDa user : userList) {
-            ContentValues values = new ContentValues();
-            values.put(DatabaseHelper.COLUMN_ID, user.getId());
-            values.put(DatabaseHelper.COLUMN_NAME, user.getName());
-            values.put(DatabaseHelper.COLUMN_AGE, user.getAge());
-
-            // INSERT OR REPLACE
-            db.insertWithOnConflict(DatabaseHelper.TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE);
-        }*/
-
-        db.close();
     }
 
     public List<handy_ms> getAllData_HandyMS(String tableName) {

@@ -1,5 +1,6 @@
 package com.example.handypicking.api;
 
+import com.example.handypicking.model.ServerVersion;
 import com.example.handypicking.model.handy;
 import com.example.handypicking.model.handy_ms;
 import com.example.handypicking.model.handy_detail;
@@ -16,20 +17,28 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 public interface ApiInterface {
+    /*@GET("system")
+    Call<Integer> getServer_VersionData();*/
+
     @GET("/checkApiStatus")
     Call<Void> checkApiStatus();
 
     @GET("handyPickingMS")
     Call<List<handy_ms>> getHandyMS();
 
+/*
     @GET("handy")
     Call<handy> getDataServer();
+*/
 
     @GET("handyPickingMS/{plNo}")
     Call<List<handy_ms>> check_Exists_HandyPicking_MS(@Path("plNo") String plNo);
 
     @GET("handyPickingDetail/{series}")
     Call<List<handy_detail>> check_Exists_HandyPicking_Detail(@Path("series") String series);
+
+    @GET("handyPickingDetail/{pickingNo}")
+    Call<List<handy_detail>> get_HandyPicking_Detail(@Path("pickingNo") String pickingNo);
 
     @POST("checkExistsDetail")
     Call<Integer> check_Exists_List_HandyPicking_Detail(@Body RequestBody requestBody);

@@ -34,7 +34,7 @@ public class DataLocalAdapter extends RecyclerView.Adapter<DataLocalAdapter.Data
     @NonNull
     @Override
     public DataLocalHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.row_item_data, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.row_item_data_server_ms, parent, false);
         return new DataLocalHolder(view, itemClickListener);
     }
 

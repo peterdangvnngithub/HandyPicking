@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Linq;
+using System.Transactions;
 using System.Drawing;
 using System.Diagnostics;
 using System.Windows.Forms;
@@ -16,6 +17,8 @@ using DevExpress.XtraGrid.Views.Grid;
 using DevExpress.XtraGrid.Views.Base;
 using DevExpress.XtraEditors.Controls;
 using DevExpress.XtraEditors.Repository;
+using Handy_Picking_Winform.DTO;
+using Handy_Picking_Winform.Utils;
 
 namespace Handy_Picking_Winform
 {
@@ -23,69 +26,73 @@ namespace Handy_Picking_Winform
     {
         #region Define the global variable
         // PICKING LIST
-        private readonly GridColumn grid_PL_Col_DELETE_ROW                          = new GridColumn();
-        private readonly GridColumn grid_PL_Col_PICKING_LIST_NO                     = new GridColumn();
-        private readonly GridColumn grid_PL_Col_PALLET_NO                           = new GridColumn();
-        private readonly GridColumn grid_PL_Col_CUS_ITEM_CODE                       = new GridColumn();
-        private readonly GridColumn grid_PL_Col_TVC_ITEM_CODE                       = new GridColumn();
-        private readonly GridColumn grid_PL_Col_SERIES                              = new GridColumn();
-        private readonly GridColumn grid_PL_Col_CUSTOMER_PO                         = new GridColumn();
-        private readonly GridColumn grid_PL_Col_QTY_CARTON                          = new GridColumn();
-        private readonly GridColumn grid_PL_Col_QTY_PER_CARTON                      = new GridColumn();
-        private readonly GridColumn grid_PL_Col_QTY_TOTAL                           = new GridColumn();
-        private readonly GridColumn grid_PL_Col_NET_WEIGHT                          = new GridColumn();
-        private readonly GridColumn grid_PL_Col_NET_WEIGHT_TOTAL                    = new GridColumn();
-        private readonly GridColumn grid_PL_Col_GROSS_WEIGHT                        = new GridColumn();
-        private readonly GridColumn grid_PL_Col_LOT_NO                              = new GridColumn();
-        private readonly RepositoryItemButtonEdit grid_PL_repo_btn_DeleteRow        = new RepositoryItemButtonEdit();
-        private readonly RepositoryItemSearchLookUpEdit grid_PL_repo_sLookUp_Pallet = new RepositoryItemSearchLookUpEdit();
+        private readonly GridColumn grid_PL_Col_DELETE_ROW                              = new GridColumn();
+        private readonly GridColumn grid_PL_Col_PICKING_LIST_NO                         = new GridColumn();
+        private readonly GridColumn grid_PL_Col_PALLET_NO                               = new GridColumn();
+        private readonly GridColumn grid_PL_Col_CUS_ITEM_CODE                           = new GridColumn();
+        private readonly GridColumn grid_PL_Col_TVC_ITEM_CODE                           = new GridColumn();
+        private readonly GridColumn grid_PL_Col_SERIES                                  = new GridColumn();
+        private readonly GridColumn grid_PL_Col_CUSTOMER_PO                             = new GridColumn();
+        private readonly GridColumn grid_PL_Col_QTY_CARTON                              = new GridColumn();
+        private readonly GridColumn grid_PL_Col_QTY_PER_CARTON                          = new GridColumn();
+        private readonly GridColumn grid_PL_Col_QTY_TOTAL                               = new GridColumn();
+        private readonly GridColumn grid_PL_Col_NET_WEIGHT                              = new GridColumn();
+        private readonly GridColumn grid_PL_Col_NET_WEIGHT_TOTAL                        = new GridColumn();
+        private readonly GridColumn grid_PL_Col_GROSS_WEIGHT                            = new GridColumn();
+        private readonly GridColumn grid_PL_Col_LOT_NO                                  = new GridColumn();
+        private readonly RepositoryItemButtonEdit grid_PL_repo_btn_DeleteRow            = new RepositoryItemButtonEdit();
+        private readonly RepositoryItemSearchLookUpEdit grid_PL_repo_sLookUp_Pallet     = new RepositoryItemSearchLookUpEdit();
 
         // SEARCH LOOKUP EDIT PALLET VIEW
-        private readonly GridView grid_PL_sLookUp_Pallet_View                   = new GridView();
-        private readonly GridColumn grid_PL_View_Col_PALLET_NO                  = new GridColumn();
+        private readonly GridView grid_PL_sLookUp_Pallet_View                           = new GridView();
+        private readonly GridColumn grid_PL_View_Col_PALLET_NO                          = new GridColumn();
 
         // PICKING LIST MERGE
-        private readonly GridColumn grid_PL_Merge_Col_PICKING_LIST_NO           = new GridColumn();
-        private readonly GridColumn grid_PL_Merge_Col_PALLET_NO                 = new GridColumn();
-        private readonly GridColumn grid_PL_Merge_Col_CUS_ITEM_CODE             = new GridColumn();
-        private readonly GridColumn grid_PL_Merge_Col_TVC_ITEM_CODE             = new GridColumn();
-        private readonly GridColumn grid_PL_Merge_Col_QTY_CARTON                = new GridColumn();
-        private readonly GridColumn grid_PL_Merge_Col_QTY_PER_CARTON            = new GridColumn();
-        private readonly GridColumn grid_PL_Merge_Col_QTY_TOTAL                 = new GridColumn();
-        private readonly GridColumn grid_PL_Merge_Col_NET_WEIGHT_TOTAL          = new GridColumn();
-        private readonly GridColumn grid_PL_Merge_Col_GROSS_WEIGHT_TOTAL        = new GridColumn();
-        private readonly GridColumn grid_PL_Merge_Col_LOT_NO                    = new GridColumn();
+        private readonly GridColumn grid_PL_Merge_Col_PICKING_LIST_NO                   = new GridColumn();
+        private readonly GridColumn grid_PL_Merge_Col_PALLET_NO                         = new GridColumn();
+        private readonly GridColumn grid_PL_Merge_Col_CUS_ITEM_CODE                     = new GridColumn();
+        private readonly GridColumn grid_PL_Merge_Col_TVC_ITEM_CODE                     = new GridColumn();
+        private readonly GridColumn grid_PL_Merge_Col_QTY_CARTON                        = new GridColumn();
+        private readonly GridColumn grid_PL_Merge_Col_QTY_PER_CARTON                    = new GridColumn();
+        private readonly GridColumn grid_PL_Merge_Col_QTY_TOTAL                         = new GridColumn();
+        private readonly GridColumn grid_PL_Merge_Col_NET_WEIGHT_TOTAL                  = new GridColumn();
+        private readonly GridColumn grid_PL_Merge_Col_GROSS_WEIGHT_TOTAL                = new GridColumn();
+        private readonly GridColumn grid_PL_Merge_Col_LOT_NO                            = new GridColumn();
 
         // DATA COMPARE
-        private readonly GridColumn grid_Data_Compare_Col_CUSTOMER_ITEM_CODE    = new GridColumn();
-        private readonly GridColumn grid_Data_Compare_Col_TVC_ITEM_CODE         = new GridColumn();
-        private readonly GridColumn grid_Data_Compare_Col_QUANTITY              = new GridColumn();
+        private readonly GridColumn grid_Data_Compare_Col_CUSTOMER_ITEM_CODE            = new GridColumn();
+        private readonly GridColumn grid_Data_Compare_Col_TVC_ITEM_CODE                 = new GridColumn();
+        private readonly GridColumn grid_Data_Compare_Col_QUANTITY                      = new GridColumn();
 
         // COMPARE WITH PACKING LIST
-        private readonly GridColumn grid_Compare_Col_CUSTOMER_ITEM_CODE         = new GridColumn();
-        private readonly GridColumn grid_Compare_Col_TVC_ITEM_CODE              = new GridColumn();
-        private readonly GridColumn grid_Compare_Col_QUANTITY                   = new GridColumn();
-        private readonly GridColumn grid_Compare_Col_PL_CUSTOMER_ITEM_CODE      = new GridColumn();
-        private readonly GridColumn grid_Compare_Col_PL_TVC_ITEM_CODE           = new GridColumn();
-        private readonly GridColumn grid_Compare_Col_PL_QUANTITY                = new GridColumn();
-        private readonly GridColumn grid_Compare_Col_QUANTITY_DIFFERENCE        = new GridColumn();
+        private readonly GridColumn grid_Compare_Col_CUSTOMER_ITEM_CODE                 = new GridColumn();
+        private readonly GridColumn grid_Compare_Col_TVC_ITEM_CODE                      = new GridColumn();
+        private readonly GridColumn grid_Compare_Col_QUANTITY                           = new GridColumn();
+        private readonly GridColumn grid_Compare_Col_PL_CUSTOMER_ITEM_CODE              = new GridColumn();
+        private readonly GridColumn grid_Compare_Col_PL_TVC_ITEM_CODE                   = new GridColumn();
+        private readonly GridColumn grid_Compare_Col_PL_QUANTITY                        = new GridColumn();
+        private readonly GridColumn grid_Compare_Col_QUANTITY_DIFFERENCE                = new GridColumn();
 
         // PACKING LIST VIEW
-        private readonly GridColumn grid_sLookUp_PL_CUSTOMER_CODE               = new GridColumn();
-        private readonly GridColumn grid_sLookUp_PL_PICKING_LIST_NO             = new GridColumn();
-        private readonly GridColumn grid_sLookUp_PL_STATUS                      = new GridColumn();
-        private readonly GridColumn grid_sLookUp_PL_DELIVERY_ADDRESS            = new GridColumn();
-        private readonly GridColumn grid_sLookUp_PL_EMPLOYEE_CODE               = new GridColumn();
-        private readonly GridColumn grid_sLookUp_PL_CREATE_DATE                 = new GridColumn();
+        private readonly GridColumn grid_sLookUp_PL_CUSTOMER_CODE                       = new GridColumn();
+        private readonly GridColumn grid_sLookUp_PL_PICKING_LIST_NO                     = new GridColumn();
+        private readonly GridColumn grid_sLookUp_PL_STATUS                              = new GridColumn();
+        private readonly GridColumn grid_sLookUp_PL_DELIVERY_ADDRESS                    = new GridColumn();
+        private readonly GridColumn grid_sLookUp_PL_EMPLOYEE_CODE                       = new GridColumn();
+        private readonly GridColumn grid_sLookUp_PL_CREATE_DATE                         = new GridColumn();
 
-        List<HANDY_PICKING_DETAIL> list_Handy_Picking_Detail                    = new List<HANDY_PICKING_DETAIL>();
-        List<HANDY_PICKING_DETAIL> list_Handy_Picking_Detail_Delete             = new List<HANDY_PICKING_DETAIL>();
-        List<Data_Compare> list_DataCompare                                     = new List<Data_Compare>();
-        List<Sum_DataCompare> sum_DataCompares                                  = new List<Sum_DataCompare>();
-        List<Sum_PickingList> sum_PickingList                                   = new List<Sum_PickingList>();
-        List<Compare_DataImport_With_PickingList> compare_Invoice_PickingList   = new List<Compare_DataImport_With_PickingList>();  
-        USER_MS userMS                                                          = new USER_MS();
+        List<HANDY_PICKING_DETAIL> list_Handy_Picking_Detail                            = new List<HANDY_PICKING_DETAIL>();
+        private readonly List<HANDY_PICKING_DETAIL> list_Handy_Picking_Detail_Delete    = new List<HANDY_PICKING_DETAIL>();
+        private readonly List<Data_Compare> list_DataCompare                            = new List<Data_Compare>();
+        List<Sum_DataCompare> sum_DataCompares                                          = new List<Sum_DataCompare>();
+        List<Sum_PickingList> sum_PickingList                                           = new List<Sum_PickingList>();
+        List<Compare_DataImport_With_PickingList> compare_Invoice_PickingList           = new List<Compare_DataImport_With_PickingList>();
+        private readonly USER_MS userMS                                                 = new USER_MS();
+        private bool IsPickingListLock = false;
+        private Color lbl_PickingList_Backcolor = Color.Transparent;
+        private Color lbl_PickingList_Forecolor = Color.Black;
         #endregion
+
         public Form_Main(USER_MS _userMS)
         {
             InitializeComponent();
@@ -109,7 +116,22 @@ namespace Handy_Picking_Winform
 
         private void SettingInit()
         {
-            barStaticUser.Caption = userMS.USERNAME;
+            barStatic_User.Caption = userMS.USERNAME;
+            barStatic_Version.Caption = "Version: " + Common.Get_Current_Version();
+            Setting_lbl_PickingList_Color(lbl_PickingList_Backcolor, lbl_PickingList_Forecolor);
+            Setting_Display(IsPickingListLock);
+        }
+
+        private void Setting_Display(bool IsPickingListLock)
+        {
+            gridView_Picking_List.OptionsBehavior.ReadOnly = IsPickingListLock;
+            gridView_Picking_List.OptionsBehavior.Editable = !IsPickingListLock;
+        }
+
+        private void Setting_lbl_PickingList_Color(Color lbl_PickingList_Backcolor, Color lbl_PickingList_Forecolor)
+        {
+            lbl_PickingList.BackColor = lbl_PickingList_Backcolor;
+            lbl_PickingList.ForeColor = lbl_PickingList_Forecolor;
         }
 
         private void Setting_Data_Item_SLookUp(SearchLookUpEdit item)
@@ -121,7 +143,7 @@ namespace Handy_Picking_Winform
                 sLookUp_PickingList.Properties.DisplayMember    = "PICKING_LIST_NO";
             }
         }
-        private List<HANDY_PICKING_MS> Get_Data_PickingList_MS()    
+        private List<HANDY_PICKING_MS> Get_Data_PickingList_MS()
         {
             using (HANDY_PICKING_Entities db = new HANDY_PICKING_Entities())
             {   
@@ -151,7 +173,51 @@ namespace Handy_Picking_Winform
         {
             using (HANDY_PICKING_Entities db = new HANDY_PICKING_Entities())
             {
-                return db.HANDY_PICKING_DETAIL.Where(x => x.PICKING_LIST_NO.Equals(PLNo)).ToList();
+                var result =
+                    db.HANDY_PICKING_DETAIL
+                    .Where(x => x.PICKING_LIST_NO == PLNo)
+                    .ToList();
+
+                var lockResult =
+                    db.HANDY_PICKING_DETAIL_LOCK
+                    .Where(x => x.PICKING_LIST_NO == PLNo)
+                    .Select(x => new HandyPickingDetail_DTO
+                    {
+                        PICKING_LIST_NO   = x.PICKING_LIST_NO,
+                        INVOICE_NO        = x.INVOICE_NO,
+                        SALE_ORDER        = x.SALE_ORDER,
+                        ITEM_CODE         = x.ITEM_CODE,
+                        LOT_ID            = x.LOT_ID,
+                        QUANTITY          = x.QUANTITY,
+                        PALLET_NO         = x.PALLET_NO,
+                        SERIES            = x.SERIES,
+                        CUS_ITEM_CODE     = x.CUS_ITEM_CODE,
+                        TVC_ITEM_CODE     = x.TVC_ITEM_CODE,
+                        CUSTOMER_PO       = x.CUSTOMER_PO,
+                        QTY_CARTON        = x.QTY_CARTON,
+                        QTY_PER_CARTON    = x.QTY_PER_CARTON,
+                        QTY_TOTAL         = x.QTY_TOTAL,
+                        NET_WEIGHT        = x.NET_WEIGHT,
+                        NET_WEIGHT_TOTAL  = x.NET_WEIGHT_TOTAL,
+                        GROSS_WEIGHT      = x.GROSS_WEIGHT,
+                        LOT_NO            = x.LOT_NO,
+                        CREATE_DATE       = x.CREATE_DATE,
+                        CREATE_BY         = x.CREATE_BY,
+                        EDIT_DATE         = x.EDIT_DATE,
+                        EDIT_BY           = x.EDIT_BY,
+                        STATUS            = x.STATUS,
+                        COLUMN1           = x.COLUMN1,
+                        COLUMN2           = x.COLUMN2,
+                        COLUMN3           = x.COLUMN3,
+                        COLUMN4           = x.COLUMN4,
+                        COLUMN5           = x.COLUMN5
+                    })
+                    .ToList();
+
+                // Convert PickingDetailDTO to HANDY_PICKING_DETAIL and add them to the list result
+                result.AddRange(lockResult.Select(dto => dto.ToHandyPickingDetail()));
+
+                return result;
             }
         }
 
@@ -1220,57 +1286,75 @@ namespace Handy_Picking_Winform
             }
         }
 
-        private void barBtnLoadPackagingStandards_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            using(HANDY_PICKING_Entities db = new HANDY_PICKING_Entities())
-            {
-                List<HANDY_PICKING_DETAIL> resultList = 
-                    (
-                        from o 
-                            in list_Handy_Picking_Detail
-                        join t 
-                            in db.PRODUCTMFs
-                        on  o.TVC_ITEM_CODE equals t.ITEM_CODE into joinedData
-                        from j
-                            in joinedData.DefaultIfEmpty()
-                        select new HANDY_PICKING_DETAIL
-                        {
-                            PICKING_LIST_NO     = o.PICKING_LIST_NO,
-                            INVOICE_NO          = o.INVOICE_NO,
-                            SALE_ORDER          = o.SALE_ORDER,
-                            ITEM_CODE           = o.ITEM_CODE,
-                            LOT_ID              = o.LOT_ID,
-                            QUANTITY            = o.QUANTITY,
-                            PALLET_NO           = o.PALLET_NO,
-                            SERIES              = o.SERIES,
-                            CUS_ITEM_CODE       = o.CUS_ITEM_CODE,
-                            TVC_ITEM_CODE       = o.TVC_ITEM_CODE,
-                            CUSTOMER_PO         = o.CUSTOMER_PO,
-                            QTY_CARTON          = j != null ? (int)Math.Ceiling((decimal)((decimal)o.QTY_TOTAL / (decimal)j.BOX_QUANTITY)) : 0,
-                            QTY_PER_CARTON      = j != null ? Convert.ToInt32(j.BOX_QUANTITY) : 0,
-                            QTY_TOTAL           = o.QTY_TOTAL,
-                            NET_WEIGHT          = (decimal)(j != null ? j.WEIGHT : 0),
-                            NET_WEIGHT_TOTAL    = (decimal)(j != null ? o.QTY_TOTAL * j.WEIGHT : 0),
-                            COLUMN1             = o.COLUMN1,
-                            COLUMN2             = o.COLUMN2,
-                            COLUMN3             = o.COLUMN3,
-                            COLUMN4             = o.COLUMN4,
-                            COLUMN5             = o.COLUMN5
-                        }
-                    ).ToList();
+        //private void barBtnLoadPackagingStandards_ItemClick(object sender, ItemClickEventArgs e)
+        //{
+        //    MessageBox.Show("Chức năng đang phát triển");
+        //    using (HANDY_PICKING_Entities db = new HANDY_PICKING_Entities())
+        //    {
+        //        List<HANDY_PICKING_DETAIL> resultList =
+        //            (
+        //                from o
+        //                    in list_Handy_Picking_Detail
+        //                join t
+        //                    in db.PRODUCTMFs
+        //                on o.TVC_ITEM_CODE equals t.ITEM_CODE into joinedData
+        //                from j
+        //                    in joinedData.DefaultIfEmpty()
+        //                select new HANDY_PICKING_DETAIL
+        //                {
+        //                    PICKING_LIST_NO = "TEST",
+        //                    INVOICE_NO = "TEST",
+        //                    SALE_ORDER = "TEST",
+        //                    ITEM_CODE = "TEST",
+        //                    LOT_ID = "TEST",
+        //                    QUANTITY = 0,
+        //                    PALLET_NO = "TEST",
+        //                    SERIES = "TEST",
+        //                    CUS_ITEM_CODE = "TEST",
+        //                    TVC_ITEM_CODE = "TEST",
+        //                    CUSTOMER_PO = "TEST",
+        //                    QTY_CARTON = 0,
+        //                    QTY_PER_CARTON = 0,
+        //                    QTY_TOTAL = 0,
+        //                    NET_WEIGHT = 0,
+        //                    NET_WEIGHT_TOTAL = 0,
+        //                    GROSS_WEIGHT = 0,
+        //                    LOT_NO = "TEST",
+        //                    CREATE_DATE = DateTime.Now,
+        //                    CREATE_BY = "TEST",
+        //                    EDIT_DATE = null,
+        //                    EDIT_BY = null,
+        //                    STATUS = 0,
+        //                    COLUMN1 = "TEST",
+        //                    COLUMN2 = "TEST",
+        //                    COLUMN3 = "TEST",
+        //                    COLUMN4 = "TEST",
+        //                    COLUMN5 = "TEST"
+        //                }
+        //            ).ToList();
 
-                list_Handy_Picking_Detail           = resultList;
-                gridControl_Picking_List.DataSource = list_Handy_Picking_Detail;
-                xMainTab.SelectedTabPageIndex       = 0;
-            }    
-        }
+        //        list_Handy_Picking_Detail = resultList;
+        //        gridControl_Picking_List.DataSource = list_Handy_Picking_Detail;
+        //        xMainTab.SelectedTabPageIndex = 0;
+        //    }
+        //}
 
         private void barBtn_Clear_PL_Data_ItemClick(object sender, ItemClickEventArgs e)
         {
             list_Handy_Picking_Detail.Clear();
+
+            Setting_Data_Item_SLookUp(sLookUp_PickingList);
             sLookUp_PickingList.EditValue       = "";
-            gridControl_Picking_List.DataSource = null;
+            
             xMainTab.SelectedTabPageIndex       = 0;
+            gridControl_Picking_List.DataSource = null;
+
+            IsPickingListLock                   = false;
+            Setting_Display(IsPickingListLock);
+
+            lbl_PickingList_Forecolor = Color.Black;
+            lbl_PickingList_Backcolor = Color.Transparent;
+            Setting_lbl_PickingList_Color(lbl_PickingList_Backcolor, lbl_PickingList_Forecolor);
         }
 
         private void barBtn_Inv_Clear_Data_ItemClick(object sender, ItemClickEventArgs e)
@@ -1355,8 +1439,10 @@ namespace Handy_Picking_Winform
 
         private void barBtn_ExportPL_ItemClick(object sender, ItemClickEventArgs e)
         {
-            if (MessageBox.Show($"Xuất dữ liệu picking list merge đang hiển thị trên lưới?", "Xác Nhận" 
-                , MessageBoxButtons.YesNo, MessageBoxIcon.Question
+            if (MessageBox.Show($"Xuất dữ liệu picking list merge đang hiển thị trên lưới?"
+                , "Xác Nhận" 
+                , MessageBoxButtons.YesNo
+                , MessageBoxIcon.Question
                 , MessageBoxDefaultButton.Button1) == DialogResult.Yes)
             {
                 SaveFileDialog saveDialog = new SaveFileDialog
@@ -1365,6 +1451,7 @@ namespace Handy_Picking_Winform
                     FileName    = "Picking_List_Merge" + DateTime.Now.ToString("ddMMyyyy_hhmmss"),
                     Filter      = "Files Excel|*.xlsx;*.xls"
                 };
+
                 if (saveDialog.ShowDialog() == DialogResult.OK)
                 {
                     string path = saveDialog.FileName;
@@ -1405,10 +1492,10 @@ namespace Handy_Picking_Winform
             {
                 using (HANDY_PICKING_Entities db = new HANDY_PICKING_Entities())
                 {
-                    String pickingListNo = Convert.ToString(sLookUp_PickingList.EditValue);
-                    String message = "";
+                    string pickingListNo = Convert.ToString(sLookUp_PickingList.EditValue);
+                    string message = "";
 
-                    if(!String.IsNullOrEmpty(pickingListNo))
+                    if(!string.IsNullOrEmpty(pickingListNo))
                     {
                         // Kiểm tra Picking List có tồn tại trong HANDY_PICKING_MS
                         HANDY_PICKING_MS handyPickingMS =
@@ -1420,36 +1507,167 @@ namespace Handy_Picking_Winform
                             // Xóa dữ liệu đã copy tại HANDY_PICKING_DETAIL
                             if (handyPickingMS.STATUS == 0)
                             {
-                                handyPickingMS.STATUS = 1;
+                                try
+                                {
+                                    using (var transaction = new TransactionScope())
+                                    {
+                                        handyPickingMS.STATUS = 1;
+                                        db.SaveChanges();
 
-                                // Copy dữ liệu Picking từ HANDY_PICKING_DETAIL sang HANDY_PICKING_DETAIL_LOCK
+                                        List<HANDY_PICKING_DETAIL> handyPickingDT =
+                                            db.HANDY_PICKING_DETAIL.Where(x => x.PICKING_LIST_NO.Equals(pickingListNo)).ToList();
 
-                                message = $"Khóa picking list {handyPickingMS.PICKING_LIST_NO} thành công";                            
+                                        if (handyPickingDT.Count > 0)
+                                        {
+                                            // Bước 1: Sao chép dữ liệu từ HANDY_PICKING_DETAIL vào HANDY_PICKING_DETAIL_LOCK
+                                            foreach (HANDY_PICKING_DETAIL item in handyPickingDT)
+                                            {
+                                                HANDY_PICKING_DETAIL_LOCK new_handyPickingDT_Lock = new HANDY_PICKING_DETAIL_LOCK
+                                                {
+                                                    PICKING_LIST_NO     = item.PICKING_LIST_NO,
+                                                    INVOICE_NO          = item.INVOICE_NO,
+                                                    SALE_ORDER          = item.SALE_ORDER,
+                                                    ITEM_CODE           = item.ITEM_CODE,
+                                                    LOT_ID              = item.LOT_ID,
+                                                    QUANTITY            = item.QUANTITY,
+                                                    PALLET_NO           = item.PALLET_NO,
+                                                    SERIES              = item.SERIES,
+                                                    CUS_ITEM_CODE       = item.CUS_ITEM_CODE,
+                                                    TVC_ITEM_CODE       = item.TVC_ITEM_CODE,
+                                                    CUSTOMER_PO         = item.CUSTOMER_PO,
+                                                    QTY_CARTON          = item.QTY_CARTON,
+                                                    QTY_PER_CARTON      = item.QTY_PER_CARTON,
+                                                    QTY_TOTAL           = item.QTY_TOTAL,
+                                                    NET_WEIGHT          = item.NET_WEIGHT,
+                                                    NET_WEIGHT_TOTAL    = item.NET_WEIGHT_TOTAL,
+                                                    GROSS_WEIGHT        = item.GROSS_WEIGHT,
+                                                    LOT_NO              = item.LOT_NO,
+                                                    CREATE_DATE         = item.CREATE_DATE,
+                                                    CREATE_BY           = item.CREATE_BY,
+                                                    EDIT_DATE           = item.EDIT_DATE,
+                                                    EDIT_BY             = item.EDIT_BY,
+                                                    STATUS              = item.STATUS,
+                                                    COLUMN1             = item.COLUMN1,
+                                                    COLUMN2             = item.COLUMN2,
+                                                    COLUMN3             = item.COLUMN3,
+                                                    COLUMN4             = item.COLUMN4,
+                                                    COLUMN5             = item.COLUMN5
+                                                };
+                                                db.HANDY_PICKING_DETAIL_LOCK.Add(new_handyPickingDT_Lock);
+                                            }
+                                            db.SaveChanges();
+
+                                            // Bước 2: Xóa dữ liệu từ HANDY_PICKING_DETAIL
+                                            foreach (HANDY_PICKING_DETAIL item in handyPickingDT)
+                                            {
+                                                db.HANDY_PICKING_DETAIL.Remove(item);
+                                            }
+                                            db.SaveChanges();
+
+                                            // Bước 3: Hoàn thành transaction
+                                            transaction.Complete();
+                                        }
+                                    }
+                                }
+                                catch (DbUpdateException ex)
+                                {
+                                    // Xử lý lỗi do cơ sở dữ liệu (ví dụ: khóa chính trùng lặp, ràng buộc, ...)
+                                    MessageBox.Show("Lỗi cơ sở dữ liệu: " + ex.Message, "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                }
+                                catch (Exception ex)
+                                {
+                                    MessageBox.Show($"Lỗi: {ex.GetType()}.\nLỗi: {ex}", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Error); // What is the real exception?
+                                }
+
+                                message = $"Khóa picking list {handyPickingMS.PICKING_LIST_NO} thành công";
+
+                                lbl_PickingList_Forecolor = Color.White;
+                                lbl_PickingList_Backcolor = Color.Red;
                             } else if (handyPickingMS.STATUS == 1)
                             {
-                                handyPickingMS.STATUS = 0;
+                                try
+                                {
+                                    using (var transaction = new TransactionScope())
+                                    {
+                                        handyPickingMS.STATUS = 0;
+                                        db.SaveChanges();
+
+                                        List<HANDY_PICKING_DETAIL_LOCK> handyPickingDTLock =
+                                            db.HANDY_PICKING_DETAIL_LOCK.Where(x => x.PICKING_LIST_NO.Equals(pickingListNo)).ToList();
+
+                                        if (handyPickingDTLock.Count > 0)
+                                        {
+                                            // Bước 1: Sao chép dữ liệu từ HANDY_PICKING_DETAIL_LOCK vào HANDY_PICKING_DETAIL
+                                            foreach (HANDY_PICKING_DETAIL_LOCK item in handyPickingDTLock)
+                                            {
+                                                HANDY_PICKING_DETAIL new_handyPickingDT = new HANDY_PICKING_DETAIL
+                                                {
+                                                    PICKING_LIST_NO     = item.PICKING_LIST_NO,
+                                                    INVOICE_NO          = item.INVOICE_NO,
+                                                    SALE_ORDER          = item.SALE_ORDER,
+                                                    ITEM_CODE           = item.ITEM_CODE,
+                                                    LOT_ID              = item.LOT_ID,
+                                                    QUANTITY            = item.QUANTITY,
+                                                    PALLET_NO           = item.PALLET_NO,
+                                                    SERIES              = item.SERIES,
+                                                    CUS_ITEM_CODE       = item.CUS_ITEM_CODE,
+                                                    TVC_ITEM_CODE       = item.TVC_ITEM_CODE,
+                                                    CUSTOMER_PO         = item.CUSTOMER_PO,
+                                                    QTY_CARTON          = item.QTY_CARTON,
+                                                    QTY_PER_CARTON      = item.QTY_PER_CARTON,
+                                                    QTY_TOTAL           = item.QTY_TOTAL,
+                                                    NET_WEIGHT          = item.NET_WEIGHT,
+                                                    NET_WEIGHT_TOTAL    = item.NET_WEIGHT_TOTAL,
+                                                    GROSS_WEIGHT        = item.GROSS_WEIGHT,
+                                                    LOT_NO              = item.LOT_NO,
+                                                    CREATE_DATE         = item.CREATE_DATE,
+                                                    CREATE_BY           = item.CREATE_BY,
+                                                    EDIT_DATE           = item.EDIT_DATE,
+                                                    EDIT_BY             = item.EDIT_BY,
+                                                    STATUS              = item.STATUS,
+                                                    COLUMN1             = item.COLUMN1,
+                                                    COLUMN2             = item.COLUMN2,
+                                                    COLUMN3             = item.COLUMN3,
+                                                    COLUMN4             = item.COLUMN4,
+                                                    COLUMN5             = item.COLUMN5
+                                                };
+                                                db.HANDY_PICKING_DETAIL.Add(new_handyPickingDT);
+                                            }
+                                            db.SaveChanges();
+
+                                            // Bước 2: Xóa dữ liệu từ HANDY_PICKING_DETAIL
+                                            foreach (HANDY_PICKING_DETAIL_LOCK item in handyPickingDTLock)
+                                            {
+                                                db.HANDY_PICKING_DETAIL_LOCK.Remove(item);
+                                            }
+                                            db.SaveChanges();
+
+                                            // Bước 3: Hoàn thành transaction
+                                            transaction.Complete();
+                                        }
+                                    }
+                                }
+                                catch (DbUpdateException ex)
+                                {
+                                    // Xử lý lỗi do cơ sở dữ liệu (ví dụ: khóa chính trùng lặp, ràng buộc, ...)
+                                    MessageBox.Show("Lỗi cơ sở dữ liệu: " + ex.Message, "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                }
+                                catch (Exception ex)
+                                {
+                                    MessageBox.Show($"Lỗi: {ex.GetType()}.\nLỗi: {ex}", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Error); // What is the real exception?
+                                }
 
                                 // Copy dữ liệu Picking từ HANDY_PICKING_DETAIL_LOCK sang HANDY_PICKING_DETAIL
-
                                 message = $"Mở khóa picking list {handyPickingMS.PICKING_LIST_NO} thành công";
+
+                                lbl_PickingList_Forecolor = Color.White;
+                                lbl_PickingList_Backcolor = Color.Blue;
                             }
                         }
 
-                        try
-                        {
-                            db.SaveChanges();
+                        Setting_lbl_PickingList_Color(lbl_PickingList_Backcolor, lbl_PickingList_Forecolor);
 
-                            Setting_Data_Item_SLookUp(sLookUp_PickingList);
-                        }
-                        catch (DbUpdateException ex)
-                        {
-                            // Xử lý lỗi do cơ sở dữ liệu (ví dụ: khóa chính trùng lặp, ràng buộc, ...)
-                            MessageBox.Show("Lỗi cơ sở dữ liệu: " + ex.Message, "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show($"Lỗi: {ex.GetType()}.\nLỗi: {ex}", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Error); // What is the real exception?
-                        }
+                        Setting_Data_Item_SLookUp(sLookUp_PickingList);
 
                         MessageBox.Show(message, "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }    
@@ -1540,7 +1758,7 @@ namespace Handy_Picking_Winform
 
         private void btn_InputPacking_ItemClick(object sender, ItemClickEventArgs e)
         {
-             
+            MessageBox.Show("Chức năng đang phát triển");
         }
 
         private void barBtn_Merge_Picking_List_ItemClick(object sender, ItemClickEventArgs e)
@@ -1549,7 +1767,6 @@ namespace Handy_Picking_Winform
                 list_Handy_Picking_Detail
                 .GroupBy(p => 
                     new {
-                        //p.PICKING_LIST_NO,
                         p.PALLET_NO,
                         p.CUS_ITEM_CODE,
                         p.TVC_ITEM_CODE,
@@ -1560,7 +1777,6 @@ namespace Handy_Picking_Winform
                 .Select(g => 
                     new Picking_List_Merge
                     (
-                        //g.Key.PICKING_LIST_NO,
                         g.Key.PALLET_NO,
                         g.Key.CUS_ITEM_CODE,
                         g.Key.TVC_ITEM_CODE,
@@ -1573,11 +1789,33 @@ namespace Handy_Picking_Winform
                     )
                 )
                 .OrderBy(p => p.PALLET_NO)
-                //.OrderBy(p => p.CUS_ITEM_CODE)
                 .ToList();
 
             xMainTab.SelectedTabPageIndex               = 3;
             gridControl_Picking_List_Merge.DataSource   = pickingListMerges;
+        }
+
+        private void sLookUp_PickingList_Closed(object sender, ClosedEventArgs e)
+        {
+            HANDY_PICKING_MS selectedRowData = (HANDY_PICKING_MS)sLookUp_PickingList.GetSelectedDataRow();
+
+            if (selectedRowData != null)
+            {
+                if (selectedRowData.STATUS == 0)
+                {
+                    IsPickingListLock = false;
+                    lbl_PickingList_Forecolor = Color.White;
+                    lbl_PickingList_Backcolor = Color.Blue;
+
+                } else if (selectedRowData.STATUS == 1)
+                {
+                    IsPickingListLock = true;
+                    lbl_PickingList_Forecolor = Color.White;
+                    lbl_PickingList_Backcolor = Color.Red;
+                }
+                Setting_Display(IsPickingListLock);
+                Setting_lbl_PickingList_Color(lbl_PickingList_Backcolor, lbl_PickingList_Forecolor);
+            }
         }
     }
 }   

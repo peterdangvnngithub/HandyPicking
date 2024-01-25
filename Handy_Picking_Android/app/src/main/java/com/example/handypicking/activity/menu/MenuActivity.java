@@ -10,7 +10,7 @@ import com.example.handypicking.R;
 import com.example.handypicking.preferences.AppPreferences;
 import com.example.handypicking.database.PickingDatabaseHelper;
 import com.example.handypicking.activity.setting.SettingActivity;
-import com.example.handypicking.activity.dataServer.DataServerActivity;
+import com.example.handypicking.activity.dataServer.dataServerMS.DataServerMSActivity;
 import com.example.handypicking.activity.picking.pickingMS.PickingMSActivity;
 import com.example.handypicking.activity.historyPicking.HistoryPickingActivity;
 
@@ -51,7 +51,7 @@ public class MenuActivity extends AppCompatActivity {
         });
 
         btnData.setOnClickListener(v -> {
-            Intent intent = new Intent(MenuActivity.this, DataServerActivity.class);
+            Intent intent = new Intent(MenuActivity.this, DataServerMSActivity.class);
             startActivity(intent);
         });
 

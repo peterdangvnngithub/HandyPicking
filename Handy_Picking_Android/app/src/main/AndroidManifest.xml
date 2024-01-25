@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
-
+<manifest
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
@@ -17,8 +17,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".activity.syncDataDetail.SyncDataDetailActivity"
-            android:exported="false" />
+            android:name=".activity.dataServer.dataServerDetail.DataServerDetailActivity"
+            android:exported="false"
+            android:parentActivityName=".activity.dataServer.dataServerMS.DataServerMSActivity"/>
         <activity
             android:name=".activity.dataLocal.DataActivity"
             android:exported="false"
@@ -26,7 +27,7 @@
             android:launchMode="singleTask"
             android:parentActivityName=".activity.menu.MenuActivity" />
         <activity
-            android:name=".activity.dataServer.DataServerActivity"
+            android:name=".activity.dataServer.dataServerMS.DataServerMSActivity"
             android:exported="false"
             android:launchMode="singleTask"
             android:parentActivityName=".activity.menu.MenuActivity" />
@@ -37,7 +38,7 @@
             android:parentActivityName=".activity.menu.MenuActivity">
             <meta-data
                 android:name="android.app.lib_name"
-                android:value=""/>
+                android:value="" />
         </activity>
         <activity
             android:name=".activity.picking.pickingMS.PickingMSActivity"
@@ -47,7 +48,7 @@
             android:parentActivityName=".activity.menu.MenuActivity">
             <meta-data
                 android:name="android.app.lib_name"
-                android:value=""/>
+                android:value="" />
         </activity>
         <activity
             android:name=".activity.setting.SettingActivity"
@@ -56,19 +57,20 @@
             android:parentActivityName=".activity.menu.MenuActivity">
             <meta-data
                 android:name="android.app.lib_name"
-                android:value=""/>
+                android:value="" />
         </activity>
         <activity
             android:name=".activity.menu.MenuActivity"
-            android:label="Handy Picking Double Check"
-            android:exported="true">
+            android:exported="true"
+            android:label="Handy Picking Double Check">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
             <meta-data
                 android:name="android.app.lib_name"
-                android:value=""/>
+                android:value="" />
         </activity>
         <activity
             android:name=".activity.picking.pickingDetail.PickingDetailActivity"
@@ -77,7 +79,7 @@
             android:parentActivityName=".activity.picking.pickingMS.PickingMSActivity">
             <meta-data
                 android:name="android.app.lib_name"
-                android:value=""/>
+                android:value="" />
         </activity>
     </application>
 

@@ -33,7 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Logo_TAKAKO_PTS.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\Logo_TAKAKO_PTS.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DevExpress.Data.Desktop.v21.2, Version=21.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
@@ -53,6 +53,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -61,6 +62,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DTO\HandyPickingDetail_DTO.cs" />
     <Compile Include="Extension.cs" />
     <Compile Include="Form_Login.cs">
       <SubType>Form</SubType>
@@ -89,7 +91,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>HandyPicking_Model.edmx</DependentUpon>
     </Compile>
+    <Compile Include="HANDY_PICKING_DETAIL_BK.cs">
+      <DependentUpon>HandyPicking_Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="HANDY_PICKING_DETAIL_LOCK.cs">
+      <DependentUpon>HandyPicking_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="HANDY_PICKING_MS_BK.cs">
       <DependentUpon>HandyPicking_Model.tt</DependentUpon>
     </Compile>
     <Compile Include="PALLET_MASTER.cs">
@@ -106,9 +114,13 @@
     <Compile Include="PRODUCTMF.cs">
       <DependentUpon>HandyPicking_Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="SYNC_VERSION.cs">
+      <DependentUpon>HandyPicking_Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="USER_MS.cs">
       <DependentUpon>HandyPicking_Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="Utils\Common.cs" />
     <Compile Include="Utils\UpdateProgarm.cs" />
     <EmbeddedResource Include="Form_Login.resx">
       <DependentUpon>Form_Login.cs</DependentUpon>
@@ -153,7 +165,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Content Include="Logo_TAKAKO_PTS.ico" />
+    <Content Include="Resources\Logo_TAKAKO_PTS.ico" />
     <None Include="Resources\ic_launcher_round.png" />
     <None Include="Resources\Logo_TAKAKO_PTS.png" />
     <None Include="Resources\icon_eye.png" />

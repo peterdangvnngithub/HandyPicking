@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 import android.content.Intent;
 
@@ -71,45 +72,60 @@ public class HistoryPickingActivity extends AppCompatActivity implements History
     @Override
     public void onGetResult(List<handy_ms> resultModels) {
         // Item click
-        itemClickListener = (((view, position) -> {
-            handy_ms handy = new handy_ms();
-            if (IsFilter){
-                for (handy_ms item : resultModels)
-                {
-                    if (item.getPICKING_LIST_NO().equalsIgnoreCase(PLNumber))
+        itemClickListener = new HistoryPickingAdapter.ItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                handy_ms handy = new handy_ms();
+                if (IsFilter){
+                    for (handy_ms item : resultModels)
                     {
-                        handy = item;
+                        if (item.getPICKING_LIST_NO().equalsIgnoreCase(PLNumber))
+                        {
+                            handy = item;
+                        }
                     }
-                }
-            } else {
-                handy = resultModels.get(position);
-            }
-
-            if(handy == null)
-            {
-                String title = "Thông Báo";
-                String message = "Lỗi giá trị History.\nKhông thể kết nối tới database.";
-                utils.displayDialogNotification(title, message);
-                return;
-            }
-
-            if(handy.getSTATUS() == 0) {
-                //Fix bug get position không đúng khi dùng chức năng filter
-                Intent intent = new Intent(HistoryPickingActivity.this, PickingDetailActivity.class);
-                if (IsFilter)
-                {
-                    intent.putExtra("HistoryPicking-PLNo", PLNumber);
-
                 } else {
-                    intent.putExtra("HistoryPicking-PLNo", resultModels.get(position).getPICKING_LIST_NO());
+                    handy = resultModels.get(position);
                 }
-                startActivity(intent);
-            } else if(handy.getSTATUS() == 1) {
-                String title = "Thông Báo";
-                String message = "Packing đã khóa, không thể chỉnh sửa";
-                utils.displayDialogNotification(title, message);
+
+                if(handy == null)
+                {
+                    String title = "Thông Báo";
+                    String message = "Lỗi giá trị History.\nKhông thể kết nối tới database.";
+                    utils.displayDialogNotification(title, message);
+                    return;
+                }
+
+                if(handy.getSTATUS() == 0) {
+                    //Fix bug get position không đúng khi dùng chức năng filter
+                    Intent intent = new Intent(HistoryPickingActivity.this, PickingDetailActivity.class);
+                    intent.putExtra("handyMS", handy);
+                    startActivity(intent);
+                } else if(handy.getSTATUS() == 1) {
+                    String title = "Thông Báo";
+                    String message = "Packing đã khóa, không thể chỉnh sửa";
+                    utils.displayDialogNotification(title, message);
+                }
             }
-        }));
+
+            @Override
+            public void onImageClick(View view, int position) {
+                handy_ms handy = new handy_ms();
+                if (IsFilter){
+                    for (handy_ms item : resultModels)
+                    {
+                        if (item.getPICKING_LIST_NO().equalsIgnoreCase(PLNumber))
+                        {
+                            handy = item;
+                        }
+                    }
+                } else {
+                    handy = resultModels.get(position);
+                }
+
+                Toast.makeText(HistoryPickingActivity.this, handy.getPICKING_LIST_NO(), Toast.LENGTH_SHORT).show();
+            }
+        };
 
         historyPickingAdapter = new HistoryPickingAdapter( this, resultModels, itemClickListener );
         historyPickingAdapter.notifyDataSetChanged();
@@ -155,7 +171,7 @@ public class HistoryPickingActivity extends AppCompatActivity implements History
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_dataserver, menu);
+        getMenuInflater().inflate(R.menu.menu_history, menu);
 
         return true;
     }

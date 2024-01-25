@@ -9,8 +9,11 @@
         <EntityTypeShape EntityType="HANDY_PICKING_Model.HANDY_PICKING_DETAIL" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="HANDY_PICKING_Model.HANDY_PICKING_MS" Width="1.5" PointX="8.625" PointY="0.75" />
         <EntityTypeShape EntityType="HANDY_PICKING_Model.USER_MS" Width="1.5" PointX="5.25" PointY="0.75" />
-        <EntityTypeShape EntityType="HANDY_PICKING_Model.PALLET_MASTER" Width="1.5" PointX="10.25" PointY="0.75" />
+        <EntityTypeShape EntityType="HANDY_PICKING_Model.PALLET_MASTER" Width="1.5" PointX="10.375" PointY="0.75" />
         <EntityTypeShape EntityType="HANDY_PICKING_Model.HANDY_PICKING_DETAIL_LOCK" Width="2.5" PointX="2.5" PointY="0.75" />
+        <EntityTypeShape EntityType="HANDY_PICKING_Model.HANDY_PICKING_DETAIL_BK" Width="1.5" PointX="0.75" PointY="8.75" />
+        <EntityTypeShape EntityType="HANDY_PICKING_Model.HANDY_PICKING_MS_BK" Width="1.5" PointX="2.75" PointY="8.75" />
+        <EntityTypeShape EntityType="HANDY_PICKING_Model.SYNC_VERSION" Width="1.5" PointX="12.125" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

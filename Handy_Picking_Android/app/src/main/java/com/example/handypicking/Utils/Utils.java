@@ -2,7 +2,6 @@ package com.example.handypicking.Utils;
 
 import android.util.Log;
 import android.app.Dialog;
-import android.os.AsyncTask;
 import android.content.Context;
 import android.view.View;
 import android.view.Window;
@@ -14,7 +13,7 @@ import androidx.annotation.NonNull;
 import com.example.handypicking.R;
 import com.example.handypicking.api.ApiClient;
 import com.example.handypicking.api.ApiInterface;
-import com.example.handypicking.model.handy;
+import com.example.handypicking.database.PickingDatabaseHelper;
 import com.example.handypicking.model.handy_detail;
 import com.example.handypicking.model.handy_ms;
 import com.example.handypicking.preferences.AppPreferences;
@@ -23,15 +22,12 @@ import com.google.gson.GsonBuilder;
 
 import java.util.List;
 import java.io.IOException;
-import java.net.URL;
-import java.net.HttpURLConnection;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import okio.Buffer;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -41,6 +37,7 @@ public class Utils {
     private Context mContext;
     private AppPreferences appPreferences;
     private boolean isServerRunning = false;
+    private PickingDatabaseHelper myDB;
     private static final String TAG = "Utils";
 
     public Utils(Context mContext, AppPreferences appPreferences) {
@@ -105,7 +102,7 @@ public class Utils {
     }
 
     // Kiểm tra kết nối đến API Node.js
-    public static void checkNodeApiConnection(String apiUrl, final NodeApiConnectionListener listener) {
+    /*public static void checkNodeApiConnection(String apiUrl, final NodeApiConnectionListener listener) {
         new AsyncTask<Void, Void, Boolean>() {
             @Override
             protected Boolean doInBackground(Void... voids) {
@@ -127,12 +124,12 @@ public class Utils {
                 listener.onConnectionResult(isConnected);
             }
         }.execute();
-    }
+    }*/
 
-    // Interface that listen for Node.js API connection results
+    /*// Interface that listen for Node.js API connection results
     public interface NodeApiConnectionListener {
         void onConnectionResult(boolean isConnected);
-    }
+    }*/
 
     public void onSendDataHandy(List<handy_ms> list_handyMS, List<handy_detail> list_handyDetail)
     {
@@ -168,7 +165,7 @@ public class Utils {
         } );*/
     }
 
-    public void onSendDataHandyMS(List<handy_ms> list_handyMS) {
+    /*public void onSendDataHandyMS(List<handy_ms> list_handyMS) {
         Gson gson   = new GsonBuilder().serializeNulls().create();
         String json = gson.toJson(list_handyMS);
 
@@ -184,10 +181,10 @@ public class Utils {
         call.enqueue( new Callback<ResponseBody>() {
             @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
-                /*view.hideLoading();*/
+                *//*view.hideLoading();*//*
                 try {
                     if (response.isSuccessful() && response.body() != null) {
-                        /*view.insertSuccess();*/
+                        *//*view.insertSuccess();*//*
                         Log.d(TAG,"Success:" + response.body().toString());
                     }
                 } catch (Exception e) {
@@ -197,13 +194,13 @@ public class Utils {
 
             @Override
             public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
-                /*view.hideLoading();*/
+                *//*view.hideLoading();*//*
                 Log.d(TAG,"Error:" + t.getLocalizedMessage());
             }
         } );
-    }
+    }*/
 
-    public void onSendDataHandyDetail(List<handy_detail> list_handyDetail) {
+    /*public void onSendDataHandyDetail(List<handy_detail> list_handyDetail) {
         Gson gson   = new GsonBuilder().serializeNulls().create();
         String json = gson.toJson(list_handyDetail);
 
@@ -219,10 +216,10 @@ public class Utils {
         call.enqueue( new Callback<ResponseBody>() {
             @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
-                /*view.hideLoading();*/
+                *//*view.hideLoading();*//*
                 try {
                     if (response.isSuccessful() && response.body() != null) {
-                        /*view.insertSuccess();*/
+                        *//*view.insertSuccess();*//*
                         Log.d(TAG,"Success:" + response.body().toString());
                     }
                 } catch (Exception e) {
@@ -232,11 +229,11 @@ public class Utils {
 
             @Override
             public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
-                /*view.hideLoading();*/
+                *//*view.hideLoading();*//*
                 Log.d(TAG,"Error:" + t.getLocalizedMessage());
             }
         } );
-    }
+    }*/
 
     Integer countExistsHandyPickingDetail = 0;
     public void check_Exists_List_HandyPicking_Detail(List<handy_detail> list_handyDetail, UtilsView callback) {

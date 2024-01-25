@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/row_dataServerDetail_txtPalletNo"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="1dp"
+        android:text="No. 01"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/row_dataServerDetail_txtItemCode"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:ellipsize="start"
+        android:singleLine="true"
+        android:text="Item Code"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toEndOf="@+id/row_dataServerDetail_txtPalletNo"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/row_dataServerDetail_txtSeries"
+        android:layout_width="213dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:ellipsize="start"
+        android:singleLine="true"
+        android:text="Series"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/row_dataServerDetail_txtPalletNo"
+        app:layout_constraintTop_toBottomOf="@+id/row_dataServerDetail_txtItemCode" />
+
+    <TextView
+        android:id="@+id/row_dataServerDetail_txtQuantity"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="13dp"
+        android:layout_marginTop="5dp"
+        android:text="111,000"
+        android:textAlignment="textEnd"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toEndOf="@+id/row_dataServerDetail_txtItemCode"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/row_dataServerDetail_dateCreate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
+        android:text="TextView"
+        android:textColor="@color/black"
+        android:textSize="10dp"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

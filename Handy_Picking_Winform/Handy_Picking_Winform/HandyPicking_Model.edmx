@@ -39,6 +39,56 @@
           <Property Name="COLUMN4" Type="varchar" MaxLength="30" />
           <Property Name="COLUMN5" Type="varchar" MaxLength="30" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'HANDY_PICKING.dbo.HANDY_PICKING_DETAIL_BK' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="HANDY_PICKING_DETAIL_BK">
+          <Key>
+            <PropertyRef Name="PICKING_LIST_NO" />
+            <PropertyRef Name="SALE_ORDER" />
+            <PropertyRef Name="ITEM_CODE" />
+            <PropertyRef Name="LOT_ID" />
+            <PropertyRef Name="QUANTITY" />
+            <PropertyRef Name="PALLET_NO" />
+            <PropertyRef Name="SERIES" />
+            <PropertyRef Name="CUS_ITEM_CODE" />
+            <PropertyRef Name="QTY_CARTON" />
+            <PropertyRef Name="QTY_PER_CARTON" />
+            <PropertyRef Name="QTY_TOTAL" />
+            <PropertyRef Name="NET_WEIGHT" />
+            <PropertyRef Name="NET_WEIGHT_TOTAL" />
+            <PropertyRef Name="GROSS_WEIGHT" />
+            <PropertyRef Name="CREATE_DATE" />
+            <PropertyRef Name="CREATE_BY" />
+          </Key>
+          <Property Name="PICKING_LIST_NO" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="INVOICE_NO" Type="nvarchar" MaxLength="50" />
+          <Property Name="SALE_ORDER" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="ITEM_CODE" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="LOT_ID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="QUANTITY" Type="int" Nullable="false" />
+          <Property Name="PALLET_NO" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="SERIES" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="CUS_ITEM_CODE" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="TVC_ITEM_CODE" Type="nvarchar" MaxLength="50" />
+          <Property Name="CUSTOMER_PO" Type="nvarchar" MaxLength="50" />
+          <Property Name="QTY_CARTON" Type="int" Nullable="false" />
+          <Property Name="QTY_PER_CARTON" Type="int" Nullable="false" />
+          <Property Name="QTY_TOTAL" Type="int" Nullable="false" />
+          <Property Name="NET_WEIGHT" Type="decimal" Precision="9" Scale="3" Nullable="false" />
+          <Property Name="NET_WEIGHT_TOTAL" Type="decimal" Precision="9" Scale="3" Nullable="false" />
+          <Property Name="GROSS_WEIGHT" Type="decimal" Precision="9" Scale="3" Nullable="false" />
+          <Property Name="LOT_NO" Type="nvarchar" MaxLength="150" />
+          <Property Name="CREATE_DATE" Type="datetime" Nullable="false" />
+          <Property Name="CREATE_BY" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="EDIT_DATE" Type="datetime" />
+          <Property Name="EDIT_BY" Type="nvarchar" MaxLength="50" />
+          <Property Name="STATUS" Type="int" />
+          <Property Name="COLUMN1" Type="varchar" MaxLength="30" />
+          <Property Name="COLUMN2" Type="varchar" MaxLength="30" />
+          <Property Name="COLUMN3" Type="varchar" MaxLength="30" />
+          <Property Name="COLUMN4" Type="varchar" MaxLength="30" />
+          <Property Name="COLUMN5" Type="varchar" MaxLength="30" />
+        </EntityType>
         <EntityType Name="HANDY_PICKING_DETAIL_LOCK">
           <Key>
             <PropertyRef Name="PICKING_LIST_NO" />
@@ -76,6 +126,33 @@
         <EntityType Name="HANDY_PICKING_MS">
           <Key>
             <PropertyRef Name="PICKING_LIST_NO" />
+          </Key>
+          <Property Name="CUSTOMER_CODE" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="PICKING_LIST_NO" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="DELIVERY_ADDRESS_CODE" Type="varchar" MaxLength="30" />
+          <Property Name="DELIVERY_ADDRESS_NAME" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="EMPLOYEE_CODE" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="CREATE_DATE" Type="datetime" Nullable="false" />
+          <Property Name="CREATE_BY" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="EDIT_DATE" Type="datetime" />
+          <Property Name="EDIT_BY" Type="varchar" MaxLength="50" />
+          <Property Name="STATUS" Type="int" />
+          <Property Name="COLUMN1" Type="varchar" MaxLength="30" />
+          <Property Name="COLUMN2" Type="varchar" MaxLength="30" />
+          <Property Name="COLUMN3" Type="varchar" MaxLength="30" />
+          <Property Name="COLUMN4" Type="varchar" MaxLength="30" />
+          <Property Name="COLUMN5" Type="varchar" MaxLength="30" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'HANDY_PICKING.dbo.HANDY_PICKING_MS_BK' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="HANDY_PICKING_MS_BK">
+          <Key>
+            <PropertyRef Name="CUSTOMER_CODE" />
+            <PropertyRef Name="PICKING_LIST_NO" />
+            <PropertyRef Name="DELIVERY_ADDRESS_NAME" />
+            <PropertyRef Name="EMPLOYEE_CODE" />
+            <PropertyRef Name="CREATE_DATE" />
+            <PropertyRef Name="CREATE_BY" />
           </Key>
           <Property Name="CUSTOMER_CODE" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="PICKING_LIST_NO" Type="varchar" MaxLength="150" Nullable="false" />
@@ -134,6 +211,12 @@
           <Property Name="CUS_ITEM_NAME" Type="nvarchar" MaxLength="256" />
           <Property Name="ACC_ITEM_CODE" Type="varchar" MaxLength="30" />
         </EntityType>
+        <EntityType Name="SYNC_VERSION">
+          <Key>
+            <PropertyRef Name="SERVER_VERSION" />
+          </Key>
+          <Property Name="SERVER_VERSION" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
         <EntityType Name="USER_MS">
           <Key>
             <PropertyRef Name="USER_NUM" />
@@ -154,7 +237,59 @@
           <EntitySet Name="HANDY_PICKING_MS" EntityType="Self.HANDY_PICKING_MS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PALLET_MASTER" EntityType="Self.PALLET_MASTER" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PRODUCTMF" EntityType="Self.PRODUCTMF" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SYNC_VERSION" EntityType="Self.SYNC_VERSION" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="USER_MS" EntityType="Self.USER_MS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HANDY_PICKING_DETAIL_BK" EntityType="Self.HANDY_PICKING_DETAIL_BK" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+[HANDY_PICKING_DETAIL_BK].[PICKING_LIST_NO] AS [PICKING_LIST_NO], 
+[HANDY_PICKING_DETAIL_BK].[INVOICE_NO] AS [INVOICE_NO], 
+[HANDY_PICKING_DETAIL_BK].[SALE_ORDER] AS [SALE_ORDER], 
+[HANDY_PICKING_DETAIL_BK].[ITEM_CODE] AS [ITEM_CODE], 
+[HANDY_PICKING_DETAIL_BK].[LOT_ID] AS [LOT_ID], 
+[HANDY_PICKING_DETAIL_BK].[QUANTITY] AS [QUANTITY], 
+[HANDY_PICKING_DETAIL_BK].[PALLET_NO] AS [PALLET_NO], 
+[HANDY_PICKING_DETAIL_BK].[SERIES] AS [SERIES], 
+[HANDY_PICKING_DETAIL_BK].[CUS_ITEM_CODE] AS [CUS_ITEM_CODE], 
+[HANDY_PICKING_DETAIL_BK].[TVC_ITEM_CODE] AS [TVC_ITEM_CODE], 
+[HANDY_PICKING_DETAIL_BK].[CUSTOMER_PO] AS [CUSTOMER_PO], 
+[HANDY_PICKING_DETAIL_BK].[QTY_CARTON] AS [QTY_CARTON], 
+[HANDY_PICKING_DETAIL_BK].[QTY_PER_CARTON] AS [QTY_PER_CARTON], 
+[HANDY_PICKING_DETAIL_BK].[QTY_TOTAL] AS [QTY_TOTAL], 
+[HANDY_PICKING_DETAIL_BK].[NET_WEIGHT] AS [NET_WEIGHT], 
+[HANDY_PICKING_DETAIL_BK].[NET_WEIGHT_TOTAL] AS [NET_WEIGHT_TOTAL], 
+[HANDY_PICKING_DETAIL_BK].[GROSS_WEIGHT] AS [GROSS_WEIGHT], 
+[HANDY_PICKING_DETAIL_BK].[LOT_NO] AS [LOT_NO], 
+[HANDY_PICKING_DETAIL_BK].[CREATE_DATE] AS [CREATE_DATE], 
+[HANDY_PICKING_DETAIL_BK].[CREATE_BY] AS [CREATE_BY], 
+[HANDY_PICKING_DETAIL_BK].[EDIT_DATE] AS [EDIT_DATE], 
+[HANDY_PICKING_DETAIL_BK].[EDIT_BY] AS [EDIT_BY], 
+[HANDY_PICKING_DETAIL_BK].[STATUS] AS [STATUS], 
+[HANDY_PICKING_DETAIL_BK].[COLUMN1] AS [COLUMN1], 
+[HANDY_PICKING_DETAIL_BK].[COLUMN2] AS [COLUMN2], 
+[HANDY_PICKING_DETAIL_BK].[COLUMN3] AS [COLUMN3], 
+[HANDY_PICKING_DETAIL_BK].[COLUMN4] AS [COLUMN4], 
+[HANDY_PICKING_DETAIL_BK].[COLUMN5] AS [COLUMN5]
+FROM [dbo].[HANDY_PICKING_DETAIL_BK] AS [HANDY_PICKING_DETAIL_BK]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="HANDY_PICKING_MS_BK" EntityType="Self.HANDY_PICKING_MS_BK" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+[HANDY_PICKING_MS_BK].[CUSTOMER_CODE] AS [CUSTOMER_CODE], 
+[HANDY_PICKING_MS_BK].[PICKING_LIST_NO] AS [PICKING_LIST_NO], 
+[HANDY_PICKING_MS_BK].[DELIVERY_ADDRESS_CODE] AS [DELIVERY_ADDRESS_CODE], 
+[HANDY_PICKING_MS_BK].[DELIVERY_ADDRESS_NAME] AS [DELIVERY_ADDRESS_NAME], 
+[HANDY_PICKING_MS_BK].[EMPLOYEE_CODE] AS [EMPLOYEE_CODE], 
+[HANDY_PICKING_MS_BK].[CREATE_DATE] AS [CREATE_DATE], 
+[HANDY_PICKING_MS_BK].[CREATE_BY] AS [CREATE_BY], 
+[HANDY_PICKING_MS_BK].[EDIT_DATE] AS [EDIT_DATE], 
+[HANDY_PICKING_MS_BK].[EDIT_BY] AS [EDIT_BY], 
+[HANDY_PICKING_MS_BK].[STATUS] AS [STATUS], 
+[HANDY_PICKING_MS_BK].[COLUMN1] AS [COLUMN1], 
+[HANDY_PICKING_MS_BK].[COLUMN2] AS [COLUMN2], 
+[HANDY_PICKING_MS_BK].[COLUMN3] AS [COLUMN3], 
+[HANDY_PICKING_MS_BK].[COLUMN4] AS [COLUMN4], 
+[HANDY_PICKING_MS_BK].[COLUMN5] AS [COLUMN5]
+FROM [dbo].[HANDY_PICKING_MS_BK] AS [HANDY_PICKING_MS_BK]</DefiningQuery>
+          </EntitySet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -167,6 +302,9 @@
           <EntitySet Name="USER_MS" EntityType="HANDY_PICKING_Model.USER_MS" />
           <EntitySet Name="PALLET_MASTER" EntityType="HANDY_PICKING_Model.PALLET_MASTER" />
           <EntitySet Name="HANDY_PICKING_DETAIL_LOCK" EntityType="HANDY_PICKING_Model.HANDY_PICKING_DETAIL_LOCK" />
+          <EntitySet Name="HANDY_PICKING_DETAIL_BK" EntityType="HANDY_PICKING_Model.HANDY_PICKING_DETAIL_BK" />
+          <EntitySet Name="HANDY_PICKING_MS_BK" EntityType="HANDY_PICKING_Model.HANDY_PICKING_MS_BK" />
+          <EntitySet Name="SYNC_VERSION" EntityType="HANDY_PICKING_Model.SYNC_VERSION" />
         </EntityContainer>
         <EntityType Name="PRODUCTMF">
           <Key>
@@ -310,6 +448,85 @@
           <Property Name="COLUMN3" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="COLUMN4" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="COLUMN5" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="HANDY_PICKING_DETAIL_BK">
+          <Key>
+            <PropertyRef Name="PICKING_LIST_NO" />
+            <PropertyRef Name="SALE_ORDER" />
+            <PropertyRef Name="ITEM_CODE" />
+            <PropertyRef Name="LOT_ID" />
+            <PropertyRef Name="QUANTITY" />
+            <PropertyRef Name="PALLET_NO" />
+            <PropertyRef Name="SERIES" />
+            <PropertyRef Name="CUS_ITEM_CODE" />
+            <PropertyRef Name="QTY_CARTON" />
+            <PropertyRef Name="QTY_PER_CARTON" />
+            <PropertyRef Name="QTY_TOTAL" />
+            <PropertyRef Name="NET_WEIGHT" />
+            <PropertyRef Name="NET_WEIGHT_TOTAL" />
+            <PropertyRef Name="GROSS_WEIGHT" />
+            <PropertyRef Name="CREATE_DATE" />
+            <PropertyRef Name="CREATE_BY" />
+          </Key>
+          <Property Name="PICKING_LIST_NO" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="INVOICE_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SALE_ORDER" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="ITEM_CODE" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="LOT_ID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="QUANTITY" Type="Int32" Nullable="false" />
+          <Property Name="PALLET_NO" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SERIES" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CUS_ITEM_CODE" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TVC_ITEM_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CUSTOMER_PO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="QTY_CARTON" Type="Int32" Nullable="false" />
+          <Property Name="QTY_PER_CARTON" Type="Int32" Nullable="false" />
+          <Property Name="QTY_TOTAL" Type="Int32" Nullable="false" />
+          <Property Name="NET_WEIGHT" Type="Decimal" Nullable="false" Precision="9" Scale="3" />
+          <Property Name="NET_WEIGHT_TOTAL" Type="Decimal" Nullable="false" Precision="9" Scale="3" />
+          <Property Name="GROSS_WEIGHT" Type="Decimal" Nullable="false" Precision="9" Scale="3" />
+          <Property Name="LOT_NO" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="CREATE_DATE" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CREATE_BY" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EDIT_DATE" Type="DateTime" Precision="3" />
+          <Property Name="EDIT_BY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="STATUS" Type="Int32" />
+          <Property Name="COLUMN1" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="COLUMN2" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="COLUMN3" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="COLUMN4" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="COLUMN5" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="HANDY_PICKING_MS_BK">
+          <Key>
+            <PropertyRef Name="CUSTOMER_CODE" />
+            <PropertyRef Name="PICKING_LIST_NO" />
+            <PropertyRef Name="DELIVERY_ADDRESS_NAME" />
+            <PropertyRef Name="EMPLOYEE_CODE" />
+            <PropertyRef Name="CREATE_DATE" />
+            <PropertyRef Name="CREATE_BY" />
+          </Key>
+          <Property Name="CUSTOMER_CODE" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="PICKING_LIST_NO" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="DELIVERY_ADDRESS_CODE" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="DELIVERY_ADDRESS_NAME" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="EMPLOYEE_CODE" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="CREATE_DATE" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CREATE_BY" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="EDIT_DATE" Type="DateTime" Precision="3" />
+          <Property Name="EDIT_BY" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="STATUS" Type="Int32" />
+          <Property Name="COLUMN1" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="COLUMN2" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="COLUMN3" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="COLUMN4" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="COLUMN5" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="SYNC_VERSION">
+          <Key>
+            <PropertyRef Name="SERVER_VERSION" />
+          </Key>
+          <Property Name="SERVER_VERSION" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -461,6 +678,68 @@
                 <ScalarProperty Name="SALE_ORDER" ColumnName="SALE_ORDER" />
                 <ScalarProperty Name="INVOICE_NO" ColumnName="INVOICE_NO" />
                 <ScalarProperty Name="PICKING_LIST_NO" ColumnName="PICKING_LIST_NO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HANDY_PICKING_DETAIL_BK">
+            <EntityTypeMapping TypeName="HANDY_PICKING_Model.HANDY_PICKING_DETAIL_BK">
+              <MappingFragment StoreEntitySet="HANDY_PICKING_DETAIL_BK">
+                <ScalarProperty Name="COLUMN5" ColumnName="COLUMN5" />
+                <ScalarProperty Name="COLUMN4" ColumnName="COLUMN4" />
+                <ScalarProperty Name="COLUMN3" ColumnName="COLUMN3" />
+                <ScalarProperty Name="COLUMN2" ColumnName="COLUMN2" />
+                <ScalarProperty Name="COLUMN1" ColumnName="COLUMN1" />
+                <ScalarProperty Name="STATUS" ColumnName="STATUS" />
+                <ScalarProperty Name="EDIT_BY" ColumnName="EDIT_BY" />
+                <ScalarProperty Name="EDIT_DATE" ColumnName="EDIT_DATE" />
+                <ScalarProperty Name="CREATE_BY" ColumnName="CREATE_BY" />
+                <ScalarProperty Name="CREATE_DATE" ColumnName="CREATE_DATE" />
+                <ScalarProperty Name="LOT_NO" ColumnName="LOT_NO" />
+                <ScalarProperty Name="GROSS_WEIGHT" ColumnName="GROSS_WEIGHT" />
+                <ScalarProperty Name="NET_WEIGHT_TOTAL" ColumnName="NET_WEIGHT_TOTAL" />
+                <ScalarProperty Name="NET_WEIGHT" ColumnName="NET_WEIGHT" />
+                <ScalarProperty Name="QTY_TOTAL" ColumnName="QTY_TOTAL" />
+                <ScalarProperty Name="QTY_PER_CARTON" ColumnName="QTY_PER_CARTON" />
+                <ScalarProperty Name="QTY_CARTON" ColumnName="QTY_CARTON" />
+                <ScalarProperty Name="CUSTOMER_PO" ColumnName="CUSTOMER_PO" />
+                <ScalarProperty Name="TVC_ITEM_CODE" ColumnName="TVC_ITEM_CODE" />
+                <ScalarProperty Name="CUS_ITEM_CODE" ColumnName="CUS_ITEM_CODE" />
+                <ScalarProperty Name="SERIES" ColumnName="SERIES" />
+                <ScalarProperty Name="PALLET_NO" ColumnName="PALLET_NO" />
+                <ScalarProperty Name="QUANTITY" ColumnName="QUANTITY" />
+                <ScalarProperty Name="LOT_ID" ColumnName="LOT_ID" />
+                <ScalarProperty Name="ITEM_CODE" ColumnName="ITEM_CODE" />
+                <ScalarProperty Name="SALE_ORDER" ColumnName="SALE_ORDER" />
+                <ScalarProperty Name="INVOICE_NO" ColumnName="INVOICE_NO" />
+                <ScalarProperty Name="PICKING_LIST_NO" ColumnName="PICKING_LIST_NO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HANDY_PICKING_MS_BK">
+            <EntityTypeMapping TypeName="HANDY_PICKING_Model.HANDY_PICKING_MS_BK">
+              <MappingFragment StoreEntitySet="HANDY_PICKING_MS_BK">
+                <ScalarProperty Name="COLUMN5" ColumnName="COLUMN5" />
+                <ScalarProperty Name="COLUMN4" ColumnName="COLUMN4" />
+                <ScalarProperty Name="COLUMN3" ColumnName="COLUMN3" />
+                <ScalarProperty Name="COLUMN2" ColumnName="COLUMN2" />
+                <ScalarProperty Name="COLUMN1" ColumnName="COLUMN1" />
+                <ScalarProperty Name="STATUS" ColumnName="STATUS" />
+                <ScalarProperty Name="EDIT_BY" ColumnName="EDIT_BY" />
+                <ScalarProperty Name="EDIT_DATE" ColumnName="EDIT_DATE" />
+                <ScalarProperty Name="CREATE_BY" ColumnName="CREATE_BY" />
+                <ScalarProperty Name="CREATE_DATE" ColumnName="CREATE_DATE" />
+                <ScalarProperty Name="EMPLOYEE_CODE" ColumnName="EMPLOYEE_CODE" />
+                <ScalarProperty Name="DELIVERY_ADDRESS_NAME" ColumnName="DELIVERY_ADDRESS_NAME" />
+                <ScalarProperty Name="DELIVERY_ADDRESS_CODE" ColumnName="DELIVERY_ADDRESS_CODE" />
+                <ScalarProperty Name="PICKING_LIST_NO" ColumnName="PICKING_LIST_NO" />
+                <ScalarProperty Name="CUSTOMER_CODE" ColumnName="CUSTOMER_CODE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SYNC_VERSION">
+            <EntityTypeMapping TypeName="HANDY_PICKING_Model.SYNC_VERSION">
+              <MappingFragment StoreEntitySet="SYNC_VERSION">
+                <ScalarProperty Name="SERVER_VERSION" ColumnName="SERVER_VERSION" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -48,6 +48,7 @@ namespace Handy_Picking_Winform
             this.panel3 = new System.Windows.Forms.Panel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panelTopLeft = new System.Windows.Forms.Panel();
+            this.txtVersion = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picShowPass)).BeginInit();
@@ -69,6 +70,7 @@ namespace Handy_Picking_Winform
             // 
             // panel4
             // 
+            this.panel4.Controls.Add(this.txtVersion);
             this.panel4.Controls.Add(this.label1);
             this.panel4.Controls.Add(this.panelTopRight);
             this.panel4.Controls.Add(this.picShowPass);
@@ -260,6 +262,17 @@ namespace Handy_Picking_Winform
             this.panelTopLeft.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panelTopLeft_MouseMove);
             this.panelTopLeft.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panelTopLeft_MouseUp);
             // 
+            // txtVersion
+            // 
+            this.txtVersion.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtVersion.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(13)))), ((int)(((byte)(89)))), ((int)(((byte)(1)))));
+            this.txtVersion.Location = new System.Drawing.Point(376, 373);
+            this.txtVersion.Name = "txtVersion";
+            this.txtVersion.Size = new System.Drawing.Size(155, 34);
+            this.txtVersion.TabIndex = 13;
+            this.txtVersion.Text = "VERSION";
+            this.txtVersion.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // Form_Login
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -270,6 +283,7 @@ namespace Handy_Picking_Winform
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form_Login";
             this.Text = "Form_Login";
+            this.Load += new System.EventHandler(this.Form_Login_Load);
             this.panel1.ResumeLayout(false);
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
@@ -301,5 +315,6 @@ namespace Handy_Picking_Winform
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Panel panelTopLeft;
+        private System.Windows.Forms.Label txtVersion;
     }
 }

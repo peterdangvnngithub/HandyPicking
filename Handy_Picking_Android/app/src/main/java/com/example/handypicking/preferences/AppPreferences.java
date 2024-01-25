@@ -22,11 +22,13 @@ public class AppPreferences {
     }
 
     public void setApiSetting(String apiSetting) {
-        sharedPreferences.edit().putString(API_SETTING_KEY, apiSetting).apply();
+        if (apiSetting != null) {
+            sharedPreferences.edit().putString(API_SETTING_KEY, apiSetting).apply();
+        }
     }
 
     public String getApiSetting() {
-        return sharedPreferences.getString(API_SETTING_KEY, "");
+        return sharedPreferences.getString(API_SETTING_KEY, null );
     }
 
     public String getPreferencesName() {

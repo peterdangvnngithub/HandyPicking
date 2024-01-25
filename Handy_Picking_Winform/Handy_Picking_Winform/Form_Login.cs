@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Drawing;
 using System.Windows.Forms;
+using Handy_Picking_Winform.Utils;
 
 namespace Handy_Picking_Winform
 {
@@ -144,6 +145,14 @@ namespace Handy_Picking_Winform
             {
                 btnLogin_Click(sender, e);
             }
+        }
+
+        private void Form_Login_Load(object sender, EventArgs e)
+        {
+            // Get information about the application's version
+            string current_version = Common.Get_Current_Version();
+
+            txtVersion.Text = "Version: " + Convert.ToString(current_version);
         }
     }
 }

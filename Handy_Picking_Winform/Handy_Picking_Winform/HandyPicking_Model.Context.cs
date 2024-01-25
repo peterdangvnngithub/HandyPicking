@@ -31,5 +31,8 @@ namespace Handy_Picking_Winform
         public DbSet<USER_MS> USER_MS { get; set; }
         public DbSet<PALLET_MASTER> PALLET_MASTER { get; set; }
         public DbSet<HANDY_PICKING_DETAIL_LOCK> HANDY_PICKING_DETAIL_LOCK { get; set; }
+        public DbSet<HANDY_PICKING_DETAIL_BK> HANDY_PICKING_DETAIL_BK { get; set; }
+        public DbSet<HANDY_PICKING_MS_BK> HANDY_PICKING_MS_BK { get; set; }
+        public DbSet<SYNC_VERSION> SYNC_VERSION { get; set; }
     }
 }

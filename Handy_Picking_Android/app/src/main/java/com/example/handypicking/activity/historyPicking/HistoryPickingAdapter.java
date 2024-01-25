@@ -57,6 +57,7 @@ public class HistoryPickingAdapter extends RecyclerView.Adapter<HistoryPickingAd
 
     public interface ItemClickListener {
         void onItemClick(View view, int position);
+        void onImageClick(View view, int position);
     }
 
     public class PickingHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -70,6 +71,7 @@ public class HistoryPickingAdapter extends RecyclerView.Adapter<HistoryPickingAd
             imgStatusPicking    = (ImageView) itemView.findViewById(R.id.imgStatusPicking);
 
             itemView.setOnClickListener(this);
+            imgStatusPicking.setOnClickListener(this);
         }
 
         void SetDetails(handy_ms handyMS)
@@ -83,11 +85,11 @@ public class HistoryPickingAdapter extends RecyclerView.Adapter<HistoryPickingAd
 
                 txtDateCreate.setText(outputFormat.format(createDate));
                 txtPickingListNo.setText(handyMS.getPICKING_LIST_NO());
-                if(handyMS.getSTATUS() == 0) {
+                /*if(handyMS.getSTATUS() == 0) {
                     imgStatusPicking.setImageResource(R.drawable.ic_check);
                 } else {
                     imgStatusPicking.setImageResource(R.drawable.ic_lock);
-                }
+                }*/
             } catch (Exception e)
             {
                 e.printStackTrace();
@@ -96,8 +98,12 @@ public class HistoryPickingAdapter extends RecyclerView.Adapter<HistoryPickingAd
 
         @Override
         public void onClick(View v) {
-            if (itemClickListener != null) {
-                itemClickListener.onItemClick(v, this.getAdapterPosition());
+            if (v.getId() == R.id.imgStatusPicking) {
+                // Handle click on imgStatusPicking
+                itemClickListener.onImageClick(v, getAdapterPosition());
+            } else {
+                // Handle click on the entire item view
+                itemClickListener.onItemClick(v, getAdapterPosition());
             }
         }
     }

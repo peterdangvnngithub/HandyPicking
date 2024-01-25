@@ -36,18 +36,17 @@ namespace Handy_Picking_Winform
             this.barBtn_ExportPL_Merge = new DevExpress.XtraBars.BarButtonItem();
             this.barBtn_Inv_Clear_Data = new DevExpress.XtraBars.BarButtonItem();
             this.barBtn_Clear_PL_Data = new DevExpress.XtraBars.BarButtonItem();
-            this.barBtnLoadPackagingStandards = new DevExpress.XtraBars.BarButtonItem();
             this.barBtn_Add_PickingList = new DevExpress.XtraBars.BarButtonItem();
             this.barBtnLockPickingList = new DevExpress.XtraBars.BarButtonItem();
             this.btnSavePicking = new DevExpress.XtraBars.BarButtonItem();
-            this.barStaticUser = new DevExpress.XtraBars.BarStaticItem();
+            this.barStatic_User = new DevExpress.XtraBars.BarStaticItem();
             this.btn_InputPacking = new DevExpress.XtraBars.BarButtonItem();
             this.barBtn_Merge_Picking_List = new DevExpress.XtraBars.BarButtonItem();
+            this.barStatic_Version = new DevExpress.XtraBars.BarStaticItem();
             this.ribbonPage_Action = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.ribbonPageGroup1 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPageGroup2 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPageGroup3 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
-            this.ribbonPageGroup4 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonStatusBar = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
             this.panelControl1 = new DevExpress.XtraEditors.PanelControl();
             this.lbl_PickingList = new DevExpress.XtraEditors.LabelControl();
@@ -107,15 +106,15 @@ namespace Handy_Picking_Winform
             this.barBtn_ExportPL_Merge,
             this.barBtn_Inv_Clear_Data,
             this.barBtn_Clear_PL_Data,
-            this.barBtnLoadPackagingStandards,
             this.barBtn_Add_PickingList,
             this.barBtnLockPickingList,
             this.btnSavePicking,
-            this.barStaticUser,
+            this.barStatic_User,
             this.btn_InputPacking,
-            this.barBtn_Merge_Picking_List});
+            this.barBtn_Merge_Picking_List,
+            this.barStatic_Version});
             this.ribbon.Location = new System.Drawing.Point(0, 0);
-            this.ribbon.MaxItemId = 17;
+            this.ribbon.MaxItemId = 18;
             this.ribbon.Name = "ribbon";
             this.ribbon.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
             this.ribbonPage_Action});
@@ -163,14 +162,6 @@ namespace Handy_Picking_Winform
             this.barBtn_Clear_PL_Data.Name = "barBtn_Clear_PL_Data";
             this.barBtn_Clear_PL_Data.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barBtn_Clear_PL_Data_ItemClick);
             // 
-            // barBtnLoadPackagingStandards
-            // 
-            this.barBtnLoadPackagingStandards.Caption = "Tải quy cách đóng gói";
-            this.barBtnLoadPackagingStandards.Id = 7;
-            this.barBtnLoadPackagingStandards.ImageOptions.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("barBtnLoadPackagingStandards.ImageOptions.SvgImage")));
-            this.barBtnLoadPackagingStandards.Name = "barBtnLoadPackagingStandards";
-            this.barBtnLoadPackagingStandards.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barBtnLoadPackagingStandards_ItemClick);
-            // 
             // barBtn_Add_PickingList
             // 
             this.barBtn_Add_PickingList.Caption = "Thêm Picking List";
@@ -195,12 +186,12 @@ namespace Handy_Picking_Winform
             this.btnSavePicking.Name = "btnSavePicking";
             this.btnSavePicking.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnSavePicking_ItemClick);
             // 
-            // barStaticUser
+            // barStatic_User
             // 
-            this.barStaticUser.Alignment = DevExpress.XtraBars.BarItemLinkAlignment.Right;
-            this.barStaticUser.Caption = "User1";
-            this.barStaticUser.Id = 11;
-            this.barStaticUser.Name = "barStaticUser";
+            this.barStatic_User.Alignment = DevExpress.XtraBars.BarItemLinkAlignment.Right;
+            this.barStatic_User.Caption = "User1";
+            this.barStatic_User.Id = 11;
+            this.barStatic_User.Name = "barStatic_User";
             // 
             // btn_InputPacking
             // 
@@ -219,13 +210,18 @@ namespace Handy_Picking_Winform
             this.barBtn_Merge_Picking_List.Name = "barBtn_Merge_Picking_List";
             this.barBtn_Merge_Picking_List.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barBtn_Merge_Picking_List_ItemClick);
             // 
+            // barStatic_Version
+            // 
+            this.barStatic_Version.Caption = "barStaticItem1";
+            this.barStatic_Version.Id = 17;
+            this.barStatic_Version.Name = "barStatic_Version";
+            // 
             // ribbonPage_Action
             // 
             this.ribbonPage_Action.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] {
             this.ribbonPageGroup1,
             this.ribbonPageGroup2,
-            this.ribbonPageGroup3,
-            this.ribbonPageGroup4});
+            this.ribbonPageGroup3});
             this.ribbonPage_Action.Name = "ribbonPage_Action";
             this.ribbonPage_Action.Text = "Action";
             // 
@@ -233,7 +229,6 @@ namespace Handy_Picking_Winform
             // 
             this.ribbonPageGroup1.ItemLinks.Add(this.barBtn_Add_PickingList);
             this.ribbonPageGroup1.ItemLinks.Add(this.barBtn_Clear_PL_Data);
-            this.ribbonPageGroup1.ItemLinks.Add(this.barBtnLoadPackagingStandards);
             this.ribbonPageGroup1.ItemLinks.Add(this.btnSavePicking);
             this.ribbonPageGroup1.ItemLinks.Add(this.barBtn_ExportPL_Merge);
             this.ribbonPageGroup1.ItemLinks.Add(this.barBtnLockPickingList);
@@ -254,15 +249,10 @@ namespace Handy_Picking_Winform
             this.ribbonPageGroup3.Name = "ribbonPageGroup3";
             this.ribbonPageGroup3.Text = "Compare";
             // 
-            // ribbonPageGroup4
-            // 
-            this.ribbonPageGroup4.ItemLinks.Add(this.btn_InputPacking);
-            this.ribbonPageGroup4.Name = "ribbonPageGroup4";
-            this.ribbonPageGroup4.Text = "Picking";
-            // 
             // ribbonStatusBar
             // 
-            this.ribbonStatusBar.ItemLinks.Add(this.barStaticUser);
+            this.ribbonStatusBar.ItemLinks.Add(this.barStatic_User);
+            this.ribbonStatusBar.ItemLinks.Add(this.barStatic_Version);
             this.ribbonStatusBar.Location = new System.Drawing.Point(0, 682);
             this.ribbonStatusBar.Name = "ribbonStatusBar";
             this.ribbonStatusBar.Ribbon = this.ribbon;
@@ -280,7 +270,9 @@ namespace Handy_Picking_Winform
             // 
             // lbl_PickingList
             // 
+            this.lbl_PickingList.Appearance.BackColor = System.Drawing.Color.Transparent;
             this.lbl_PickingList.Appearance.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_PickingList.Appearance.Options.UseBackColor = true;
             this.lbl_PickingList.Appearance.Options.UseFont = true;
             this.lbl_PickingList.Appearance.Options.UseTextOptions = true;
             this.lbl_PickingList.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
@@ -289,21 +281,25 @@ namespace Handy_Picking_Winform
             this.lbl_PickingList.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.Simple;
             this.lbl_PickingList.Location = new System.Drawing.Point(4, 4);
             this.lbl_PickingList.Name = "lbl_PickingList";
-            this.lbl_PickingList.Size = new System.Drawing.Size(113, 20);
+            this.lbl_PickingList.Size = new System.Drawing.Size(141, 25);
             this.lbl_PickingList.TabIndex = 6;
             this.lbl_PickingList.Text = "PICKING LIST NO";
             // 
             // sLookUp_PickingList
             // 
-            this.sLookUp_PickingList.Location = new System.Drawing.Point(118, 4);
+            this.sLookUp_PickingList.Location = new System.Drawing.Point(146, 4);
             this.sLookUp_PickingList.MenuManager = this.ribbon;
             this.sLookUp_PickingList.Name = "sLookUp_PickingList";
+            this.sLookUp_PickingList.Properties.Appearance.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.sLookUp_PickingList.Properties.Appearance.Options.UseFont = true;
+            this.sLookUp_PickingList.Properties.AutoHeight = false;
             this.sLookUp_PickingList.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
             this.sLookUp_PickingList.Properties.PopupView = this.gridView_sLookUp_PL_No;
             this.sLookUp_PickingList.Properties.EditValueChanged += new System.EventHandler(this.sLookUp_PickingList_Properties_EditValueChanged);
-            this.sLookUp_PickingList.Size = new System.Drawing.Size(137, 20);
+            this.sLookUp_PickingList.Size = new System.Drawing.Size(152, 25);
             this.sLookUp_PickingList.TabIndex = 5;
+            this.sLookUp_PickingList.Closed += new DevExpress.XtraEditors.Controls.ClosedEventHandler(this.sLookUp_PickingList_Closed);
             // 
             // gridView_sLookUp_PL_No
             // 
@@ -478,7 +474,7 @@ namespace Handy_Picking_Winform
             this.Name = "Form_Main";
             this.Ribbon = this.ribbon;
             this.StatusBar = this.ribbonStatusBar;
-            this.Text = "COMPARE INVOICE AND PICKING LIST";
+            this.Text = "CHƯƠNG TRÌNH DOUBLE CHECK PICKING LIST";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form_Main_FormClosing);
             this.Load += new System.EventHandler(this.Form_Main_Load);
             ((System.ComponentModel.ISupportInitialize)(this.ribbon)).EndInit();
@@ -522,7 +518,6 @@ namespace Handy_Picking_Winform
         private DevExpress.XtraBars.BarButtonItem barBtn_ExportPL_Merge;
         private DevExpress.XtraBars.BarButtonItem barBtn_Inv_Clear_Data;
         private DevExpress.XtraBars.BarButtonItem barBtn_Clear_PL_Data;
-        private DevExpress.XtraBars.BarButtonItem barBtnLoadPackagingStandards;
         private DevExpress.XtraBars.BarButtonItem barBtn_Add_PickingList;
         private DevExpress.XtraBars.BarButtonItem barBtnLockPickingList;
         private DevExpress.XtraBars.BarButtonItem btnSavePicking;
@@ -541,10 +536,9 @@ namespace Handy_Picking_Winform
         private DevExpress.XtraEditors.PanelControl panelControl2;
         private System.Windows.Forms.Panel panel1;
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup3;
-        private DevExpress.XtraBars.BarStaticItem barStaticUser;
+        private DevExpress.XtraBars.BarStaticItem barStatic_User;
         private DevExpress.XtraGrid.GridControl gridControl_CompareWithInvoice;
         private DevExpress.XtraGrid.Views.Grid.GridView gridView_Compare_With_Invoice;
-        private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup4;
         private DevExpress.XtraBars.BarButtonItem btn_InputPacking;
         private DevExpress.XtraGrid.GridControl gridControl1;
         private DevExpress.XtraGrid.Views.Grid.GridView gridView1;
@@ -552,5 +546,6 @@ namespace Handy_Picking_Winform
         private DevExpress.XtraTab.XtraTabPage xtraTabPage4;
         private DevExpress.XtraGrid.GridControl gridControl_Picking_List_Merge;
         private DevExpress.XtraGrid.Views.Grid.GridView gridView_Picking_List_Merge;
+        private DevExpress.XtraBars.BarStaticItem barStatic_Version;
     }
 }
