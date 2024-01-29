@@ -85,11 +85,6 @@ public class HistoryPickingAdapter extends RecyclerView.Adapter<HistoryPickingAd
 
                 txtDateCreate.setText(outputFormat.format(createDate));
                 txtPickingListNo.setText(handyMS.getPICKING_LIST_NO());
-                /*if(handyMS.getSTATUS() == 0) {
-                    imgStatusPicking.setImageResource(R.drawable.ic_check);
-                } else {
-                    imgStatusPicking.setImageResource(R.drawable.ic_lock);
-                }*/
             } catch (Exception e)
             {
                 e.printStackTrace();

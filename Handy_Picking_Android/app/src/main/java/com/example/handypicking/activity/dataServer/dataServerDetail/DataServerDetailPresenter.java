@@ -33,7 +33,6 @@ public class DataServerDetailPresenter {
                 if(response.isSuccessful() && response.body() != null) {
                     if (response.body().size() > 0) {
                         view.onGetResult(response.body());
-                    } else {
                     }
                 }
             }

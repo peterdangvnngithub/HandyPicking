@@ -2,7 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -10,7 +9,6 @@
         android:id="@+id/row_dataServerDetail_txtPalletNo"
         android:layout_width="60dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="1dp"
         android:text="No. 01"
         android:textAlignment="center"
         android:textColor="@color/black"

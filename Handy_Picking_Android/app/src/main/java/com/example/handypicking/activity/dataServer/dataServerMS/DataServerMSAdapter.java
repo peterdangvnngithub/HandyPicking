@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.view.LayoutInflater;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -25,17 +26,14 @@ public class DataServerMSAdapter extends RecyclerView.Adapter<DataServerMSAdapte
     private List<handy_ms> list_handyMS;
     private List<handy_ms> list_handyMS_Old;
     private ItemClickListener itemClickListener;
-    private ButtonClickListener buttonClickListener;
     String TAG = "DataServerAdapter";
     public DataServerMSAdapter(Context mContext,
                                List<handy_ms> list_handyMS,
-                               ItemClickListener itemClickListener,
-                               ButtonClickListener buttonClickListener) {
+                               ItemClickListener itemClickListener) {
         this.mContext               = mContext;
         this.list_handyMS           = list_handyMS;
         this.list_handyMS_Old       = list_handyMS;
         this.itemClickListener      = itemClickListener;
-        this.buttonClickListener    = buttonClickListener;
     }
 
     @NonNull
@@ -58,21 +56,21 @@ public class DataServerMSAdapter extends RecyclerView.Adapter<DataServerMSAdapte
 
     public interface ItemClickListener {
         void onItemClick(View view, int position);
-    }
-
-    public interface ButtonClickListener {
-        void onButtonClick(View view, int position);
+        void onImageClick(View view, int position);
     }
 
     public class DataServerHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private final TextView dataServer_txtDateCreate, dataServer_txtPickingListNo;
+        private final TextView row_dataServerMS_txtDateCreate, row_dataServerMS_txtPickingListNo;
+        private final ImageView row_dataServerMS_imgDownload;
         public DataServerHolder(@NonNull View itemView, ItemClickListener itemClickListener) {
             super(itemView);
 
-            dataServer_txtDateCreate    = itemView.findViewById(R.id.dataServer_txtDateCreate);
-            dataServer_txtPickingListNo = itemView.findViewById(R.id.dataServer_txtPickingListNo);
+            row_dataServerMS_txtDateCreate      = itemView.findViewById(R.id.row_dataServerMS_txtDateCreate);
+            row_dataServerMS_txtPickingListNo   = itemView.findViewById(R.id.row_dataServerMS_txtPickingListNo);
+            row_dataServerMS_imgDownload        = itemView.findViewById(R.id.row_dataServerMS_imgDownload);
 
             itemView.setOnClickListener(this);
+            row_dataServerMS_imgDownload.setOnClickListener(this);
         }
 
         void SetDetails(handy_ms handyMS)
@@ -82,8 +80,8 @@ public class DataServerMSAdapter extends RecyclerView.Adapter<DataServerMSAdapte
             SimpleDateFormat outputFormat   = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.US);
             try {
                 Date createDate = inputFormat.parse(createDateStr);
-                dataServer_txtDateCreate.setText(outputFormat.format(createDate));
-                dataServer_txtPickingListNo.setText(handyMS.getPICKING_LIST_NO());
+                row_dataServerMS_txtDateCreate.setText(outputFormat.format(createDate));
+                row_dataServerMS_txtPickingListNo.setText(handyMS.getPICKING_LIST_NO());
             } catch (Exception e)
             {
                 e.printStackTrace();
@@ -92,17 +90,10 @@ public class DataServerMSAdapter extends RecyclerView.Adapter<DataServerMSAdapte
 
         @Override
         public void onClick(View v) {
-            int position = getAdapterPosition();
-            if (position != RecyclerView.NO_POSITION) {
-                if (v.getId() == R.id.imgDeleteData) {
-                    if (buttonClickListener != null) {
-                        buttonClickListener.onButtonClick(v, position);
-                    }
-                } else {
-                    if (itemClickListener != null) {
-                        itemClickListener.onItemClick(v, position);
-                    }
-                }
+            if (v.getId() == R.id.row_dataServerMS_imgDownload) {
+                itemClickListener.onImageClick(v, getAdapterPosition());
+            } else {
+                itemClickListener.onItemClick(v, getAdapterPosition());
             }
         }
     }

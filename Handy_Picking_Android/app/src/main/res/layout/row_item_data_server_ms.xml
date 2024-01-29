@@ -7,20 +7,20 @@
     android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/dataServer_txtDateCreate"
+        android:id="@+id/row_dataServerMS_txtDateCreate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
         android:textColor="@color/red"
         android:textStyle="bold|italic"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@id/dataServer_txtPickingListNo"
+        app:layout_constraintBottom_toTopOf="@id/row_dataServerMS_txtPickingListNo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
-        android:id="@+id/dataServer_txtPickingListNo"
+        android:id="@+id/row_dataServerMS_txtPickingListNo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -29,6 +29,18 @@
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/dataServer_txtDateCreate" />
+        app:layout_constraintTop_toBottomOf="@id/row_dataServerMS_txtDateCreate" />
+
+    <ImageView
+        android:id="@+id/row_dataServerMS_imgDownload"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:src="@drawable/ic_download"
+        android:paddingRight="5dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.5"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -26,11 +26,10 @@ import com.example.handypicking.activity.dataServer.dataServerDetail.DataServerD
 import java.util.ArrayList;
 import java.util.List;
 
-public class DataServerMSActivity extends AppCompatActivity implements DataServerMSAdapter.ItemClickListener, DataServerMSAdapter.ButtonClickListener, DataServerMSView {
+public class DataServerMSActivity extends AppCompatActivity implements DataServerMSView {
     RecyclerView recyclerView;
     SwipeRefreshLayout swipeRefreshLayout;
     DataServerMSAdapter.ItemClickListener itemClickListener;
-    DataServerMSAdapter.ButtonClickListener buttonClickListener;
     private AppPreferences appPreferences;
     private DataServerMSPresenter dataServerMSPresenter;
     private DataServerMSAdapter dataServerMSAdapter;
@@ -46,8 +45,6 @@ public class DataServerMSActivity extends AppCompatActivity implements DataServe
         setTitle("Data Server");
 
         recyclerView        = findViewById(R.id.data_recyclerView);
-        itemClickListener   = this;
-        buttonClickListener = this;
 
         appPreferences      = new AppPreferences(DataServerMSActivity.this);
         dataServerMSPresenter = new DataServerMSPresenter(DataServerMSActivity.this, appPreferences, this);
@@ -58,49 +55,65 @@ public class DataServerMSActivity extends AppCompatActivity implements DataServe
     }
 
     @Override
-    public void onItemClick(View view, int position) {
-      /*  Intent intent = new Intent(DataServerMSActivity.this, DataServerDetailActivity.class);
-        intent.putExtra("packingListNo", listHandyMS.get(position).getPICKING_LIST_NO());
-        startActivity(intent);*/
-    }
-
-    @Override
-    public void onButtonClick(View view, int position) {
-    }
-
-    @Override
     public void onGetResult(List<handy_ms> handyMS) {
         listHandyMS = handyMS;
-
         // Item click
-        itemClickListener = (((view, position) -> {
+        itemClickListener = (new DataServerMSAdapter.ItemClickListener() {
             handy_ms handy = new handy_ms();
-            if (IsFilter){
-                for (handy_ms item : listHandyMS)
-                {
-                    if (item.getPICKING_LIST_NO().equalsIgnoreCase(PLNumber))
+            @Override
+            public void onItemClick(View view, int position) {
+                if (IsFilter){
+                    for (handy_ms item : listHandyMS)
                     {
-                        handy = item;
+                        if (item.getPICKING_LIST_NO().equalsIgnoreCase(PLNumber))
+                        {
+                            handy = item;
+                        }
                     }
+                } else {
+                    handy = listHandyMS.get(position);
                 }
-            } else {
-                handy = listHandyMS.get(position);
+
+                if(handy == null)
+                {
+                    String title = "Thông Báo";
+                    String message = "Lỗi giá trị History.\nKhông thể kết nối tới database.";
+                    utils.displayDialogNotification(title, message);
+                    return;
+                }
+
+                Intent intent = new Intent(DataServerMSActivity.this, DataServerDetailActivity.class);
+                intent.putExtra("packingListNo", handy.getPICKING_LIST_NO());
+                startActivity(intent);
             }
 
-            if(handy == null)
-            {
-                String title = "Thông Báo";
-                String message = "Lỗi giá trị History.\nKhông thể kết nối tới database.";
-                utils.displayDialogNotification(title, message);
-                return;
+            @Override
+            public void onImageClick(View view, int position) {
+                if (IsFilter){
+                    for (handy_ms item : listHandyMS)
+                    {
+                        if (item.getPICKING_LIST_NO().equalsIgnoreCase(PLNumber))
+                        {
+                            handy = item;
+                        }
+                    }
+                } else {
+                    handy = listHandyMS.get(position);
+                }
+
+                if(handy == null)
+                {
+                    String title = "Thông Báo";
+                    String message = "Lỗi giá trị History.\nKhông thể kết nối tới database.";
+                    utils.displayDialogNotification(title, message);
+                    return;
+                }
+
+                Toast.makeText(DataServerMSActivity.this, handy.getPICKING_LIST_NO(), Toast.LENGTH_SHORT).show();
             }
+        });
 
-            Intent intent = new Intent(DataServerMSActivity.this, DataServerDetailActivity.class);
-            intent.putExtra("packingListNo", handy.getPICKING_LIST_NO());
-            startActivity(intent);
-        }));
-
-        dataServerMSAdapter = new DataServerMSAdapter( DataServerMSActivity.this, listHandyMS, itemClickListener, buttonClickListener);
+        dataServerMSAdapter = new DataServerMSAdapter( DataServerMSActivity.this, listHandyMS, itemClickListener);
         dataServerMSAdapter.notifyDataSetChanged();
 
         // Update recyclerView
