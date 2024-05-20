@@ -10,6 +10,7 @@ import android.content.Intent;
 
 import com.example.handypicking.R;
 import com.example.handypicking.Utils.Utils;
+import com.example.handypicking.database.PickingDatabaseHelper;
 import com.example.handypicking.model.handy_ms;
 import com.example.handypicking.preferences.AppPreferences;
 import com.example.handypicking.activity.picking.pickingDetail.PickingDetailActivity;
@@ -23,13 +24,13 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.util.List;
 
-public class HistoryPickingActivity extends AppCompatActivity implements HistoryPickingView {
+public class DataLocalActivity extends AppCompatActivity implements DataLocalView {
     RecyclerView recyclerView;
     SwipeRefreshLayout swipeRefreshLayout;
-    HistoryPickingAdapter.ItemClickListener itemClickListener;
-    private HistoryPickingAdapter historyPickingAdapter;
-    private HistoryPickingPresenter historyPickingPresenter;
+    DataLocalAdapter.ItemClickListener itemClickListener;
+    private DataLocalAdapter dataLocalAdapter;
     private AppPreferences appPreferences;
+    PickingDatabaseHelper myDB;
     private Utils utils;
     private Boolean IsFilter = false;
     private String PLNumber = "";
@@ -43,15 +44,19 @@ public class HistoryPickingActivity extends AppCompatActivity implements History
 
         recyclerView            = findViewById(R.id.recyclerView);
         swipeRefreshLayout      = (SwipeRefreshLayout) findViewById( R.id.swipe_refresh );
+        myDB                    = new PickingDatabaseHelper(DataLocalActivity.this);
 
-        appPreferences          = new AppPreferences(HistoryPickingActivity.this);
-        utils                   = new Utils(HistoryPickingActivity.this, appPreferences);
+        appPreferences          = new AppPreferences(DataLocalActivity.this);
+        utils                   = new Utils(DataLocalActivity.this, appPreferences);
 
-        historyPickingPresenter = new HistoryPickingPresenter( appPreferences, HistoryPickingActivity.this);
-        historyPickingPresenter.getDataHandyMS();
 
         swipeRefreshLayout.setOnRefreshListener(
-                () -> historyPickingPresenter.getDataHandyMS()
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+
+                    }
+                }
         );
 
         // Setting init recyclerView
@@ -72,7 +77,7 @@ public class HistoryPickingActivity extends AppCompatActivity implements History
     @Override
     public void onGetResult(List<handy_ms> resultModels) {
         // Item click
-        itemClickListener = new HistoryPickingAdapter.ItemClickListener() {
+        itemClickListener = new DataLocalAdapter.ItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 handy_ms handy = new handy_ms();
@@ -98,7 +103,7 @@ public class HistoryPickingActivity extends AppCompatActivity implements History
 
                 if(handy.getSTATUS() == 0) {
                     //Fix bug get position không đúng khi dùng chức năng filter
-                    Intent intent = new Intent(HistoryPickingActivity.this, PickingDetailActivity.class);
+                    Intent intent = new Intent(DataLocalActivity.this, PickingDetailActivity.class);
                     intent.putExtra("handyMS", handy);
                     startActivity(intent);
                 } else if(handy.getSTATUS() == 1) {
@@ -123,15 +128,15 @@ public class HistoryPickingActivity extends AppCompatActivity implements History
                     handy = resultModels.get(position);
                 }
 
-                Toast.makeText(HistoryPickingActivity.this, handy.getPICKING_LIST_NO(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(DataLocalActivity.this, handy.getPICKING_LIST_NO(), Toast.LENGTH_SHORT).show();
             }
         };
 
-        historyPickingAdapter = new HistoryPickingAdapter( this, resultModels, itemClickListener );
-        historyPickingAdapter.notifyDataSetChanged();
+        dataLocalAdapter = new DataLocalAdapter( this, resultModels, itemClickListener );
+        dataLocalAdapter.notifyDataSetChanged();
 
         // Update recyclerView
-        recyclerView.setAdapter( historyPickingAdapter );
+        recyclerView.setAdapter(dataLocalAdapter);
 
         swipeRefreshLayout.setRefreshing(false);
     }
@@ -161,7 +166,7 @@ public class HistoryPickingActivity extends AppCompatActivity implements History
             } else {
                 PLNumber = inputString.substring(66, 96).trim();
 
-                historyPickingAdapter.getFilter().filter(PLNumber);
+                dataLocalAdapter.getFilter().filter(PLNumber);
 
                 IsFilter = true;
             }
@@ -182,7 +187,7 @@ public class HistoryPickingActivity extends AppCompatActivity implements History
 
         switch(id) {
             case R.id.action_refresh:
-                historyPickingAdapter.getFilter().filter("");
+                dataLocalAdapter.getFilter().filter("");
                 IsFilter = false;
                 PLNumber = "";
                 return true;
