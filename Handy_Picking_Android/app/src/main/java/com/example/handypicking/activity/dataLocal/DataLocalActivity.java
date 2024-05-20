@@ -1,4 +1,4 @@
-package com.example.handypicking.activity.historyPicking;
+package com.example.handypicking.activity.dataLocal;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DataLocalActivity extends AppCompatActivity implements DataLocalView {
@@ -31,9 +32,11 @@ public class DataLocalActivity extends AppCompatActivity implements DataLocalVie
     private DataLocalAdapter dataLocalAdapter;
     private AppPreferences appPreferences;
     PickingDatabaseHelper myDB;
+    List<handy_ms> handyMS = new ArrayList<>();
     private Utils utils;
     private Boolean IsFilter = false;
     private String PLNumber = "";
+    private String TABLE_NAME = "handy_ms";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,41 +51,24 @@ public class DataLocalActivity extends AppCompatActivity implements DataLocalVie
 
         appPreferences          = new AppPreferences(DataLocalActivity.this);
         utils                   = new Utils(DataLocalActivity.this, appPreferences);
-
+        handyMS                 = myDB.getAllData_HandyMS(TABLE_NAME);
 
         swipeRefreshLayout.setOnRefreshListener(
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {
-
+                        handyMS = myDB.getAllData_HandyMS(TABLE_NAME);
                     }
                 }
         );
 
-        // Setting init recyclerView
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
-    }
-
-    @Override
-    public void showLoading() {
-        swipeRefreshLayout.setRefreshing( true );
-    }
-
-    @Override
-    public void hideLoading() {
-        swipeRefreshLayout.setRefreshing( false );
-    }
-
-    @Override
-    public void onGetResult(List<handy_ms> resultModels) {
         // Item click
         itemClickListener = new DataLocalAdapter.ItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 handy_ms handy = new handy_ms();
                 if (IsFilter){
-                    for (handy_ms item : resultModels)
+                    for (handy_ms item : handyMS)
                     {
                         if (item.getPICKING_LIST_NO().equalsIgnoreCase(PLNumber))
                         {
@@ -90,7 +76,7 @@ public class DataLocalActivity extends AppCompatActivity implements DataLocalVie
                         }
                     }
                 } else {
-                    handy = resultModels.get(position);
+                    handy = handyMS.get(position);
                 }
 
                 if(handy == null)
@@ -117,7 +103,7 @@ public class DataLocalActivity extends AppCompatActivity implements DataLocalVie
             public void onImageClick(View view, int position) {
                 handy_ms handy = new handy_ms();
                 if (IsFilter){
-                    for (handy_ms item : resultModels)
+                    for (handy_ms item : handyMS)
                     {
                         if (item.getPICKING_LIST_NO().equalsIgnoreCase(PLNumber))
                         {
@@ -125,20 +111,38 @@ public class DataLocalActivity extends AppCompatActivity implements DataLocalVie
                         }
                     }
                 } else {
-                    handy = resultModels.get(position);
+                    handy = handyMS.get(position);
                 }
 
                 Toast.makeText(DataLocalActivity.this, handy.getPICKING_LIST_NO(), Toast.LENGTH_SHORT).show();
             }
         };
 
-        dataLocalAdapter = new DataLocalAdapter( this, resultModels, itemClickListener );
+        dataLocalAdapter = new DataLocalAdapter( this, handyMS, itemClickListener );
         dataLocalAdapter.notifyDataSetChanged();
 
         // Update recyclerView
         recyclerView.setAdapter(dataLocalAdapter);
-
         swipeRefreshLayout.setRefreshing(false);
+
+        // Setting init recyclerView
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+    }
+
+    @Override
+    public void showLoading() {
+        swipeRefreshLayout.setRefreshing( true );
+    }
+
+    @Override
+    public void hideLoading() {
+        swipeRefreshLayout.setRefreshing( false );
+    }
+
+    @Override
+    public void onGetResult(List<handy_ms> resultModels) {
+
     }
 
     @Override

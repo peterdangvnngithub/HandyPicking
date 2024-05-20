@@ -415,7 +415,8 @@ public class PickingDetailActivity extends AppCompatActivity{
                 String palletNo = event.getCharacters();
                 // Check format pallet No scan
                 if(palletNo.length() == 20) {
-                    txtPalletNo.setText(palletNo.trim().replaceAll("[\t ]", ""));
+                    txtPalletNo.setText(palletNo.trim().replaceAll("\\s+", ""));
+                    Toast.makeText(this, "\'" + txtPalletNo.getText() + "\'" + "-" + txtPalletNo.getText().length(),Toast.LENGTH_SHORT).show();
                     txtLabelPalletNo.setTextColor(Color.parseColor("#FF0000"));
                 } else {
                     String title = "Lỗi";

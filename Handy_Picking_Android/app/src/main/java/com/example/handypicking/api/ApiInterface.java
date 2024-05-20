@@ -26,13 +26,11 @@ public interface ApiInterface {
     @GET("handyPickingMS")
     Call<List<handy_ms>> getHandyMS();
 
-/*
-    @GET("handy")
-    Call<handy> getDataServer();
-*/
+    @GET("handy/{pickingNo}")
+    Call<handy> getHandyDataByPickingList(@Path("pickingNo") String plNo);
 
-    @GET("handyPickingMS/{plNo}")
-    Call<List<handy_ms>> check_Exists_HandyPicking_MS(@Path("plNo") String plNo);
+    @GET("handyPickingMS/{pickingNo}")
+    Call<List<handy_ms>> check_Exists_HandyPicking_MS(@Path("pickingNo") String plNo);
 
     @GET("handyPickingDetail/{series}")
     Call<List<handy_detail>> check_Exists_HandyPicking_Detail(@Path("series") String series);

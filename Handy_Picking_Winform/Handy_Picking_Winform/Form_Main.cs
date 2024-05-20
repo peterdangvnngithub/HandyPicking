@@ -176,11 +176,13 @@ namespace Handy_Picking_Winform
                 var result =
                     db.HANDY_PICKING_DETAIL
                     .Where(x => x.PICKING_LIST_NO == PLNo)
+                    .OrderBy(x => x.PALLET_NO)
                     .ToList();
 
                 var lockResult =
                     db.HANDY_PICKING_DETAIL_LOCK
                     .Where(x => x.PICKING_LIST_NO == PLNo)
+                    .OrderBy(x => x.PALLET_NO)
                     .Select(x => new HandyPickingDetail_DTO
                     {
                         PICKING_LIST_NO   = x.PICKING_LIST_NO,
@@ -1816,6 +1818,11 @@ namespace Handy_Picking_Winform
                 Setting_Display(IsPickingListLock);
                 Setting_lbl_PickingList_Color(lbl_PickingList_Backcolor, lbl_PickingList_Forecolor);
             }
+        }
+
+        private void barBtn_ThirdCustomer_ItemClick(object sender, ItemClickEventArgs e)
+        {
+
         }
     }
 }   

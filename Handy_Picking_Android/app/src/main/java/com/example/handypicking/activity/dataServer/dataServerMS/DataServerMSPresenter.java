@@ -5,6 +5,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.handypicking.model.handy;
 import com.example.handypicking.model.handy_ms;
 import com.example.handypicking.api.ApiClient;
 import com.example.handypicking.api.ApiInterface;
@@ -22,42 +23,16 @@ public class DataServerMSPresenter {
     private Context mContext;
     private PickingDatabaseHelper myDB;
     private List<handy_ms> handyMS;
+    private handy handyData;
     private AppPreferences appPreferences;
     private DataServerMSView view;
-    private static final String TAG = "DataPresenter";
+    private static final String TAG = "DataServerMSPresenter";
 
     public DataServerMSPresenter(Context mContext, AppPreferences appPreferences, DataServerMSView view) {
         this.mContext       = mContext;
         this.appPreferences = appPreferences;
         this.view           = view;
     }
-
-/*    public void checkServer_VersionData()
-    {
-        Log.d(TAG, "checkServer_VersionData");
-        myDB = new PickingDatabaseHelper(mContext);
-
-        //Request to server API
-        ApiInterface apiInterface   = ApiClient.getApiClient(appPreferences).create(ApiInterface.class);
-        Call<Integer> call          = apiInterface.getServer_VersionData();
-        call.enqueue(new Callback<Integer>() {
-            @Override
-            public void onResponse(Call<Integer> call, Response<Integer> response) {
-                logLargeString(String.valueOf(response.body()));
-                if (response.isSuccessful() && response.body() != null) {
-                    int versionResponse = response.body();
-                  *//*  view.checkServer_VersionData(versionResponse.getVersion(), myDB.getLocalVersion());*//*
-                } else {
-                    Toast.makeText(mContext, "Not successful: " + response.message(), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Integer> call, Throwable t) {
-                Toast.makeText(mContext, "onFailure: " + t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }*/
 
     public List<handy_ms> getData_Server()
     {
@@ -86,12 +61,38 @@ public class DataServerMSPresenter {
         return handyMS;
     }
 
+    public void getData_Handy_By_Picking_List(String plNo)
+    {
+        //Request to server
+        Log.d(TAG, "getData_Handy_By_Picking_List");
+        ApiInterface apiInterface = ApiClient.getApiClient(appPreferences).create( ApiInterface.class );
+        Call<handy> call = apiInterface.getHandyDataByPickingList(plNo);
+
+        call.enqueue( new Callback<handy>() {
+            @Override
+            public void onResponse(@NonNull Call<handy> call, @NonNull Response<handy> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    handyData = (handy) response.body().get_ListHandyDetail();
+                    logLargeString(String.valueOf(handyData));
+                    view.onInsertDataToLocalTable(handyData);
+                } else {
+                    Log.d(TAG, "response.isSuccessful(): " + String.valueOf(response.isSuccessful()) +  " - response.code: " + String.valueOf(response.errorBody()));
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<handy> call, @NonNull Throwable t) {
+                Log.d(TAG, t.getLocalizedMessage());
+            }
+        } );
+    }
+
     public void logLargeString(String str) {
         if (str.length() > 3000) {
             Log.i(TAG, str.substring(0, 3000));
             logLargeString(str.substring(3000));
         } else {
-            Log.i(TAG, str);    // Continuation
+            Log.i(TAG, str);
         }
     }
 }

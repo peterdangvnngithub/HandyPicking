@@ -26,7 +26,7 @@ public class DataServerMSAdapter extends RecyclerView.Adapter<DataServerMSAdapte
     private List<handy_ms> list_handyMS;
     private List<handy_ms> list_handyMS_Old;
     private ItemClickListener itemClickListener;
-    String TAG = "DataServerAdapter";
+    String TAG = "DataServerMSAdapter";
     public DataServerMSAdapter(Context mContext,
                                List<handy_ms> list_handyMS,
                                ItemClickListener itemClickListener) {

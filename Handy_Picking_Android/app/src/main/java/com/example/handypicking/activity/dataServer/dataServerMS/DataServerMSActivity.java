@@ -8,35 +8,39 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.view.MenuItem;
-import android.widget.Toast;
+import android.widget.ProgressBar;
 import android.content.Intent;
+import android.widget.Toast;
 
 import com.example.handypicking.R;
 import com.example.handypicking.Utils.Utils;
-import com.example.handypicking.activity.historyPicking.HistoryPickingActivity;
-import com.example.handypicking.activity.picking.pickingDetail.PickingDetailActivity;
+import com.example.handypicking.model.handy;
+import com.example.handypicking.model.handy_detail;
 import com.example.handypicking.model.handy_ms;
 import com.example.handypicking.preferences.AppPreferences;
 import com.example.handypicking.activity.dataServer.dataServerDetail.DataServerDetailActivity;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
 
 public class DataServerMSActivity extends AppCompatActivity implements DataServerMSView {
-    RecyclerView recyclerView;
+    RecyclerView dataServerMS_recyclerView;
+    ProgressBar dataServerMS_progressBar;
+    View dataServerMS_backgroundView;
     SwipeRefreshLayout swipeRefreshLayout;
     DataServerMSAdapter.ItemClickListener itemClickListener;
-    private AppPreferences appPreferences;
-    private DataServerMSPresenter dataServerMSPresenter;
-    private DataServerMSAdapter dataServerMSAdapter;
-    private List<handy_ms> listHandyMS = new ArrayList<>();
-    private Utils utils;
-    private Boolean IsFilter = false;
-    private String PLNumber = "";
+    AppPreferences appPreferences;
+    DataServerMSPresenter dataServerMSPresenter;
+    DataServerMSAdapter dataServerMSAdapter;
+    List<handy_ms> listHandyMS = new ArrayList<>();
+    Boolean IsFilter = false;
+    String PLNumber = "";
+    Utils utils;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,14 +48,16 @@ public class DataServerMSActivity extends AppCompatActivity implements DataServe
 
         setTitle("Data Server");
 
-        recyclerView        = findViewById(R.id.data_recyclerView);
+        dataServerMS_recyclerView   = findViewById(R.id.dataServerMS_recyclerView);
+        dataServerMS_progressBar    = findViewById(R.id.dataServerMS_progressBar);
+        dataServerMS_backgroundView = findViewById(R.id.dataServerMS_backgroundView);
 
-        appPreferences      = new AppPreferences(DataServerMSActivity.this);
+        appPreferences              = new AppPreferences(DataServerMSActivity.this);
         dataServerMSPresenter = new DataServerMSPresenter(DataServerMSActivity.this, appPreferences, this);
         dataServerMSPresenter.getData_Server();
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+        dataServerMS_recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        dataServerMS_recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
     }
 
     @Override
@@ -109,7 +115,16 @@ public class DataServerMSActivity extends AppCompatActivity implements DataServe
                     return;
                 }
 
-                Toast.makeText(DataServerMSActivity.this, handy.getPICKING_LIST_NO(), Toast.LENGTH_SHORT).show();
+                setLoading(View.VISIBLE);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        /*Toast.makeText(DataServerMSActivity.this, "Activity run: " + handy.getPICKING_LIST_NO(), Toast.LENGTH_SHORT).show();*/
+                        // Hide ProgressBar and layout silver
+                        dataServerMSPresenter.getData_Handy_By_Picking_List(handy.getPICKING_LIST_NO());
+                        setLoading(View.GONE);
+                    }
+                }, 2000);
             }
         });
 
@@ -117,7 +132,20 @@ public class DataServerMSActivity extends AppCompatActivity implements DataServe
         dataServerMSAdapter.notifyDataSetChanged();
 
         // Update recyclerView
-        recyclerView.setAdapter(dataServerMSAdapter);
+        dataServerMS_recyclerView.setAdapter(dataServerMSAdapter);
+    }
+
+    @Override
+    public void onInsertDataToLocalTable(handy handyData) {
+        /*handy_ms handyMS = new handy_ms();
+        List<handy_detail> handyDetail = new ArrayList<>();
+        if(handyData != null)
+        {
+            handyMS = handyData.get_ListHandyMS().get(0);
+            handyDetail = handyData.get_ListHandyDetail();
+        }*/
+
+        Toast.makeText(DataServerMSActivity.this, "onInsertDataToLocalTable Clicked", Toast.LENGTH_SHORT).show();
     }
 
     // Add menu to Toolbar
@@ -167,5 +195,11 @@ public class DataServerMSActivity extends AppCompatActivity implements DataServe
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void setLoading(int status)
+    {
+        dataServerMS_progressBar.setVisibility(status);
+        dataServerMS_backgroundView.setVisibility(status);
     }
 }

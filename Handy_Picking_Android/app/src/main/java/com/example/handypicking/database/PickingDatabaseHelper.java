@@ -56,24 +56,6 @@ public class PickingDatabaseHelper extends SQLiteOpenHelper {
             COL_HANDY_MS_COLUMN3                + " TEXT, "     +
             COL_HANDY_MS_COLUMN4                + " TEXT, "     +
             COL_HANDY_MS_COLUMN5                + " TEXT)";
-    /*-------------------------------HANDY MS SERVER--------------------------------*/
-    private static final String TABLE_HANDY_MS_SERVER = "handy_ms_server";
-    private String CREATE_TABLE_HANDY_MS_SERVER = "CREATE TABLE " + TABLE_HANDY_MS_SERVER +
-            " (" + COL_HANDY_MS_CUSTOMER_CODE   + " TEXT, "     +
-            COL_HANDY_MS_PICKING_LIST_NO        + " TEXT PRIMARY KEY, " +
-            COL_HANDY_MS_DELIVERY_ADDRESS_CODE  + " TEXT, "     +
-            COL_HANDY_MS_DELIVERY_ADDRESS_NAME  + " TEXT, "     +
-            COL_HANDY_MS_EMPLOYEE_CODE          + " TEXT, "     +
-            COL_HANDY_MS_CREATE_DATE            + " TEXT, "     +
-            COL_HANDY_MS_CREATE_BY              + " TEXT, "     +
-            COL_HANDY_MS_EDIT_DATE              + " TEXT, "     +
-            COL_HANDY_MS_EDIT_BY                + " TEXT, "     +
-            COL_HANDY_MS_STATUS                 + " INTEGER, "  +
-            COL_HANDY_MS_COLUMN1                + " TEXT, "     +
-            COL_HANDY_MS_COLUMN2                + " TEXT, "     +
-            COL_HANDY_MS_COLUMN3                + " TEXT, "     +
-            COL_HANDY_MS_COLUMN4                + " TEXT, "     +
-            COL_HANDY_MS_COLUMN5                + " TEXT)";
     /*---------------------------------HANDY DETAIL---------------------------------*/
     private static final String TABLE_HANDY_DETAIL                  = "handy_detail";
     private static final String COL_HANDY_DETAIL_PICKING_LIST_NO    = "picking_list_no";
@@ -139,44 +121,6 @@ public class PickingDatabaseHelper extends SQLiteOpenHelper {
                 COL_HANDY_DETAIL_CUSTOMER_ITEM_CODE     + "," +
                 COL_HANDY_DETAIL_SERIES                 + ")" +
             ")";
-    /*---------------------------------HANDY DETAIL SERVER---------------------------------*/
-    private static final String TABLE_HANDY_DETAIL_SERVER = "handy_detail_server";
-    private final String CREATE_TABLE_HANDY_DETAIL_SERVER = "CREATE TABLE " + TABLE_HANDY_DETAIL_SERVER +
-            " (" +
-            COL_HANDY_DETAIL_PICKING_LIST_NO            + " TEXT, "     +
-            COL_HANDY_DETAIL_INVOICE_NO                 + " TEXT, "     +
-            COL_HANDY_DETAIL_SALE_ORDER                 + " TEXT, "     +
-            COL_HANDY_DETAIL_ITEM_CODE                  + " TEXT, "     +
-            COL_HANDY_DETAIL_LOT_ID                     + " TEXT, "     +
-            COL_HANDY_DETAIL_QUANTITY                   + " INTEGER, "  +
-            COL_HANDY_DETAIL_PALLET_NO                  + " TEXT, "     +
-            COL_HANDY_DETAIL_SERIES                     + " TEXT, "     +
-            COL_HANDY_DETAIL_CUSTOMER_ITEM_CODE         + " TEXT, "     +
-            COL_HANDY_DETAIL_TVC_ITEM_CODE              + " TEXT, "     +
-            COL_HANDY_DETAIL_CUSTOMER_PO                + " TEXT, "     +
-            COL_HANDY_DETAIL_QTY_CARTON                 + " INTEGER, "  +
-            COL_HANDY_DETAIL_QTY_PER_CARTON             + " INTEGER, "  +
-            COL_HANDY_DETAIL_QTY_TOTAL                  + " INTEGER, "  +
-            COL_HANDY_DETAIL_NET_WEIGHT                 + " REAL, "     +
-            COL_HANDY_DETAIL_NET_WEIGHT_TOTAL           + " REAL, "     +
-            COL_HANDY_DETAIL_GROSS_WEIGHT               + " REAL, "     +
-            COL_HANDY_DETAIL_LOT_NO                     + " TEXT, "     +
-            COL_HANDY_DETAIL_CREATE_DATE                + " TEXT, "     +
-            COL_HANDY_DETAIL_CREATE_BY                  + " TEXT, "     +
-            COL_HANDY_DETAIL_EDIT_DATE                  + " TEXT, "     +
-            COL_HANDY_DETAIL_EDIT_BY                    + " TEXT, "     +
-            COL_HANDY_DETAIL_STATUS                     + " INTEGER, "  +
-            COL_HANDY_DETAIL_COLUMN1                    + " TEXT, "     +
-            COL_HANDY_DETAIL_COLUMN2                    + " TEXT, "     +
-            COL_HANDY_DETAIL_COLUMN3                    + " TEXT, "     +
-            COL_HANDY_DETAIL_COLUMN4                    + " TEXT, "     +
-            COL_HANDY_DETAIL_COLUMN5                    + " TEXT, "     +
-            "PRIMARY KEY (" +
-                COL_HANDY_DETAIL_PICKING_LIST_NO        + "," +
-                COL_HANDY_DETAIL_CUSTOMER_ITEM_CODE     + "," +
-                COL_HANDY_DETAIL_SERIES                 + ")" +
-            ")";
-
     /*---------------------------------SQLITE COMMAND---------------------------------*/
     public PickingDatabaseHelper(@Nullable Context mContext) {
         super(mContext, DATABASE_NAME, null, DATABASE_VERSION);
@@ -187,16 +131,12 @@ public class PickingDatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE_HANDY_MS);
         db.execSQL(CREATE_TABLE_HANDY_DETAIL);
-        db.execSQL(CREATE_TABLE_HANDY_MS_SERVER);
-        db.execSQL(CREATE_TABLE_HANDY_DETAIL_SERVER);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_HANDY_MS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_HANDY_DETAIL);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_HANDY_MS_SERVER);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_HANDY_DETAIL_SERVER);
         onCreate(db);
     }
 
