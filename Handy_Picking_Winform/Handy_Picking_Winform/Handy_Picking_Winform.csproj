@@ -103,6 +103,9 @@
     <Compile Include="PALLET_MASTER.cs">
       <DependentUpon>HandyPicking_Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="PRODUCT_MASTER.cs">
+      <DependentUpon>HandyPicking_Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="HANDY_PICKING_DETAIL.cs">

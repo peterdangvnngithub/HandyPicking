@@ -176,6 +176,22 @@ warning 6002: The table/view 'HANDY_PICKING.dbo.HANDY_PICKING_MS_BK' does not ha
           </Key>
           <Property Name="PALLET_NO" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
+        <EntityType Name="PRODUCT_MASTER">
+          <Key>
+            <PropertyRef Name="PRODUCT_NUMBER" />
+            <PropertyRef Name="ADDRESS_CODE" />
+          </Key>
+          <Property Name="PRODUCT_NUMBER" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="TYPE" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="REFERENCE" Type="varchar" MaxLength="6" Nullable="false" />
+          <Property Name="ADDRESS_CODE" Type="varchar" MaxLength="60" Nullable="false" />
+          <Property Name="EXTERNAL_ITEM_CODE" Type="nvarchar" MaxLength="60" Nullable="false" />
+          <Property Name="EXTERNAL_ITEM_NAME" Type="nvarchar" MaxLength="60" Nullable="false" />
+          <Property Name="CREATE_DATE" Type="datetime" />
+          <Property Name="CREATE_BY" Type="varchar" MaxLength="8" />
+          <Property Name="EDIT_DATE" Type="datetime" />
+          <Property Name="EDIT_BY" Type="varchar" MaxLength="8" />
+        </EntityType>
         <EntityType Name="PRODUCTMF">
           <Key>
             <PropertyRef Name="ITEM_CODE" />
@@ -236,6 +252,7 @@ warning 6002: The table/view 'HANDY_PICKING.dbo.HANDY_PICKING_MS_BK' does not ha
           <EntitySet Name="HANDY_PICKING_DETAIL_LOCK" EntityType="Self.HANDY_PICKING_DETAIL_LOCK" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="HANDY_PICKING_MS" EntityType="Self.HANDY_PICKING_MS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PALLET_MASTER" EntityType="Self.PALLET_MASTER" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PRODUCT_MASTER" EntityType="Self.PRODUCT_MASTER" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PRODUCTMF" EntityType="Self.PRODUCTMF" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SYNC_VERSION" EntityType="Self.SYNC_VERSION" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="USER_MS" EntityType="Self.USER_MS" Schema="dbo" store:Type="Tables" />
@@ -305,6 +322,7 @@ FROM [dbo].[HANDY_PICKING_MS_BK] AS [HANDY_PICKING_MS_BK]</DefiningQuery>
           <EntitySet Name="HANDY_PICKING_DETAIL_BK" EntityType="HANDY_PICKING_Model.HANDY_PICKING_DETAIL_BK" />
           <EntitySet Name="HANDY_PICKING_MS_BK" EntityType="HANDY_PICKING_Model.HANDY_PICKING_MS_BK" />
           <EntitySet Name="SYNC_VERSION" EntityType="HANDY_PICKING_Model.SYNC_VERSION" />
+          <EntitySet Name="PRODUCT_MASTER" EntityType="HANDY_PICKING_Model.PRODUCT_MASTER" />
         </EntityContainer>
         <EntityType Name="PRODUCTMF">
           <Key>
@@ -528,6 +546,22 @@ FROM [dbo].[HANDY_PICKING_MS_BK] AS [HANDY_PICKING_MS_BK]</DefiningQuery>
           </Key>
           <Property Name="SERVER_VERSION" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
         </EntityType>
+        <EntityType Name="PRODUCT_MASTER">
+          <Key>
+            <PropertyRef Name="PRODUCT_NUMBER" />
+            <PropertyRef Name="ADDRESS_CODE" />
+          </Key>
+          <Property Name="PRODUCT_NUMBER" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="TYPE" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="REFERENCE" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Name="ADDRESS_CODE" Type="String" Nullable="false" MaxLength="60" FixedLength="false" Unicode="false" />
+          <Property Name="EXTERNAL_ITEM_CODE" Type="String" Nullable="false" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="EXTERNAL_ITEM_NAME" Type="String" Nullable="false" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="CREATE_DATE" Type="DateTime" Precision="3" />
+          <Property Name="CREATE_BY" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="EDIT_DATE" Type="DateTime" Precision="3" />
+          <Property Name="EDIT_BY" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -740,6 +774,22 @@ FROM [dbo].[HANDY_PICKING_MS_BK] AS [HANDY_PICKING_MS_BK]</DefiningQuery>
             <EntityTypeMapping TypeName="HANDY_PICKING_Model.SYNC_VERSION">
               <MappingFragment StoreEntitySet="SYNC_VERSION">
                 <ScalarProperty Name="SERVER_VERSION" ColumnName="SERVER_VERSION" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PRODUCT_MASTER">
+            <EntityTypeMapping TypeName="HANDY_PICKING_Model.PRODUCT_MASTER">
+              <MappingFragment StoreEntitySet="PRODUCT_MASTER">
+                <ScalarProperty Name="EDIT_BY" ColumnName="EDIT_BY" />
+                <ScalarProperty Name="EDIT_DATE" ColumnName="EDIT_DATE" />
+                <ScalarProperty Name="CREATE_BY" ColumnName="CREATE_BY" />
+                <ScalarProperty Name="CREATE_DATE" ColumnName="CREATE_DATE" />
+                <ScalarProperty Name="EXTERNAL_ITEM_NAME" ColumnName="EXTERNAL_ITEM_NAME" />
+                <ScalarProperty Name="EXTERNAL_ITEM_CODE" ColumnName="EXTERNAL_ITEM_CODE" />
+                <ScalarProperty Name="ADDRESS_CODE" ColumnName="ADDRESS_CODE" />
+                <ScalarProperty Name="REFERENCE" ColumnName="REFERENCE" />
+                <ScalarProperty Name="TYPE" ColumnName="TYPE" />
+                <ScalarProperty Name="PRODUCT_NUMBER" ColumnName="PRODUCT_NUMBER" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

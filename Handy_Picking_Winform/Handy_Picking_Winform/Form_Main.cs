@@ -86,6 +86,7 @@ namespace Handy_Picking_Winform
         private readonly List<Data_Compare> list_DataCompare                            = new List<Data_Compare>();
         List<Sum_DataCompare> sum_DataCompares                                          = new List<Sum_DataCompare>();
         List<Sum_PickingList> sum_PickingList                                           = new List<Sum_PickingList>();
+        List<Picking_List_Merge> pickingListMerge                                       = new List<Picking_List_Merge>();
         List<Compare_DataImport_With_PickingList> compare_Invoice_PickingList           = new List<Compare_DataImport_With_PickingList>();
         private readonly USER_MS userMS                                                 = new USER_MS();
         private bool IsPickingListLock = false;
@@ -229,6 +230,7 @@ namespace Handy_Picking_Winform
             {
                 gridView_Picking_List.OptionsPrint.AutoWidth                        = false;
                 gridView_Picking_List.OptionsView.ColumnAutoWidth                   = false;
+                gridView_Picking_List.OptionsView.RowAutoHeight                     = true;
                 gridView_Picking_List.OptionsView.ColumnHeaderAutoHeight            = DefaultBoolean.True;
                 gridView_Picking_List.OptionsView.AllowCellMerge                    = true;
                 gridView_Picking_List.OptionsView.ShowFooter                        = true;
@@ -473,6 +475,7 @@ namespace Handy_Picking_Winform
                     c.AppearanceHeader.ForeColor                = Color.Black;
                     c.AppearanceHeader.TextOptions.HAlignment   = HorzAlignment.Center;
                     c.AppearanceHeader.TextOptions.WordWrap     = WordWrap.Wrap;
+                    c.AppearanceCell.TextOptions.WordWrap       = WordWrap.Wrap;
                 }
             }
             else if (gridViewControl.Name == gridView_Picking_List_Merge.Name)
@@ -1748,13 +1751,121 @@ namespace Handy_Picking_Winform
 
         private void Add_PickingList()
         {
-            string PL_No = Convert.ToString(sLookUp_PickingList.EditValue);
-
-            if (!string.IsNullOrEmpty(PL_No))
+            using(HANDY_PICKING_Entities db = new HANDY_PICKING_Entities())
             {
-                list_Handy_Picking_Detail           = list_Handy_Picking_Detail.Concat(Get_Data_PickingList_Detail(PL_No)).ToList();
-                gridControl_Picking_List.DataSource = list_Handy_Picking_Detail;
-                xMainTab.SelectedTabPageIndex       = 0;
+                string PL_No = Convert.ToString(sLookUp_PickingList.EditValue);
+                
+
+                if (!string.IsNullOrEmpty(PL_No))
+                {
+                    HANDY_PICKING_MS pickingInfo = db.HANDY_PICKING_MS.Where(x => x.PICKING_LIST_NO.Equals(PL_No)).FirstOrDefault();
+                    List<HANDY_PICKING_DETAIL> pickingDetail = Get_Data_PickingList_Detail(PL_No);
+
+                    if (pickingInfo.CUSTOMER_CODE.Equals("CO0001"))
+                    {
+                        List<PRODUCT_MASTER> productMS = 
+                            db
+                            .PRODUCT_MASTER
+                            .Where(
+                                x => (
+                                    x.REFERENCE.Equals(pickingInfo.CUSTOMER_CODE) 
+                                 && x.ADDRESS_CODE.Equals(pickingInfo.DELIVERY_ADDRESS_CODE)
+                                )
+                            )
+                            .ToList();
+
+                        pickingDetail =
+                            (from 
+                               handy in pickingDetail
+                            join
+                               product in productMS
+                            on
+                               handy.TVC_ITEM_CODE equals product.PRODUCT_NUMBER into handyProducts
+                            from
+                               product in handyProducts.DefaultIfEmpty()
+                            select new HANDY_PICKING_DETAIL
+                            {
+                                PICKING_LIST_NO    = handy.PICKING_LIST_NO,
+                                INVOICE_NO         = handy.INVOICE_NO,
+                                SALE_ORDER         = handy.SALE_ORDER,
+                                ITEM_CODE          = handy.ITEM_CODE,
+                                LOT_ID             = handy.LOT_ID,
+                                QUANTITY           = handy.QUANTITY,
+                                PALLET_NO          = handy.PALLET_NO,
+                                SERIES             = handy.SERIES,
+                                CUS_ITEM_CODE      = product == null ? handy.CUS_ITEM_CODE : product.EXTERNAL_ITEM_CODE + "\n(" + handy.CUS_ITEM_CODE + ")",
+                                TVC_ITEM_CODE      = handy.TVC_ITEM_CODE,
+                                CUSTOMER_PO        = handy.CUSTOMER_PO,
+                                QTY_CARTON         = handy.QTY_CARTON,
+                                QTY_PER_CARTON     = handy.QTY_PER_CARTON,
+                                QTY_TOTAL          = handy.QTY_TOTAL,
+                                NET_WEIGHT         = handy.NET_WEIGHT,
+                                NET_WEIGHT_TOTAL   = handy.NET_WEIGHT_TOTAL,
+                                GROSS_WEIGHT       = handy.GROSS_WEIGHT,
+                                LOT_NO             = handy.LOT_NO,
+                                CREATE_DATE        = handy.CREATE_DATE,
+                                CREATE_BY          = handy.CREATE_BY,
+                                EDIT_DATE          = handy.EDIT_DATE,
+                                EDIT_BY            = handy.EDIT_BY,
+                                STATUS             = handy.STATUS,
+                                COLUMN1            = handy.COLUMN1,
+                                COLUMN2            = handy.COLUMN2,
+                                COLUMN3            = handy.COLUMN3,
+                                COLUMN4            = handy.COLUMN4,
+                                COLUMN5            = handy.COLUMN5
+                            }).ToList();
+
+                    }
+                    else if (pickingInfo.CUSTOMER_CODE.Equals("CO0002"))
+                    {
+                        List<PRODUCT_MASTER> productMS = db.PRODUCT_MASTER.Where(x => (x.REFERENCE.Equals(pickingInfo.CUSTOMER_CODE) && x.ADDRESS_CODE.Equals(pickingInfo.DELIVERY_ADDRESS_CODE))).ToList();
+
+                        pickingDetail =
+                            (from
+                               handy in pickingDetail
+                             join
+                                product in productMS
+                             on
+                                handy.TVC_ITEM_CODE equals product.PRODUCT_NUMBER into handyProducts
+                             from
+                                product in handyProducts.DefaultIfEmpty()
+                             select new HANDY_PICKING_DETAIL
+                             {
+                                 PICKING_LIST_NO    = handy.PICKING_LIST_NO,
+                                 INVOICE_NO         = handy.INVOICE_NO,
+                                 SALE_ORDER         = handy.SALE_ORDER,
+                                 ITEM_CODE          = handy.ITEM_CODE,
+                                 LOT_ID             = handy.LOT_ID,
+                                 QUANTITY           = handy.QUANTITY,
+                                 PALLET_NO          = handy.PALLET_NO,
+                                 SERIES             = handy.SERIES,
+                                 CUS_ITEM_CODE      = product == null ? handy.CUS_ITEM_CODE : product.EXTERNAL_ITEM_CODE,
+                                 TVC_ITEM_CODE      = handy.TVC_ITEM_CODE,
+                                 CUSTOMER_PO        = handy.CUSTOMER_PO,
+                                 QTY_CARTON         = handy.QTY_CARTON,
+                                 QTY_PER_CARTON     = handy.QTY_PER_CARTON,
+                                 QTY_TOTAL          = handy.QTY_TOTAL,
+                                 NET_WEIGHT         = handy.NET_WEIGHT,
+                                 NET_WEIGHT_TOTAL   = handy.NET_WEIGHT_TOTAL,
+                                 GROSS_WEIGHT       = handy.GROSS_WEIGHT,
+                                 LOT_NO             = handy.LOT_NO,
+                                 CREATE_DATE        = handy.CREATE_DATE,
+                                 CREATE_BY          = handy.CREATE_BY,
+                                 EDIT_DATE          = handy.EDIT_DATE,
+                                 EDIT_BY            = handy.EDIT_BY,
+                                 STATUS             = handy.STATUS,
+                                 COLUMN1            = handy.COLUMN1,
+                                 COLUMN2            = handy.COLUMN2,
+                                 COLUMN3            = handy.COLUMN3,
+                                 COLUMN4            = handy.COLUMN4,
+                                 COLUMN5            = handy.COLUMN5
+                             }).ToList();
+                    }    
+
+                    list_Handy_Picking_Detail = list_Handy_Picking_Detail.Concat(pickingDetail).ToList();
+                    gridControl_Picking_List.DataSource = list_Handy_Picking_Detail;
+                    xMainTab.SelectedTabPageIndex = 0;
+                }
             }
         }
 
@@ -1765,36 +1876,45 @@ namespace Handy_Picking_Winform
 
         private void barBtn_Merge_Picking_List_ItemClick(object sender, ItemClickEventArgs e)
         {
-            List<Picking_List_Merge> pickingListMerges = 
-                list_Handy_Picking_Detail
-                .GroupBy(p => 
-                    new {
-                        p.PALLET_NO,
-                        p.CUS_ITEM_CODE,
-                        p.TVC_ITEM_CODE,
-                        p.QTY_TOTAL,
-                        p.LOT_NO
-                    }
-                )
-                .Select(g => 
-                    new Picking_List_Merge
-                    (
-                        g.Key.PALLET_NO,
-                        g.Key.CUS_ITEM_CODE,
-                        g.Key.TVC_ITEM_CODE,
-                        g.Count(),
-                        g.Max(p => p.QTY_TOTAL),
-                        g.Sum(p => p.QTY_TOTAL),
-                        g.Sum(p => p.NET_WEIGHT_TOTAL),
-                        g.Sum(p => p.GROSS_WEIGHT),
-                        g.Key.LOT_NO
-                    )
-                )
-                .OrderBy(p => p.PALLET_NO)
-                .ToList();
+            using (HANDY_PICKING_Entities db = new HANDY_PICKING_Entities())
+            {
+                List<PRODUCT_MASTER> productMasterList = db.PRODUCT_MASTER.ToList();
 
-            xMainTab.SelectedTabPageIndex               = 3;
-            gridControl_Picking_List_Merge.DataSource   = pickingListMerges;
+                pickingListMerge =
+                    list_Handy_Picking_Detail
+                    .GroupBy(p =>
+                        new
+                        {
+                            p.PICKING_LIST_NO,
+                            p.PALLET_NO,
+                            p.CUS_ITEM_CODE,
+                            p.TVC_ITEM_CODE,
+                            p.QTY_TOTAL,
+                            p.LOT_NO
+                        }
+                    )
+                    .Select(g =>
+                        new Picking_List_Merge
+                        (
+                            g.Key.PICKING_LIST_NO,
+                            g.Key.PALLET_NO,
+                            g.Key.CUS_ITEM_CODE,
+                            g.Key.TVC_ITEM_CODE,
+                            g.Count(),
+                            g.Max(p => p.QTY_TOTAL),
+                            g.Sum(p => p.QTY_TOTAL),
+                            g.Sum(p => p.NET_WEIGHT_TOTAL),
+                            g.Sum(p => p.GROSS_WEIGHT),
+                            g.Key.LOT_NO
+                        )
+                    )
+                    .OrderBy(p => p.PALLET_NO)
+                    .ToList();
+
+                // Hiển thị kết quả truy vấn trong DataGridView
+                xMainTab.SelectedTabPageIndex = 3;
+                gridControl_Picking_List_Merge.DataSource = pickingListMerge;
+            }
         }
 
         private void sLookUp_PickingList_Closed(object sender, ClosedEventArgs e)
@@ -1818,11 +1938,6 @@ namespace Handy_Picking_Winform
                 Setting_Display(IsPickingListLock);
                 Setting_lbl_PickingList_Color(lbl_PickingList_Backcolor, lbl_PickingList_Forecolor);
             }
-        }
-
-        private void barBtn_ThirdCustomer_ItemClick(object sender, ItemClickEventArgs e)
-        {
-
         }
     }
 }   

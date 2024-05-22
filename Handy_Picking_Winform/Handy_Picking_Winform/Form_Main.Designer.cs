@@ -69,7 +69,6 @@ namespace Handy_Picking_Winform
             this.panelControl2 = new DevExpress.XtraEditors.PanelControl();
             this.gridControl1 = new DevExpress.XtraGrid.GridControl();
             this.gridView1 = new DevExpress.XtraGrid.Views.Grid.GridView();
-            this.barBtn_ThirdCustomer = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.ribbon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).BeginInit();
             this.panelControl1.SuspendLayout();
@@ -113,8 +112,7 @@ namespace Handy_Picking_Winform
             this.barStatic_User,
             this.btn_InputPacking,
             this.barBtn_Merge_Picking_List,
-            this.barStatic_Version,
-            this.barBtn_ThirdCustomer});
+            this.barStatic_Version});
             this.ribbon.Location = new System.Drawing.Point(0, 0);
             this.ribbon.MaxItemId = 21;
             this.ribbon.Name = "ribbon";
@@ -235,7 +233,6 @@ namespace Handy_Picking_Winform
             this.ribbonPageGroup1.ItemLinks.Add(this.barBtn_ExportPL_Merge);
             this.ribbonPageGroup1.ItemLinks.Add(this.barBtnLockPickingList);
             this.ribbonPageGroup1.ItemLinks.Add(this.barBtn_Merge_Picking_List);
-            this.ribbonPageGroup1.ItemLinks.Add(this.barBtn_ThirdCustomer);
             this.ribbonPageGroup1.Name = "ribbonPageGroup1";
             this.ribbonPageGroup1.Text = "Picking List";
             // 
@@ -463,15 +460,6 @@ namespace Handy_Picking_Winform
             this.gridView1.GridControl = this.gridControl1;
             this.gridView1.Name = "gridView1";
             // 
-            // barBtn_ThirdCustomer
-            // 
-            this.barBtn_ThirdCustomer.Caption = "Thêm mã cho KH thứ 3";
-            this.barBtn_ThirdCustomer.Id = 20;
-            this.barBtn_ThirdCustomer.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItem1.ImageOptions.Image")));
-            this.barBtn_ThirdCustomer.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("barButtonItem1.ImageOptions.LargeImage")));
-            this.barBtn_ThirdCustomer.Name = "barBtn_ThirdCustomer";
-            this.barBtn_ThirdCustomer.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barBtn_ThirdCustomer_ItemClick);
-            // 
             // Form_Main
             // 
             this.Appearance.BackColor = System.Drawing.Color.Black;
@@ -561,6 +549,5 @@ namespace Handy_Picking_Winform
         private DevExpress.XtraGrid.GridControl gridControl_Picking_List_Merge;
         private DevExpress.XtraGrid.Views.Grid.GridView gridView_Picking_List_Merge;
         private DevExpress.XtraBars.BarStaticItem barStatic_Version;
-        private DevExpress.XtraBars.BarButtonItem barBtn_ThirdCustomer;
     }
 }

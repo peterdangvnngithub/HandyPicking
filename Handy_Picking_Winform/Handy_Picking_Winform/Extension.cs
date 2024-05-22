@@ -117,7 +117,7 @@ namespace Handy_Picking_Winform
 
     public class Picking_List_Merge
     {
-        //public string PICKING_LIST_NO { get; set; }
+        public string PICKING_LIST_NO { get; set; }
         public string PALLET_NO { get; set; }
         public string CUS_ITEM_CODE { get; set; }
         public string TVC_ITEM_CODE { get; set; }
@@ -128,8 +128,10 @@ namespace Handy_Picking_Winform
         public decimal GROSS_WEIGHT { get; set; }
         public string LOT_NO { get; set; }
 
+        public Picking_List_Merge() { }
+
         public Picking_List_Merge(
-            //string _picking_list_no, 
+            string _picking_list_no, 
             string _pallet_no, 
             string _cus_item_code, 
             string _tvc_item_code, 
@@ -141,7 +143,7 @@ namespace Handy_Picking_Winform
             string _lot_no
         )
         {
-            //PICKING_LIST_NO     = _picking_list_no;
+            PICKING_LIST_NO     = _picking_list_no;
             PALLET_NO           = _pallet_no;
             CUS_ITEM_CODE       = _cus_item_code;
             TVC_ITEM_CODE       = _tvc_item_code;
