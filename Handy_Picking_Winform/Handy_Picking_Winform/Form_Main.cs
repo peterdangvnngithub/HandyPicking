@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Data;
 using System.Linq;
-using System.Transactions;
 using System.Drawing;
 using System.Diagnostics;
+using System.Transactions;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
 using DevExpress.Data;
 using DevExpress.Utils;
-using DevExpress.DataAccess.Excel;
 using DevExpress.XtraBars;
 using DevExpress.XtraEditors;
 using DevExpress.XtraGrid.Columns;
@@ -17,8 +16,10 @@ using DevExpress.XtraGrid.Views.Grid;
 using DevExpress.XtraGrid.Views.Base;
 using DevExpress.XtraEditors.Controls;
 using DevExpress.XtraEditors.Repository;
+using DevExpress.DataAccess.Excel;
 using Handy_Picking_Winform.DTO;
 using Handy_Picking_Winform.Utils;
+using System.Threading.Tasks;
 
 namespace Handy_Picking_Winform
 {
@@ -82,7 +83,7 @@ namespace Handy_Picking_Winform
         private readonly GridColumn grid_sLookUp_PL_CREATE_DATE                         = new GridColumn();
 
         List<HANDY_PICKING_DETAIL> list_Handy_Picking_Detail                            = new List<HANDY_PICKING_DETAIL>();
-        private readonly List<HANDY_PICKING_DETAIL> list_Handy_Picking_Detail_Delete    = new List<HANDY_PICKING_DETAIL>();
+        private readonly List<HANDY_PICKING_DETAIL> list_Handy_Picking_Detail_Delete    = new List<HANDY_PICKING_DETAIL>(); 
         private readonly List<Data_Compare> list_DataCompare                            = new List<Data_Compare>();
         List<Sum_DataCompare> sum_DataCompares                                          = new List<Sum_DataCompare>();
         List<Sum_PickingList> sum_PickingList                                           = new List<Sum_PickingList>();
@@ -92,6 +93,7 @@ namespace Handy_Picking_Winform
         private bool IsPickingListLock = false;
         private Color lbl_PickingList_Backcolor = Color.Transparent;
         private Color lbl_PickingList_Forecolor = Color.Black;
+        private bool isClosingConfirmed = false; // Cờ xác nhận đóng form
         #endregion
 
         public Form_Main(USER_MS _userMS)
@@ -156,7 +158,7 @@ namespace Handy_Picking_Winform
         {
             if (item.Name == grid_PL_repo_sLookUp_Pallet.Name)
             {
-                grid_PL_repo_sLookUp_Pallet.DataSource      = Get_Data_Pallet_Master(); ;
+                grid_PL_repo_sLookUp_Pallet.DataSource      = Get_Data_Pallet_Master();
                 grid_PL_repo_sLookUp_Pallet.ValueMember     = "PALLET_NO";
                 grid_PL_repo_sLookUp_Pallet.DisplayMember   = "PALLET_NO";
             }
@@ -441,11 +443,6 @@ namespace Handy_Picking_Winform
                 // sLookUpPallet
                 // 
                 grid_PL_repo_sLookUp_Pallet.AutoHeight = false;
-                //grid_PL_repo_sLookUp_Pallet.Buttons.AddRange(
-                //    new EditorButton[] {
-                //        new EditorButton(ButtonPredefines.Combo)
-                //    }
-                //);
                 grid_PL_repo_sLookUp_Pallet.Name = "grid_PL_Col_PALLET_NO";
                 grid_PL_repo_sLookUp_Pallet.PopupView = this.grid_PL_sLookUp_Pallet_View;
                 
@@ -1719,25 +1716,19 @@ namespace Handy_Picking_Winform
             }
         }
 
+        
         private void Form_Main_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (e.CloseReason == CloseReason.UserClosing)
+            DialogResult dialogResult = MessageBox.Show(
+                "Bạn muốn đóng form Handy Picking?",
+                "Xác nhận",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question
+            );
+
+            if (dialogResult == DialogResult.No)
             {
-                DialogResult dialogResult =
-                    MessageBox.Show(
-                        "Bạn có muốn thoát khỏi phần mềm so sánh Invoice và Picking List",
-                        "Thông Báo",
-                        MessageBoxButtons.OKCancel,
-                        MessageBoxIcon.Information
-                    );
-                if (dialogResult == DialogResult.OK)
-                {
-                    Application.Exit();
-                }
-                else if (dialogResult == DialogResult.Cancel)
-                {
-                    e.Cancel = true;    // Stopping Form Close perocess.
-                }
+                e.Cancel = true; // Hủy việc đóng form
             }
         }
 
@@ -1758,10 +1749,12 @@ namespace Handy_Picking_Winform
 
                 if (!string.IsNullOrEmpty(PL_No))
                 {
-                    HANDY_PICKING_MS pickingInfo = db.HANDY_PICKING_MS.Where(x => x.PICKING_LIST_NO.Equals(PL_No)).FirstOrDefault();
+                    HANDY_PICKING_MS pickingInfo = 
+                        db.HANDY_PICKING_MS.Where(x => x.PICKING_LIST_NO.Equals(PL_No)).FirstOrDefault();
+                    
                     List<HANDY_PICKING_DETAIL> pickingDetail = Get_Data_PickingList_Detail(PL_No);
 
-                    if (pickingInfo.CUSTOMER_CODE.Equals("CO0001"))
+                    if (pickingInfo.CUSTOMER_CODE.Equals("CO0001")) //TSP
                     {
                         List<PRODUCT_MASTER> productMS = 
                             db
@@ -1816,9 +1809,10 @@ namespace Handy_Picking_Winform
                             }).ToList();
 
                     }
-                    else if (pickingInfo.CUSTOMER_CODE.Equals("CO0002"))
+                    else if (pickingInfo.CUSTOMER_CODE.Equals("CO0002")) // TAC
                     {
-                        List<PRODUCT_MASTER> productMS = db.PRODUCT_MASTER.Where(x => (x.REFERENCE.Equals(pickingInfo.CUSTOMER_CODE) && x.ADDRESS_CODE.Equals(pickingInfo.DELIVERY_ADDRESS_CODE))).ToList();
+                        List<PRODUCT_MASTER> productMS = 
+                            db.PRODUCT_MASTER.Where(x => (x.REFERENCE.Equals(pickingInfo.CUSTOMER_CODE) && x.ADDRESS_CODE.Equals(pickingInfo.DELIVERY_ADDRESS_CODE))).ToList();
 
                         pickingDetail =
                             (from
@@ -1860,7 +1854,53 @@ namespace Handy_Picking_Winform
                                  COLUMN4            = handy.COLUMN4,
                                  COLUMN5            = handy.COLUMN5
                              }).ToList();
-                    }    
+                    }
+                    else if (pickingInfo.CUSTOMER_CODE.Equals("CO0008")) // KYB
+                    {
+                        List<PRODUCT_MASTER> productMS = 
+                            db.PRODUCT_MASTER.Where(x => (x.REFERENCE.Equals(pickingInfo.CUSTOMER_CODE) && x.ADDRESS_CODE.Equals(pickingInfo.DELIVERY_ADDRESS_CODE))).ToList();
+
+                        pickingDetail =
+                            (from
+                               handy in pickingDetail
+                             join
+                                product in productMS
+                             on
+                                handy.TVC_ITEM_CODE equals product.PRODUCT_NUMBER into handyProducts
+                             from
+                                product in handyProducts.DefaultIfEmpty()
+                             select new HANDY_PICKING_DETAIL
+                             {
+                                 PICKING_LIST_NO    = handy.PICKING_LIST_NO,
+                                 INVOICE_NO         = handy.INVOICE_NO,
+                                 SALE_ORDER         = handy.SALE_ORDER,
+                                 ITEM_CODE          = handy.ITEM_CODE,
+                                 LOT_ID             = handy.LOT_ID,
+                                 QUANTITY           = handy.QUANTITY,
+                                 PALLET_NO          = handy.PALLET_NO,
+                                 SERIES             = handy.SERIES,
+                                 CUS_ITEM_CODE      = product == null ? handy.CUS_ITEM_CODE : product.EXTERNAL_ITEM_CODE,
+                                 TVC_ITEM_CODE      = handy.TVC_ITEM_CODE,
+                                 CUSTOMER_PO        = handy.CUSTOMER_PO,
+                                 QTY_CARTON         = handy.QTY_CARTON,
+                                 QTY_PER_CARTON     = handy.QTY_PER_CARTON,
+                                 QTY_TOTAL          = handy.QTY_TOTAL,
+                                 NET_WEIGHT         = handy.NET_WEIGHT,
+                                 NET_WEIGHT_TOTAL   = handy.NET_WEIGHT_TOTAL,
+                                 GROSS_WEIGHT       = handy.GROSS_WEIGHT,
+                                 LOT_NO             = handy.LOT_NO,
+                                 CREATE_DATE        = handy.CREATE_DATE,
+                                 CREATE_BY          = handy.CREATE_BY,
+                                 EDIT_DATE          = handy.EDIT_DATE,
+                                 EDIT_BY            = handy.EDIT_BY,
+                                 STATUS             = handy.STATUS,
+                                 COLUMN1            = handy.COLUMN1,
+                                 COLUMN2            = handy.COLUMN2,
+                                 COLUMN3            = handy.COLUMN3,
+                                 COLUMN4            = handy.COLUMN4,
+                                 COLUMN5            = handy.COLUMN5
+                             }).ToList();
+                    }
 
                     list_Handy_Picking_Detail = list_Handy_Picking_Detail.Concat(pickingDetail).ToList();
                     gridControl_Picking_List.DataSource = list_Handy_Picking_Detail;
@@ -1938,6 +1978,12 @@ namespace Handy_Picking_Winform
                 Setting_Display(IsPickingListLock);
                 Setting_lbl_PickingList_Color(lbl_PickingList_Backcolor, lbl_PickingList_Forecolor);
             }
+        }
+
+        private void barBtn_Import_Production_Master_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            Form_Product_Master formProductMaster = new Form_Product_Master(userMS);
+            formProductMaster.ShowDialog();
         }
     }
 }   

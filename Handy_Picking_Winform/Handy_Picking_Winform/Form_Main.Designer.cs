@@ -43,10 +43,12 @@ namespace Handy_Picking_Winform
             this.btn_InputPacking = new DevExpress.XtraBars.BarButtonItem();
             this.barBtn_Merge_Picking_List = new DevExpress.XtraBars.BarButtonItem();
             this.barStatic_Version = new DevExpress.XtraBars.BarStaticItem();
+            this.barBtn_Import_Product_Master = new DevExpress.XtraBars.BarButtonItem();
             this.ribbonPage_Action = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.ribbonPageGroup1 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPageGroup2 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPageGroup3 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
+            this.ribbonPageGroup4 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonStatusBar = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
             this.panelControl1 = new DevExpress.XtraEditors.PanelControl();
             this.lbl_PickingList = new DevExpress.XtraEditors.LabelControl();
@@ -112,9 +114,10 @@ namespace Handy_Picking_Winform
             this.barStatic_User,
             this.btn_InputPacking,
             this.barBtn_Merge_Picking_List,
-            this.barStatic_Version});
+            this.barStatic_Version,
+            this.barBtn_Import_Product_Master});
             this.ribbon.Location = new System.Drawing.Point(0, 0);
-            this.ribbon.MaxItemId = 21;
+            this.ribbon.MaxItemId = 22;
             this.ribbon.Name = "ribbon";
             this.ribbon.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
             this.ribbonPage_Action});
@@ -216,12 +219,21 @@ namespace Handy_Picking_Winform
             this.barStatic_Version.Id = 17;
             this.barStatic_Version.Name = "barStatic_Version";
             // 
+            // barBtn_Import_Product_Master
+            // 
+            this.barBtn_Import_Product_Master.Caption = "Nhập Product Master";
+            this.barBtn_Import_Product_Master.Id = 21;
+            this.barBtn_Import_Product_Master.ImageOptions.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("barBtn_Import_Production_Master.ImageOptions.SvgImage")));
+            this.barBtn_Import_Product_Master.Name = "barBtn_Import_Product_Master";
+            this.barBtn_Import_Product_Master.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barBtn_Import_Production_Master_ItemClick);
+            // 
             // ribbonPage_Action
             // 
             this.ribbonPage_Action.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] {
             this.ribbonPageGroup1,
             this.ribbonPageGroup2,
-            this.ribbonPageGroup3});
+            this.ribbonPageGroup3,
+            this.ribbonPageGroup4});
             this.ribbonPage_Action.Name = "ribbonPage_Action";
             this.ribbonPage_Action.Text = "Action";
             // 
@@ -248,6 +260,12 @@ namespace Handy_Picking_Winform
             this.ribbonPageGroup3.ItemLinks.Add(this.barBtn_Compare_Data_Inv_PL);
             this.ribbonPageGroup3.Name = "ribbonPageGroup3";
             this.ribbonPageGroup3.Text = "Compare";
+            // 
+            // ribbonPageGroup4
+            // 
+            this.ribbonPageGroup4.ItemLinks.Add(this.barBtn_Import_Product_Master);
+            this.ribbonPageGroup4.Name = "ribbonPageGroup4";
+            this.ribbonPageGroup4.Text = "Product";
             // 
             // ribbonStatusBar
             // 
@@ -549,5 +567,7 @@ namespace Handy_Picking_Winform
         private DevExpress.XtraGrid.GridControl gridControl_Picking_List_Merge;
         private DevExpress.XtraGrid.Views.Grid.GridView gridView_Picking_List_Merge;
         private DevExpress.XtraBars.BarStaticItem barStatic_Version;
+        private DevExpress.XtraBars.BarButtonItem barBtn_Import_Product_Master;
+        private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup4;
     }
 }
